@@ -5,12 +5,14 @@ Introspect is small set of tools for iOS and the iOS Simulator that aid in debug
 
 ![Introspect Demo Image](http://domesticcat.com.au/projects/introspect/introspectdemo.png)
 
+![CBIntrospector Screenshot](http://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-screenshot.jpg)
+
 It uses keyboard shortcuts to handle starting, ending and other commands.  It can also be invoked via an app-wide `UIGestureRecognizer` if it is to be used on the device.
 
 Features:
 --------------
 * Simple to setup and use
-* Compatible with the iOS Simulator companion desktop app (CBIntrospector)
+* Compatible with the iOS Simulator companion desktop app - [CBIntrospector](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-latest.dmg)
 * Controlled via app-wide keyboard commands
 * Highlighting of view frames
 * Displays a views origin & size, including distances to edges of main window
@@ -46,6 +48,7 @@ A a small demo app is included to test it out.
 CBIntrospector Usage
 --------------------
 
+* Download app [CBIntrospector](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-latest.dmg)
 * Start your app
 * Start `CBIntrospector` desktop app
 * Open your project from `CBIntrospector` project window (Menu->Window->Show Projects)
