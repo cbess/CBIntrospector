@@ -26,6 +26,7 @@ static IMP gOrigSendEvent = nil;
 
     Method mySendEventMethod = class_getInstanceMethod([UIWindow class], mySendEventSelector);
     gOrigSendEvent = class_replaceMethod([UIWindow class], origSendEventSelector, method_getImplementation(mySendEventMethod), method_getTypeEncoding(mySendEventMethod));
+#endif
 }
 
 - (void)_sendEvent:(UIEvent *)event

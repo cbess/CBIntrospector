@@ -1,21 +1,16 @@
-DCIntrospect
+CBIntrospector
 ============
 
-Twitter: [@patr](http://twitter.com/patr)
-
-Our commercial apps: [domesticcat.com.au](http://domesticcat.com.au/apps)
-
-Introspect is small set of tools for iOS that aid in debugging user interfaces built with UIKit.  It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily.  It's designed for use in the iPhone simulator, but can also be used on a device.
-
+Introspect is small set of tools for iOS and the iOS Simulator that aid in debugging user interfaces built with UIKit.  It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily.  It's designed for use in the iOS simulator, but can also be used on a device.
 
 ![Introspect Demo Image](http://domesticcat.com.au/projects/introspect/introspectdemo.png)
-
 
 It uses keyboard shortcuts to handle starting, ending and other commands.  It can also be invoked via an app-wide `UIGestureRecognizer` if it is to be used on the device.
 
 Features:
 --------------
 * Simple to setup and use
+* Compatible with the iOS Simulator companion desktop app (CBIntrospector)
 * Controlled via app-wide keyboard commands
 * Highlighting of view frames
 * Displays a views origin & size, including distances to edges of main window
@@ -31,15 +26,15 @@ Features:
 Usage
 -----
 
-Before you start make sure the `DEBUG` environment variable is set.  DCIntrospect will not run without that set to prevent it being left in for production use.
+Before you start make sure the `DEBUG` environment variable is set. CBIntrospect will not run without that set to prevent it being left in for production use.
 
-Add the `DCIntrospect` class files to your project, add the QuartzCore framework if needed.  To start:
+Add the `CBIntrospect` class files to your project, add the QuartzCore framework if needed.  To start:
 
     [window makeKeyAndDisplay]
     
     // always call after makeKeyAndDisplay.
     #if TARGET_IPHONE_SIMULATOR
-        [[DCIntrospect sharedIntrospector] start];
+        [[CBIntrospect sharedIntrospector] start];
     #endif
 
 The `#if` to target the simulator is not required but is a good idea to further prevent leaving it on in production code.
@@ -47,6 +42,15 @@ The `#if` to target the simulator is not required but is a good idea to further 
 Once setup, simply push the space bar to invoke the introspect or then start clicking on views to get info.  You can also tap and drag around the interface.
 
 A a small demo app is included to test it out.
+
+CBIntrospector Usage
+--------------------
+
+* Start your app
+* Start `CBIntrospector` desktop app
+* Open your project from `CBIntrospector` project window (Menu->Window->Show Projects)
+* Interact with `CBIntrospector` UIView tree to select or adjust the UIView in the iOS Simulator
+* (More documentation coming soon)
 
 Selected keyboard shortcuts
 -----------------------------------------
@@ -64,38 +68,43 @@ Selected keyboard shortcuts
 Logging selected views properties
 -------------------------------------------------
 
-Pushing `p` will log out the available properties about the selected view.  DCIntrospect will try to make sense of the values it can and show more useful info.  An example from a `UIButton`:
+Pushing `p` will log out the available properties about the selected view. CBIntrospect will try to make sense of the values it can and show more useful info.  An example from a `UISegmentedControl`:
 
-    ** UIRoundedRectButton : UIButton : UIControl : UIView : UIResponder : NSObject **
-    
-    ** UIView properties **
-        tag: 1
-        frame: {{21, 331}, {278, 37}} | bounds: {{0, 0}, {278, 37}} | center: {160, 349.5}
+    ** UISegmentedControl:0x6d5eca0 : UIControl : UIView : UIResponder : NSObject ** 
+
+      ** UIView properties **
+        tag: 0
+        frame: {{20, 66}, {207, 30}} | bounds: {{0, 0}, {207, 30}} | center: {123.5, 81}
         transform: [1, 0, 0, 1, 0, 0]
-        autoresizingMask: UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin
+        autoresizingMask: UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin
         autoresizesSubviews: YES
-        contentMode: UIViewContentModeScaleToFill | contentStretch: {{0, 0}, {1, 1}} backgroundColor: nil
-        alpha: 1.00 | opaque: NO | hidden: NO | clips to bounds: NO |
-        clearsContextBeforeDrawing: YES
+        contentMode: UIViewContentModeScaleToFill | contentStretch: {{0, 0}, {1, 1}}
+        backgroundColor: nil
+        alpha: 1.00 | opaque: NO | hidden: NO | clipsToBounds: NO | clearsContextBeforeDrawing: YES
         userInteractionEnabled: YES | multipleTouchEnabled: NO
         gestureRecognizers: nil
-    
-    ** UIRoundedRectButton properties **
-    
-    ** Targets & Actions **
-        target: <DCIntrospectDemoViewController: 0x4c8c0e0> action: buttonTapped:
+        superview: <UIView: 0x6d4e820; frame = (0 20; 320 460); autoresize = W+H; layer = <CALayer: 0x6d4e8a0>>
+        subviews: 2 views [<UISegment: 0x6d5f680>, <UISegment: 0x6d5ef90>]
+
+      ** UISegmentedControl properties **
+        removedSegment: nil
+        segmentedControlStyle: 2
+        numberOfSegments: 2
+        apportionsSegmentWidthsByContent: NO
+        selectedSegmentIndex: 0
+        tintColor: nil
+
+      ** Targets & Actions **
 
 Customizing Key Bindings
 --------------------------------------
 
 Edit the file `DCIntrospectSettings.h` to change key bindings.  You might want to change the key bindings if your using a laptop/wireless keyboard for development.
+Keep in mind you can use the `CBIntrospector` desktop app to interact with the UIView objects as well.
 
 License
 -----------
 
 Made available under the MIT License.
 
-Collaboration
--------------
-
-If you have any feature requests/bugfixes etc. feel free to help out and send a pull request, or create a new issue.
+DCIntrospect concept and implementation originally created by Patrick Richards domesticcatsoftware.com
