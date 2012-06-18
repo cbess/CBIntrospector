@@ -1,11 +1,12 @@
 CBIntrospector
 ============
+![app icon](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/CBIntrospector/appicon.png)
 
 Introspect is small set of tools for iOS and the iOS Simulator that aid in debugging user interfaces built with UIKit.  It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily.  It's designed for use in the iOS simulator, but can also be used on a device.
 
 ![Introspect Demo Image](http://domesticcat.com.au/projects/introspect/introspectdemo.png)
 
-![CBIntrospector Screenshot](http://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-screenshot.jpg)
+![CBIntrospector Screenshot](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-screenshot.jpg)
 
 It uses keyboard shortcuts to handle starting, ending and other commands.  It can also be invoked via an app-wide `UIGestureRecognizer` if it is to be used on the device.
 
@@ -51,7 +52,8 @@ CBIntrospector Usage
 * Download app [CBIntrospector](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-latest.dmg)
 * Start your app
 * Start `CBIntrospector` desktop app
-* Open your project from `CBIntrospector` project window (Menu->Window->Show Projects)
+* Click `Reload` to load the projects
+* Select then open your project from `CBIntrospector` project window (Menu->Window->Show Projects)
 * Interact with `CBIntrospector` UIView tree to select or adjust the UIView in the iOS Simulator
 * (More documentation coming soon)
 
@@ -109,5 +111,7 @@ License
 -----------
 
 Made available under the MIT License.
+
+CBIntrospector and DCIntrospect to CBIntrospect changes by Christopher Bess
 
 DCIntrospect concept and implementation originally created by Patrick Richards domesticcatsoftware.com
