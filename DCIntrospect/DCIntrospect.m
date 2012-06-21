@@ -819,7 +819,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	}
 	else
 	{
-		self.statusBarOverlay.leftLabel.text = @"DCIntrospect";
+		self.statusBarOverlay.leftLabel.text = NSStringFromClass([self class]);
 		self.statusBarOverlay.rightLabel.text = [NSString stringWithFormat:@"'%@' for help", kDCIntrospectKeysToggleHelp];
 	}
 	

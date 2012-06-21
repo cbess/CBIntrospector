@@ -23,6 +23,8 @@ typedef enum {
 
 @property (nonatomic, assign) CBIntrospectSyncFileSystemState syncFileSystemState;
 
++ (CBIntrospect *)sharedIntrospector;
+
 /**
  * Syncs the changes from the file system back to the corresponding iOS view.
  */
