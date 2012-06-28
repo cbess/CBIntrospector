@@ -24,11 +24,6 @@
 @implementation CBIntrospect
 @synthesize syncFileSystemState = _syncFileSystemState;
 
-+ (CBIntrospect *)sharedIntrospector
-{
-    return (CBIntrospect*) [[self class] sharedIntrospector];
-}
-
 #pragma mark - Properties
 
 - (void)setSyncFileSystemState:(CBIntrospectSyncFileSystemState)syncFileSystemState
