@@ -178,10 +178,14 @@
 
 - (BOOL)canDumpView:(UIView *)view
 {
-    NSString *className = NSStringFromClass([view class]);
-    if ([className hasPrefix:@"_"])
+    NSString *className = [NSStringFromClass([view class]) lowercaseString];
+    if ([className hasPrefix:@"_uipopover"])
         return YES;
-    return NO;
+    
+    if ([className hasPrefix:@"_"])
+        return NO;
+    
+    return YES;
 }
 
 - (BOOL)canDumpSubviewsOfView:(UIView *)view
@@ -218,7 +222,7 @@
         if ([self shouldIgnoreView:view])
             continue;
         
-        if ([self canDumpView:view])
+        if (![self canDumpView:view])
             continue;
         
         // add subview info to root view dictionary
