@@ -18,7 +18,11 @@ static NSString * nssprintf(NSString *format, ...)
                                               arguments:args];
     va_end(args);
     
-	return NSAutoRelease(string);
+#if __has_feature(objc_arc)
+	return string;
+#else
+    return [string autorelease];
+#endif
 }
 
 #endif
