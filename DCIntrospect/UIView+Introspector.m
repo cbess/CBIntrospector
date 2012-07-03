@@ -356,7 +356,9 @@
     }
     
     NSAssert(error == nil, @"error reading view: %@", error);
-    NO_ARC([jsonString release];)
+#if ! __has_feature(objc_arc)
+    [jsonString release];
+#endif
 }
 
 + (void)unlinkView:(UIView *)view
