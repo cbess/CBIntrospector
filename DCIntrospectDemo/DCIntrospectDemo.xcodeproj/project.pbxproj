@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1ED64EF415C09F5E00FA1396 /* DLInvocationResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED64EEB15C09BD000FA1396 /* DLInvocationResult.m */; };
+		1ED64EF615C09F6200FA1396 /* DLStatementParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED64EED15C09BD000FA1396 /* DLStatementParser.m */; };
 		625780B0138A052F004DA77B /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 625780AF138A052F004DA77B /* circle.png */; };
 		625780B2138A0EBD004DA77B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 625780B1138A0EBC004DA77B /* QuartzCore.framework */; };
 		920C426D154DDA38001BC855 /* UIView+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 920C426C154DDA38001BC855 /* UIView+Introspector.m */; };
@@ -31,6 +33,10 @@
 /* Begin PBXFileReference section */
 		1E3F0D9B155E39160015A478 /* CBIntrospectConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CBIntrospectConstants.h; path = ../../DCIntrospect/CBIntrospectConstants.h; sourceTree = "<group>"; };
 		1E3F0D9D155E39690015A478 /* CBMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CBMacros.h; path = ../../DCIntrospect/CBMacros.h; sourceTree = "<group>"; };
+		1ED64EEA15C09BD000FA1396 /* DLInvocationResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DLInvocationResult.h; path = ../../DCIntrospect/DLInvocationResult.h; sourceTree = "<group>"; };
+		1ED64EEB15C09BD000FA1396 /* DLInvocationResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DLInvocationResult.m; path = ../../DCIntrospect/DLInvocationResult.m; sourceTree = "<group>"; };
+		1ED64EEC15C09BD000FA1396 /* DLStatementParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DLStatementParser.h; path = ../../DCIntrospect/DLStatementParser.h; sourceTree = "<group>"; };
+		1ED64EED15C09BD000FA1396 /* DLStatementParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DLStatementParser.m; path = ../../DCIntrospect/DLStatementParser.m; sourceTree = "<group>"; };
 		625780AF138A052F004DA77B /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		625780B1138A0EBC004DA77B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		920C426B154DDA38001BC855 /* UIView+Introspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Introspector.h"; path = "../../DCIntrospect/UIView+Introspector.h"; sourceTree = "<group>"; };
@@ -83,6 +89,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1ED64EEF15C09BD600FA1396 /* Statement Parser */ = {
+			isa = PBXGroup;
+			children = (
+				1ED64EEA15C09BD000FA1396 /* DLInvocationResult.h */,
+				1ED64EEB15C09BD000FA1396 /* DLInvocationResult.m */,
+				1ED64EEC15C09BD000FA1396 /* DLStatementParser.h */,
+				1ED64EED15C09BD000FA1396 /* DLStatementParser.m */,
+			);
+			name = "Statement Parser";
+			sourceTree = "<group>";
+		};
 		920C426F154DDA3D001BC855 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +123,7 @@
 		92D478AA154F9C7700AD49BE /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				1ED64EEF15C09BD600FA1396 /* Statement Parser */,
 				1E3F0D9D155E39690015A478 /* CBMacros.h */,
 				1E3F0D9B155E39160015A478 /* CBIntrospectConstants.h */,
 				92CBB0FF15521CA200F2217D /* CBSharedHeader.h */,
@@ -266,6 +284,8 @@
 				92D478A7154F991E00AD49BE /* DCUtility.m in Sources */,
 				92D950621551F80300C87FD7 /* JSONKit.m in Sources */,
 				92D950691551FDF400C87FD7 /* CBIntrospect.m in Sources */,
+				1ED64EF415C09F5E00FA1396 /* DLInvocationResult.m in Sources */,
+				1ED64EF615C09F6200FA1396 /* DLStatementParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

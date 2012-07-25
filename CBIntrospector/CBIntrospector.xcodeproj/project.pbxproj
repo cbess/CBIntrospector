@@ -10,6 +10,7 @@
 		1E3F0DA0155E54220015A478 /* NSView.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1E3F0D9F155E54220015A478 /* NSView.icns */; };
 		1E6E7A55157F9B6E0080EFE1 /* appicon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1E6E7A54157F9B6E0080EFE1 /* appicon.icns */; };
 		1E9245C7155AABE600CE32D3 /* CBTreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9245C6155AABE600CE32D3 /* CBTreeView.m */; };
+		1ED64EE915C0883700FA1396 /* CBViewMessengerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED64EE815C0883700FA1396 /* CBViewMessengerWindow.m */; };
 		92C0AF61157D9E26003F13FC /* CBProjectWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0AF60157D9E26003F13FC /* CBProjectWindow.m */; };
 		92C0AF64157DA0F9003F13FC /* CBPathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0AF63157DA0F9003F13FC /* CBPathItem.m */; };
 		92CBB0A615521B3C00F2217D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92CBB0A515521B3C00F2217D /* Cocoa.framework */; };
@@ -47,6 +48,8 @@
 		1E6E7A54157F9B6E0080EFE1 /* appicon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = appicon.icns; path = CBIntrospector/appicon.icns; sourceTree = SOURCE_ROOT; };
 		1E9245C5155AABE600CE32D3 /* CBTreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBTreeView.h; sourceTree = "<group>"; };
 		1E9245C6155AABE600CE32D3 /* CBTreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBTreeView.m; sourceTree = "<group>"; };
+		1ED64EE715C0883700FA1396 /* CBViewMessengerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBViewMessengerWindow.h; sourceTree = "<group>"; };
+		1ED64EE815C0883700FA1396 /* CBViewMessengerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBViewMessengerWindow.m; sourceTree = "<group>"; };
 		9233AA5C1552F33F000BFF5F /* CBSharedHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CBSharedHeader.h; path = ../../DCIntrospect/CBSharedHeader.h; sourceTree = "<group>"; };
 		92C0AF5F157D9E26003F13FC /* CBProjectWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBProjectWindow.h; sourceTree = "<group>"; };
 		92C0AF60157D9E26003F13FC /* CBProjectWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBProjectWindow.m; sourceTree = "<group>"; };
@@ -234,6 +237,8 @@
 				92CBB10515521E6100F2217D /* CBUIView.m */,
 				92C0AF5F157D9E26003F13FC /* CBProjectWindow.h */,
 				92C0AF60157D9E26003F13FC /* CBProjectWindow.m */,
+				1ED64EE715C0883700FA1396 /* CBViewMessengerWindow.h */,
+				1ED64EE815C0883700FA1396 /* CBViewMessengerWindow.m */,
 				92DF8885155653B800D63CCC /* CBTextField.h */,
 				92DF8886155653B800D63CCC /* CBTextField.m */,
 				1E9245C5155AABE600CE32D3 /* CBTreeView.h */,
@@ -372,6 +377,7 @@
 				1E9245C7155AABE600CE32D3 /* CBTreeView.m in Sources */,
 				92C0AF61157D9E26003F13FC /* CBProjectWindow.m in Sources */,
 				92C0AF64157DA0F9003F13FC /* CBPathItem.m in Sources */,
+				1ED64EE915C0883700FA1396 /* CBViewMessengerWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

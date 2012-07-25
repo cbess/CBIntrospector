@@ -8,7 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class CBUIViewManager;
+
 @interface CBIntrospectorWindow : NSWindow
+@property (nonatomic, readonly) NSString *simulatorDirectoryPath;
+@property (nonatomic, readonly) NSString *syncDirectoryPath;
 @property (nonatomic, strong) NSDictionary *treeContents;
+@property (nonatomic, readonly) CBUIViewManager *viewManager;
 - (void)switchProjectToDirectoryPath:(NSString *)path;
+- (void)selectTreeItemWithMemoryAddress:(NSString *)memAddress;
 @end

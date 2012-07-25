@@ -11,6 +11,7 @@
 
 static NSString *const kCBCurrentViewFileName = @"current.view.json";
 static NSString * const kCBTreeDumpFileName = @"viewtree.dump.json";
+static NSString * const kCBViewMessageFileName = @"view.message.json";
 
 // stored json keys
 static NSString * const kUIViewSubviewsKey = @"subviews";
@@ -22,5 +23,6 @@ static NSString * const kUIViewBoundsKey = @"bounds";
 static NSString * const kUIViewCenterKey = @"center";
 static NSString * const kUIViewFrameKey = @"frame";
 static NSString * const kUIViewDescriptionKey = @"viewdescription";
+static NSString * const kUIViewMessageKey = @"viewmessage";
 
 #endif

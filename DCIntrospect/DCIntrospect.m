@@ -257,7 +257,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	if (!self.currentViewHistory)
 		self.currentViewHistory = [[[NSMutableArray alloc] init] autorelease];
 	
-	DCLog(@"%@ is setup. %@ to start.", [self class], [kDCIntrospectKeysInvoke isEqualToString:@" "] ? @"Push the space bar" : [NSString stringWithFormat:@"Type '%@'",  kDCIntrospectKeysInvoke]);
+	DCLog(@"%@ (%@) is setup. %@ to start.", [self class], [self versionName], [kDCIntrospectKeysInvoke isEqualToString:@" "] ? @"Push the space bar" : [NSString stringWithFormat:@"Type '%@'",  kDCIntrospectKeysInvoke]);
 }
 
 - (void)takeFirstResponder
@@ -366,6 +366,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
     if (view == nil)
         return; // nil, if deactivating introspector
     
+    // if it crashes here (EXC_BAD_ACCESS), try reloading the UIView Introspector
 	self.originalFrame = self.currentView.frame;
 	self.originalAlpha = self.currentView.alpha;
 	
@@ -378,7 +379,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 
 	[self updateFrameView];
 	[self updateStatusBar];
-	
+
 	if (![self.currentViewHistory containsObject:self.currentView])
 		[self.currentViewHistory addObject:self.currentView];
     
@@ -1262,6 +1263,13 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	if (view == self.frameView || view == self.inputTextView)
 		return YES;
 	return NO;
+}
+
+#pragma mark - Misc
+
+- (NSString *)versionName
+{
+    return @"v0.1";
 }
 
 #pragma mark - Select View Delegate

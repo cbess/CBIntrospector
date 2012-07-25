@@ -149,6 +149,10 @@
 - (BOOL)view:(UIView *)view containsSubview:(UIView *)subview;
 - (BOOL)shouldIgnoreView:(UIView *)view;
 
+#pragma mark - Misc
+
+- (NSString *)versionName;
+
 #pragma mark - Select View Delegate
 - (void)onWillDeselectView:(UIView *)view;
 - (void)onWillSelectView:(UIView *)view;

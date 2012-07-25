@@ -12,6 +12,7 @@
 #import "JSONKit.h"
 #import "CBTreeView.h"
 #import "CBProjectWindow.h"
+#import "CBViewMessengerWindow.h"
 
 static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 
@@ -29,11 +30,9 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 @property (assign) IBOutlet NSTextField *topPositionTextField;
 @property (assign) IBOutlet NSTextField *leftPositionTextField;
 @property (assign) IBOutlet CBProjectWindow *projectWindow;
-@property (nonatomic, readonly) CBUIViewManager *viewManager;
-@property (nonatomic, readonly) NSString *syncDirectoryPath;
+@property (assign) IBOutlet CBViewMessengerWindow *messengerWindow;
 @property (nonatomic, assign) NSTextField *focusedTextField;
 @property (nonatomic, assign) BOOL showAllSubviews;
-@property (nonatomic, readonly) NSString *simulatorDirectoryPath;
 @property (nonatomic, copy) NSString *defaultTitle;
 - (IBAction)treeNodeClicked:(id)sender;
 - (void)loadCurrentViewControls;
@@ -53,6 +52,7 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 @synthesize topPositionTextField;
 @synthesize leftPositionTextField;
 @synthesize projectWindow;
+@synthesize messengerWindow;
 @synthesize viewManager = _viewManager;
 @synthesize treeContents = _treeContents;
 @synthesize syncDirectoryPath;
@@ -246,7 +246,14 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 
 - (IBAction)showProjectsWindowClicked:(id)sender 
 {
-    [projectWindow makeKeyAndOrderFront:nil];
+    [self.projectWindow makeKeyAndOrderFront:nil];
+}
+
+- (IBAction)sendMessageButtonClicked:(id)sender
+{
+    self.messengerWindow.introspectorWindow = self;
+    self.messengerWindow.receiverView = self.viewManager.currentView;
+    [self.messengerWindow makeKeyAndOrderFront:nil];
 }
 
 #pragma mark - Misc

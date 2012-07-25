@@ -13,6 +13,8 @@
 #import "DCUtility.h"
 #import "CBSharedHeader.h"
 #import "CBIntrospectConstants.h"
+#import "DLStatementParser.h"
+#import "DLInvocationResult.h"
 
 @interface CBIntrospect ()
 {
@@ -95,8 +97,36 @@
         [jsonString release];
     }
     
+    // read and execute the 'uiview message' sent from the introspector tool
+    [self readSentViewMessage];
+    
     // store last mod time
     _lastModTime = sb.st_mtimespec;
+}
+
+- (BOOL)readSentViewMessage
+{
+    NSError *error = nil;
+    NSString *messageFilePath = [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBViewMessageFileName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:messageFilePath])
+        return NO;
+    
+    NSString *jsonString = [[NSString alloc] initWithContentsOfFile:messageFilePath encoding:NSUTF8StringEncoding error:&error];
+    if (error)
+    {
+        NSAssert(NO, @"Unable to read the sent view mesage: %@", error);
+        return NO;
+    }
+    
+    NSDictionary *messageInfo = [jsonString objectFromJSONString];
+    
+    NSInvocation *invocation = [[DLStatementParser sharedParser] invocationForStatement:[messageInfo objectForKey:kUIViewMessageKey] error:&error];
+    [invocation invoke];
+    
+    [jsonString release];
+    
+    // remove the file after it has been used/read
+    return [[NSFileManager defaultManager] removeItemAtPath:messageFilePath error:nil];
 }
 
 #pragma mark - Misc
@@ -127,6 +157,11 @@
                            @"UISlider",
                            @"UITableViewCell",
                            nil];
+}
+
+- (NSString *)versionName
+{
+    return @"v0.3";
 }
 
 #pragma mark - Overrides
