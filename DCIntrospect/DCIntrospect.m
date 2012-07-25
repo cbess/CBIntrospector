@@ -63,9 +63,11 @@ static bool AmIBeingDebugged(void)
 #endif
 
 #ifdef DEBUG
-#define DCLog(M, ...) NSLog(M, ##__VA_ARGS__)
+#define DCLog(MSG, ...) NSLog(MSG, ##__VA_ARGS__)
+#define DCNamedLog(MSG, ...) NSLog(@"%@: "MSG, NSStringFromClass([self class]), ##__VA_ARGS__)
 #else
-#define DCLog(M, ...) ({});
+#define DCLog(MSG, ...) ({});
+#define DCNamedLog(MSG, ...) ({});
 #endif
 
 @interface DCIntrospect ()
@@ -209,7 +211,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	UIWindow *mainWindow = [self mainWindow];
 	if (!mainWindow)
 	{
-		DCLog(@"DCIntrospect: Couldn't setup. No main window?");
+		DCNamedLog(@"Couldn't setup. No main window?");
 		return;
 	}
 	
@@ -261,7 +263,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 - (void)takeFirstResponder
 {
 	if (![self.inputTextView becomeFirstResponder])
-		DCLog(@"DCIntrospect: Couldn't reclaim keyboard input.  Is the keyboard used elsewhere?");
+		DCNamedLog(@"Couldn't reclaim keyboard input.  Is the keyboard used elsewhere?");
 }
 
 - (void)resetInputTextView
@@ -458,7 +460,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
     {
         [self setKeyboardBindingsOn:NO];
         [[self inputTextView] resignFirstResponder];
-        DCLog(@"DCIntrospect: Disabled for %.1f seconds", kDCIntrospectTemporaryDisableDuration);
+        DCNamedLog(@"Disabled for %.1f seconds", kDCIntrospectTemporaryDisableDuration);
         [self performSelector:@selector(setKeyboardBindingsOn:) withObject:[NSNumber numberWithFloat:YES] afterDelay:kDCIntrospectTemporaryDisableDuration];
         return NO;
     }
@@ -506,7 +508,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 							 if (self.showStatusBarOverlay)
 								 [self showTemporaryStringInStatusBar:coordinatesString];
 							 else
-								 DCLog(@"DCIntrospect: %@", coordinatesString);
+								 DCNamedLog(@"%@", coordinatesString);
 						 }];
 		return NO;
 	}
@@ -556,7 +558,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			}
 			else
 			{
-				DCLog(@"DCIntrospect: At top of view hierarchy.");
+				DCNamedLog(@"At top of view hierarchy.");
 				return NO;
 			}
 			return NO;
@@ -569,7 +571,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			int indexOfCurrentView = [self.currentViewHistory indexOfObject:self.currentView];
 			if (indexOfCurrentView == 0)
 			{
-				DCLog(@"DCIntrospect: At bottom of view history.");
+				DCNamedLog(@"At bottom of view history.");
 				return NO;
 			}
 			
@@ -580,7 +582,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			if (self.currentView.subviews.count>0) {
 				[self selectView:[self.currentView.subviews objectAtIndex:0]];
 			}else{
-				DCLog(@"DCIntrospect: No subviews.");
+				DCNamedLog(@"No subviews.");
 				return NO;
 			}
 			return NO;
@@ -590,11 +592,11 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			NSUInteger currentViewsIndex = [self.currentView.superview.subviews indexOfObject:self.currentView];
 			
 			if (currentViewsIndex==NSNotFound) {
-				DCLog(@"DCIntrospect: BROKEN HIERARCHY.");
+				DCNamedLog(@"BROKEN HIERARCHY.");
 			} else if (self.currentView.superview.subviews.count>currentViewsIndex + 1) {
 				[self selectView:[self.currentView.superview.subviews objectAtIndex:currentViewsIndex + 1]];
 			}else{
-				DCLog(@"DCIntrospect: No next sibling views.");
+				DCNamedLog(@"No next sibling views.");
 				return NO;
 			}
 			return NO;
@@ -603,11 +605,11 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		{
 			NSUInteger currentViewsIndex = [self.currentView.superview.subviews indexOfObject:self.currentView];
 			if (currentViewsIndex==NSNotFound) {
-				DCLog(@"DCIntrospect: BROKEN HIERARCHY.");
+				DCNamedLog(@"BROKEN HIERARCHY.");
 			} else if (currentViewsIndex!=0) {
 				[self selectView:[self.currentView.superview.subviews objectAtIndex:currentViewsIndex - 1]];
 			} else {
-				DCLog(@"DCIntrospect: No previous sibling views.");
+				DCNamedLog(@"No previous sibling views.");
 			}
 			return NO;
 		}
@@ -654,7 +656,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 #ifdef DEBUG
 			UIView *view = self.currentView;
 			view.tag = view.tag;	// suppress the xcode warning about an unused variable.
-			DCLog(@"DCIntrospect: access current view using local 'view' variable.");
+			DCNamedLog(@"access current view using local 'view' variable.");
 			DEBUGGER;
 			return NO;
 #endif
@@ -696,7 +698,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	
 	if (outputString.length == 0)
     {
-		DCLog(@"DCIntrospect: No changes made to %@.", self.currentView.class);
+		DCNamedLog(@"No changes made to %@.", self.currentView.class);
     }
 	else
 		printf("\n\n%s\n", [outputString UTF8String]);
@@ -882,7 +884,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 {
 #ifdef DEBUG
 	// [UIView recursiveDescription] is a private method.  This should probably be re-written to avoid any potential problems.
-	DCLog(@"DCIntrospect: %@", [view recursiveDescription]);
+	DCNamedLog(@"%@", [view recursiveDescription]);
 #endif
 }
 
@@ -918,7 +920,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	if (self.showStatusBarOverlay)
 		[self showTemporaryStringInStatusBar:string];
 	else
-		DCLog(@"DCIntrospect: %@", string);
+		DCNamedLog(@"%@", string);
 }
 
 - (void)addOutlinesToFrameViewFromSubview:(UIView *)view
@@ -948,7 +950,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	if (self.showStatusBarOverlay)
 		[self showTemporaryStringInStatusBar:string];
 	else
-		DCLog(@"DCIntrospect: %@", string);
+		DCNamedLog(@"%@", string);
 }
 
 - (void)setBackgroundColor:(UIColor *)color ofNonOpaqueViewsInSubview:(UIView *)view
@@ -972,7 +974,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	if (self.showStatusBarOverlay)
 		[self showTemporaryStringInStatusBar:string];
 	else
-		DCLog(@"DCIntrospect: %@", string);
+		DCNamedLog(@"%@", string);
 	
 	// flash all views to show what is working
 	[self callDrawRectOnViewsInSubview:[self mainWindow]];
@@ -1039,11 +1041,11 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 			[helpString appendString:@"body { font-size:11pt; width:500px; margin:0 auto; }"];
 		
-		[helpString appendString:@"</style></head><body><h1>DCIntrospect</h1>"];
-		[helpString appendString:@"<p>Created by <a href='http://domesticcat.com.au'>Domestic Cat Software</a> 2011.</p>"];
+		[helpString appendString:@"</style></head><body><h1>CBIntrospect</h1>"];
+		[helpString appendString:@"<p>Created by <a href='http://domesticcat.com.au'>Domestic Cat Software</a> 2011. Updated by Christopher Bess</p>"];
 		[helpString appendString:@"<p>Twitter: <a href='http://twitter.com/patr'>@patr</a></p>"];
 		[helpString appendString:@"<p>More info and full documentation: <a href='http://domesticcat.com.au/projects/introspect'>domesticcat.com.au/projects/introspect</a></p>"];
-		[helpString appendString:@"<p>GitHub project: <a href='https://github.com/domesticcatsoftware/dcintrospect'>github.com/domesticcatsoftware/dcintrospect/</a></p>"];
+		[helpString appendString:@"<p>GitHub project: <a href='https://github.com/cbess/CBIntrospector'>github.com/cbess/CBIntrospector</a></p>"];
 		
 		[helpString appendString:@"<div class='bindings'><h1>Key Bindings</h1>"];
 		[helpString appendString:@"<p>Edit DCIntrospectSettings.h to change key bindings.</p>"];
@@ -1092,7 +1094,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		
 		[helpString appendFormat:@"<h1>Naming objects & logging code</h1><p>By providing names for objects using <span class='code'>setName:forObject:accessedWithSelf:</span>, that name will be shown in the status bar instead of the class of the view.</p><p>This is also used when logging view code (binding: <span class='code'>%@</span>).  Logging view code prints formatted code to the console for properties that have been changed.</p><p>For example, if you resize/move a view using the nudge keys, logging the view code will print <span class='code'>view.frame = CGRectMake(50.0 ..etc);</span> to the console.  If a name is provided then <span class='code'>view</span> is replaced by the name.</p>", kDCIntrospectKeysLogCodeForCurrentViewChanges];
 		
-		[helpString appendString:@"<h1>License</h1><p>DCIntrospect is made available under the <a href='http://en.wikipedia.org/wiki/MIT_License'>MIT license</a>.</p>"];
+		[helpString appendString:@"<h1>License</h1><p>CBIntrospect is made available under the <a href='http://en.wikipedia.org/wiki/MIT_License'>MIT license</a>.</p>"];
 		
 		[helpString appendString:@"<h2 style='text-align:center;'><a href='http://close'>Close Help</h2>"];
 		[helpString appendString:@"<div class='spacer'></div>"];
@@ -1140,7 +1142,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 - (void)logPropertiesForView:(UIView *)object
 {
     NSString *outputString = [object viewDescription];
-	DCLog(@"DCIntrospect: %@", outputString);
+	DCNamedLog(@"%@", outputString);
 }
 
 - (void)logAccessabilityPropertiesForObject:(id)object
@@ -1162,7 +1164,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	[outputString appendFormat:@"	frame: %@\n", NSStringFromCGRect([object accessibilityFrame])];
 	[outputString appendString:@"\n"];
 	
-	DCLog(@"DCIntrospect: %@", outputString);
+	DCNamedLog(@"%@", outputString);
 }
 
 - (NSArray *)subclassesOfClass:(Class)parentClass

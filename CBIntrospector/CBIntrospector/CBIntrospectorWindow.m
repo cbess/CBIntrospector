@@ -112,8 +112,6 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
     
 	// user can drag a string to create a new note from the initially dropped data
 	[self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
-    [self.splitView setPosition:500 ofDividerAtIndex:0];
-    [self.splitView adjustSubviews];
     
     // setup text view
     self.textView.font = [NSFont fontWithName:@"Monaco" size:12];

@@ -54,7 +54,6 @@
                                                                                options:0 error:nil];
     // build the path items collection
     NSArray *pathItems = [CBPathItem pathItemsAtPath:[[CBUtility sharedInstance] simulatorDirectoryPath] recursive:YES block:^BOOL(CBPathItem *item) {
-        NSRange nameRange = NSMakeRange(0, item.name.length);
         BOOL isDir;
         if ([item.name hasSuffix:@".app"])
             return YES;
@@ -63,7 +62,7 @@
         else if ([self textIsVersionString:item.name]
                  && ([[NSFileManager defaultManager] fileExistsAtPath:item.path isDirectory:&isDir] && isDir))
             return YES;
-        else if ([guidRegex matchesInString:item.name options:NSMatchingCompleted range:nameRange].count)
+        else if ([guidRegex matchesInString:item.name options:NSMatchingCompleted range:NSMakeRange(0, item.name.length)].count)
             return YES;
         
         return NO; 
