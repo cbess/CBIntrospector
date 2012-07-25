@@ -88,6 +88,7 @@
             if ([self.currentView updateWithJSON:jsonInfo])
             {
                 [self updateFrameView];
+                [self updateStatusBar];
             }
         }
         

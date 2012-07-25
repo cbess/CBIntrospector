@@ -579,9 +579,9 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		}
 		else if ([string isEqualToString:kDCIntrospectKeysMoveDownToFirstSubview])
 		{
-			if (self.currentView.subviews.count>0) {
+			if (self.currentView.subviews.count > 0) {
 				[self selectView:[self.currentView.subviews objectAtIndex:0]];
-			}else{
+			} else {
 				DCNamedLog(@"No subviews.");
 				return NO;
 			}
@@ -591,11 +591,11 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		{
 			NSUInteger currentViewsIndex = [self.currentView.superview.subviews indexOfObject:self.currentView];
 			
-			if (currentViewsIndex==NSNotFound) {
+			if (currentViewsIndex == NSNotFound) {
 				DCNamedLog(@"BROKEN HIERARCHY.");
 			} else if (self.currentView.superview.subviews.count>currentViewsIndex + 1) {
 				[self selectView:[self.currentView.superview.subviews objectAtIndex:currentViewsIndex + 1]];
-			}else{
+			} else {
 				DCNamedLog(@"No next sibling views.");
 				return NO;
 			}
@@ -604,9 +604,9 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		else if ([string isEqualToString:kDCIntrospectKeysMoveToPrevSiblingView])
 		{
 			NSUInteger currentViewsIndex = [self.currentView.superview.subviews indexOfObject:self.currentView];
-			if (currentViewsIndex==NSNotFound) {
+			if (currentViewsIndex == NSNotFound) {
 				DCNamedLog(@"BROKEN HIERARCHY.");
-			} else if (currentViewsIndex!=0) {
+			} else if (currentViewsIndex != 0) {
 				[self selectView:[self.currentView.superview.subviews objectAtIndex:currentViewsIndex - 1]];
 			} else {
 				DCNamedLog(@"No previous sibling views.");

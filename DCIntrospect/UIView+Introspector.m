@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <sys/types.h>
 #import <objc/runtime.h>
+#import "CBIntrospect.h"
 
 @interface UIView (Custom)
 + (NSString *)filePathWithView:(UIView *)view;
@@ -372,7 +373,7 @@
     // build the JSON/dictionary
     NSMutableDictionary *jsonInfo = [NSMutableDictionary dictionaryWithCapacity:7];
     
-    [jsonInfo setObject:NSStringFromClass([self class]) forKey:kUIViewClassNameKey];
+    [jsonInfo setObject:[[CBIntrospect sharedIntrospector] nameForObject:self] forKey:kUIViewClassNameKey];
     [jsonInfo setObject:[NSString stringWithFormat:@"%x", self] forKey:kUIViewMemoryAddressKey];
     [jsonInfo setObject:self.viewDescription forKey:kUIViewDescriptionKey];
     
