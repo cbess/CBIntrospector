@@ -495,7 +495,7 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 
 - (void)viewManagerClearedView:(CBUIViewManager *)manager
 {
-    [self.headerButton setTitle:@"CBIntrospector"];
+    [self.headerButton setTitle:@"UIView Introspector"];
     self.leftPositionTextField.stringValue = self.topPositionTextField.stringValue = // below
     self.widthTextField.stringValue = self.heightTextField.stringValue = @"";
     

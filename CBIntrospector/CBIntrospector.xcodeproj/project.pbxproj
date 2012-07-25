@@ -52,7 +52,7 @@
 		92C0AF60157D9E26003F13FC /* CBProjectWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBProjectWindow.m; sourceTree = "<group>"; };
 		92C0AF62157DA0F9003F13FC /* CBPathItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPathItem.h; sourceTree = "<group>"; };
 		92C0AF63157DA0F9003F13FC /* CBPathItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPathItem.m; sourceTree = "<group>"; };
-		92CBB0A115521B3C00F2217D /* CBIntrospector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CBIntrospector.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92CBB0A115521B3C00F2217D /* UIView Introspector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UIView Introspector.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92CBB0A515521B3C00F2217D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		92CBB0A815521B3C00F2217D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		92CBB0A915521B3C00F2217D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -128,7 +128,7 @@
 		92CBB0A215521B3C00F2217D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				92CBB0A115521B3C00F2217D /* CBIntrospector.app */,
+				92CBB0A115521B3C00F2217D /* UIView Introspector.app */,
 				92CBB0C215521B3C00F2217D /* CBIntrospectorTests.octest */,
 			);
 			name = Products;
@@ -267,7 +267,7 @@
 			);
 			name = CBIntrospector;
 			productName = CBIntrospector;
-			productReference = 92CBB0A115521B3C00F2217D /* CBIntrospector.app */;
+			productReference = 92CBB0A115521B3C00F2217D /* UIView Introspector.app */;
 			productType = "com.apple.product-type.application";
 		};
 		92CBB0C115521B3C00F2217D /* CBIntrospectorTests */ = {
@@ -480,7 +480,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CBIntrospector/CBIntrospector-Prefix.pch";
 				INFOPLIST_FILE = "CBIntrospector/CBIntrospector-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "UIView Introspector";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -491,7 +491,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CBIntrospector/CBIntrospector-Prefix.pch";
 				INFOPLIST_FILE = "CBIntrospector/CBIntrospector-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "UIView Introspector";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
