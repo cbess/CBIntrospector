@@ -55,6 +55,11 @@
     return [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBTreeDumpFileName];
 }
 
+- (NSString *)viewMessageJSONFilePath
+{
+    return [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBViewMessageFileName];
+}
+
 - (NSString *)describeColor:(UIColor *)color
 {
 	if (!color)

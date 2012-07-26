@@ -45,7 +45,6 @@
         self.receiverViewButton.title = nssprintf(@"<%@: 0x%@>", receiverView.className, receiverView.memoryAddress);
     
     [self.sendButton setEnabled:receiverView != nil];
-    self.responseTextView.string = @"";
 }
 
 - (void)makeKeyAndOrderFront:(id)sender
@@ -104,5 +103,10 @@
     }
     
     return YES;
+}
+
+- (void)clearHistory
+{
+    self.responseTextView.string = @"";
 }
 @end

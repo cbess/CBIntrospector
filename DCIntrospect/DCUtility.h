@@ -24,6 +24,7 @@ static inline NSString * NSStringFromBOOL(BOOL value)
 
 - (NSString *)currentViewJSONFilePath;
 - (NSString *)viewTreeJSONFilePath;
+- (NSString *)viewMessageJSONFilePath;
 
 - (BOOL)writeString:(NSString *)string toPath:(NSString *)path;
 

@@ -14,11 +14,14 @@
 #import "CBProjectWindow.h"
 #import "CBViewMessengerWindow.h"
 
+// option constants
 static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
+static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-view";
 
 @interface CBIntrospectorWindow () <NSDraggingDestination, CBUIViewManagerDelegate, NSOutlineViewDataSource, 
     NSOutlineViewDelegate, NSTextFieldDelegate, NSWindowDelegate, NSSplitViewDelegate>
 @property (assign) IBOutlet NSMenuItem *showAllSubviewsMenuItem;
+@property (assign) IBOutlet NSMenuItem *messageActiveViewMenuItem;
 @property (assign) IBOutlet NSTextView *textView;
 @property (assign) IBOutlet NSSplitView *splitView;
 @property (assign) IBOutlet CBTreeView *treeView;
@@ -32,7 +35,8 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 @property (assign) IBOutlet CBProjectWindow *projectWindow;
 @property (assign) IBOutlet CBViewMessengerWindow *messengerWindow;
 @property (nonatomic, assign) NSTextField *focusedTextField;
-@property (nonatomic, assign) BOOL showAllSubviews;
+@property (nonatomic, assign) BOOL doShowAllSubviews;
+@property (nonatomic, assign) BOOL doMessageActiveView;
 @property (nonatomic, copy) NSString *defaultTitle;
 - (IBAction)treeNodeClicked:(id)sender;
 - (void)loadCurrentViewControls;
@@ -41,6 +45,7 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 
 @implementation CBIntrospectorWindow
 @synthesize showAllSubviewsMenuItem;
+@synthesize messageActiveViewMenuItem;
 @synthesize textView;
 @synthesize splitView;
 @synthesize treeView;
@@ -57,9 +62,10 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 @synthesize treeContents = _treeContents;
 @synthesize syncDirectoryPath;
 @synthesize focusedTextField;
-@synthesize showAllSubviews = _showAllSubviews;
+@synthesize doShowAllSubviews = _doShowAllSubviews;
 @synthesize simulatorDirectoryPath;
 @synthesize defaultTitle;
+@synthesize doMessageActiveView = _doMessageActiveView;
 
 - (void)dealloc
 {
@@ -91,15 +97,30 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
     return [[CBUtility sharedInstance] simulatorDirectoryPath];
 }
 
-- (BOOL)showAllSubviews
+- (BOOL)doShowAllSubviews
 {
-    return (_showAllSubviews = [[NSUserDefaults standardUserDefaults] boolForKey:kCBUserSettingShowAllSubviewsKey]);
+    return (_doShowAllSubviews = [[NSUserDefaults standardUserDefaults] boolForKey:kCBUserSettingShowAllSubviewsKey]);
 }
 
-- (void)setShowAllSubviews:(BOOL)show
+- (void)setDoShowAllSubviews:(BOOL)show
 {
-    _showAllSubviews = show;
+    _doShowAllSubviews = show;
     [[NSUserDefaults standardUserDefaults] setBool:show forKey:kCBUserSettingShowAllSubviewsKey];
+}
+
+- (BOOL)doMessageActiveView
+{
+    _doMessageActiveView = YES;
+    if (nil == [[NSUserDefaults standardUserDefaults] objectForKey:kCBUserSettingMessageActiveViewKey])
+        return _doMessageActiveView;
+    
+    return (_doMessageActiveView = [[NSUserDefaults standardUserDefaults] boolForKey:kCBUserSettingMessageActiveViewKey]);
+}
+
+- (void)setDoMessageActiveView:(BOOL)doMessageActiveView
+{
+    _doMessageActiveView = doMessageActiveView;
+    [[NSUserDefaults standardUserDefaults] setBool:doMessageActiveView forKey:kCBUserSettingMessageActiveViewKey];
 }
 
 #pragma mark - General Overrides
@@ -107,7 +128,8 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 - (void)awakeFromNib
 {
     self.delegate = self;
-    self.showAllSubviewsMenuItem.state = (self.showAllSubviews ? NSOnState : NSOffState);
+    self.showAllSubviewsMenuItem.state = (self.doShowAllSubviews ? NSOnState : NSOffState);
+    self.messageActiveViewMenuItem.state = (self.doMessageActiveView ? NSOnState : NSOffState);
     self.defaultTitle = self.title;
     
 	// user can drag a string to create a new note from the initially dropped data
@@ -233,8 +255,8 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 
 - (IBAction)showAllSubviewsClicked:(id)sender 
 {
-    self.showAllSubviews = !self.showAllSubviews;
-    self.showAllSubviewsMenuItem.state = (self.showAllSubviews ? NSOnState : NSOffState);
+    self.doShowAllSubviews = !self.doShowAllSubviews;
+    self.showAllSubviewsMenuItem.state = (self.doShowAllSubviews ? NSOnState : NSOffState);
     
     [self reloadTree];
 }
@@ -254,6 +276,17 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
     self.messengerWindow.introspectorWindow = self;
     self.messengerWindow.receiverView = self.viewManager.currentView;
     [self.messengerWindow makeKeyAndOrderFront:nil];
+}
+
+- (IBAction)messageActiveViewClicked:(id)sender
+{
+    self.doMessageActiveView = !self.doMessageActiveView;
+    self.messageActiveViewMenuItem.state = (self.doMessageActiveView ? NSOnState : NSOffState);
+}
+
+- (IBAction)clearMessengerHistory:(id)sender
+{
+    [self.messengerWindow clearHistory];
 }
 
 #pragma mark - Misc
@@ -286,6 +319,8 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 {
     CBUIView *view = self.viewManager.currentView;
     
+    if (self.doMessageActiveView)
+        self.messengerWindow.receiverView = view;
     self.headerButton.title = nssprintf(@"<%@: 0x%@>", view.className, view.memoryAddress);
     if (view.viewDescription)
         self.textView.string = view.viewDescription;
@@ -350,7 +385,7 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 
 - (BOOL)allowChildrenWithJSON:(NSDictionary *)jsonInfo
 {
-    if (_showAllSubviews)
+    if (self.doShowAllSubviews)
         return YES;
     
     NSString *className = [jsonInfo valueForKey:kUIViewClassNameKey];

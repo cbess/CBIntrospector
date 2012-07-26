@@ -120,6 +120,7 @@
     
     NSDictionary *messageInfo = [jsonString objectFromJSONString];
     
+    // if EXC_BAD_ACCESS, try reloading the tree
     NSInvocation *invocation = [[DLStatementParser sharedParser] invocationForStatement:[messageInfo objectForKey:kUIViewMessageKey] error:&error];
     [invocation invoke];
     
@@ -197,6 +198,7 @@
    
     // remove the current view file
     [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] currentViewJSONFilePath] error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] viewMessageJSONFilePath] error:nil];
     
     if (self.on)
     {
