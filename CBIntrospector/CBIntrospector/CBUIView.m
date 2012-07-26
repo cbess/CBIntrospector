@@ -135,7 +135,7 @@
     NSError *error = nil;
     NSString *jsonString = [jsonInfo JSONString];
     [jsonString writeToFile:self.syncFilePath
-                 atomically:YES
+                 atomically:NO
                    encoding:NSUTF8StringEncoding
                       error:&error];
     if (error)

@@ -93,7 +93,7 @@
     NSError *error = nil;
     NSString *jsonString = [jsonInfo JSONString];
     [jsonString writeToFile:[self.introspectorWindow.syncDirectoryPath stringByAppendingPathComponent:kCBViewMessageFileName]
-                 atomically:YES
+                 atomically:NO
                    encoding:NSUTF8StringEncoding
                       error:&error];
     if (error)
