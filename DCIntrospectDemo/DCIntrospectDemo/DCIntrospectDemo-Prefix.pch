@@ -13,6 +13,5 @@
 #import <Foundation/Foundation.h>
 #import "CBIntrospectConstants.h"
 #import "CBMacros.h"
-#import "CBSharedHeader.h"
 #import "DCUtility.h"
 #endif

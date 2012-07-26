@@ -9,7 +9,6 @@
 #import "UIView+Introspector.h"
 #import "DCUtility.h"
 #import "JSONKit.h"
-#import "CBSharedHeader.h"
 #import "CBIntrospectConstants.h"
 #include <stdbool.h>
 #include <sys/types.h>
@@ -439,7 +438,7 @@
 
 - (NSString *)memoryAddress
 {
-    return nssprintf(@"%x", self);
+    return [NSString stringWithFormat:@"%x", (int)self];
 }
 
 #pragma mark - View Description

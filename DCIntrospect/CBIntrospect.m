@@ -11,7 +11,6 @@
 #import <sys/stat.h>
 #import "JSONKit.h"
 #import "DCUtility.h"
-#import "CBSharedHeader.h"
 #import "CBIntrospectConstants.h"
 #import "DLStatementParser.h"
 #import "DLInvocationResult.h"
@@ -124,7 +123,17 @@
     NSInvocation *invocation = [[DLStatementParser sharedParser] invocationForStatement:[messageInfo objectForKey:kUIViewMessageKey] error:&error];
     [invocation invoke];
     
+    // get the results (the response from the message)
+    NSString *memAddress = [messageInfo objectForKey:kUIViewMemoryAddressKey];
+    DLInvocationResult *invocationResult = [[DLInvocationResult alloc] initWithInvokedInvocation:invocation];
+    UIView *view = [self viewWithMemoryAddress:memAddress];
+    NSString *message = [NSString stringWithFormat:@"%@: <%@: 0x%@> = %@", self.class, view.class, memAddress, invocationResult.resultDescription];
+    NSLog(@"%@", message);
+    
+    // write the response back to the client
+
     [jsonString release];
+    [invocationResult release];
     
     // remove the file after it has been used/read
     return [[NSFileManager defaultManager] removeItemAtPath:messageFilePath error:nil];
@@ -132,17 +141,23 @@
 
 #pragma mark - Misc
 
+// Returns the view at the specified mem address (0x9575200, minus the `0x`)
+- (UIView *)viewWithMemoryAddress:(NSString *)memAddress
+{
+    // convert the memaddres to a pointer
+    unsigned addr = 0;
+    [[NSScanner scannerWithString:memAddress] scanHexInt:&addr];
+    
+    UIView *view = (id)addr;
+    return view;
+}
+
 - (BOOL)updateCurrentViewWithMemoryAddress:(NSString *)memAddress
 {
     // if mem address different than current view, then get mem address of the target view
     if (![memAddress isEqualToString:self.currentView.memoryAddress])
     {
-        // convert the memaddres to a pointer
-        unsigned addr = 0;
-        [[NSScanner scannerWithString:memAddress] scanHexInt:&addr];
-        
-        UIView *view = (id)addr;
-        
+        UIView *view = [self viewWithMemoryAddress:memAddress];
         [self selectView:view];
         return YES;
     }
