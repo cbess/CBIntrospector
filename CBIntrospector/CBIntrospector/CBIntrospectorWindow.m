@@ -123,7 +123,7 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
 - (BOOL)performKeyEquivalent:(NSEvent *)evt
 { // handles key down events
 	int key = [evt keyCode];
-	int modFlag = [evt modifierFlags];
+	NSUInteger modFlag = [evt modifierFlags];
 //    NSLog(@"main window key event: %d", key);
     BOOL shiftKey = (modFlag | NSShiftKeyMask);
     
@@ -463,7 +463,7 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
     if (itemInfo == nil)
         return;
     
-    int nRow = [self.treeView rowForItem:itemInfo];
+    NSInteger nRow = [self.treeView rowForItem:itemInfo];
     
     if (nRow < 0) 
     {
@@ -535,7 +535,7 @@ static NSString * const kCBUserSettingShowAllSubviewsKey = @"show-subviews";
     if (![self allowChildrenWithJSON:item])
         return NO;
     
-    int count = [[item valueForKey:kUIViewSubviewsKey] count];
+    NSUInteger count = [[item valueForKey:kUIViewSubviewsKey] count];
     return count != 0;
 }
 

@@ -13,8 +13,8 @@
 {
     NSRange visibleRowIndexes = [self rowsInRect:clipRect];
     NSIndexSet *selectedRowIndexes = [self selectedRowIndexes];
-    int nRow = visibleRowIndexes.location;
-    int nEndRow = nRow + visibleRowIndexes.length;
+    NSUInteger nRow = visibleRowIndexes.location;
+    NSUInteger nEndRow = nRow + visibleRowIndexes.length;
     
     NSColor *color = [NSColor colorWithCalibratedRed:0.929 green:0.953 blue:0.996 alpha:0.7];
     [color set];
