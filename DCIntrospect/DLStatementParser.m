@@ -257,7 +257,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	NSError *returnError = nil;
 	
 	// Scan statement
-	NSScanner *scanner = [[NSScanner alloc] initWithString:statement];
+	NSScanner *scanner = [[[NSScanner alloc] initWithString:statement] autorelease];
 	while (scanner.scanLocation < statement.length)
 	{
 		// Setup
@@ -363,10 +363,8 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 			break;
 		}
 		
-		
-		
 		// Method name setup
-		NSMutableString *selectorName = [[NSMutableString alloc] initWithCapacity:statement.length - scanner.scanLocation];
+		NSMutableString *selectorName = [[[NSMutableString alloc] initWithCapacity:statement.length - scanner.scanLocation] autorelease];
 		int numberOfMethodParameters = 0; // Used for parsing parameter objects
 		
 		NSUInteger methodNameScanLocation = scanner.scanLocation;
@@ -470,9 +468,6 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		
 		// Method selector
 		theSelector = NSSelectorFromString(selectorName);
-		
-		// Clean up
-		[selectorName release];
 		selectorName = nil;
 		
 		// Create invocation from class
@@ -719,7 +714,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 					else
 					{
 						// TODO: look into converting return type into argument type
-						NSString *errorString = [NSString stringWithFormat:@"Selector parameter %d command at statement index %d return type '%c' different from selector argument type '%c'. Command: %@", index, scanner.scanLocation, [NSString stringWithUTF8String:parameterReturnType], [NSString stringWithUTF8String:theInvocationArgumentType], subStatement];
+						NSString *errorString = [NSString stringWithFormat:@"Selector parameter %d command at statement index %d return type '%c' different from selector argument type '%c'. Command: %@", index, scanner.scanLocation, (int)[NSString stringWithUTF8String:parameterReturnType], (int)[NSString stringWithUTF8String:theInvocationArgumentType], subStatement];
 						returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 														  code:DLStatementParserErrorParameterReturnValueDifferentFromSelectorArgumentValue
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -782,7 +777,6 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		// Finish scanning through remainder of statement
 		[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
 	}
-	[scanner release];
 
 	// Error
 	if (returnError)
@@ -807,7 +801,6 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		
 		*error = returnError;
 	}
-	
 	// Return status of parsing statement
 	return invocation;
 }

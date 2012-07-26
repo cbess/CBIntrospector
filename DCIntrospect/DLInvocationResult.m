@@ -58,7 +58,7 @@
 - (NSString *)descriptionForBitFold:(int)bitFold
 {
 	// TODO: Implement returning a binary visualization of the int
-	return [NSString stringWithFormat:@"Bitfold: %i", self.result];
+	return [NSString stringWithFormat:@"Bitfold: %i", (int)self.result];
 }
 
 #pragma mark - Public
@@ -87,49 +87,56 @@
 			description = NSStringFromSelector(self.result);
 			break;
 		case _C_CHR:      // 'c'
-			description = [NSString stringWithFormat:@"%c", self.result];
+			description = [NSString stringWithFormat:@"%c", (int)self.result];
 			break;
 		case _C_UCHR:     // 'C'
-			description = [NSString stringWithFormat:@"%C", self.result];
+			description = [NSString stringWithFormat:@"%C", (unsigned short)self.result];
 			break;
 		case _C_SHT:      // 's'
-			description = [NSString stringWithFormat:@"%hi", self.result];
+			description = [NSString stringWithFormat:@"%hi", (short)self.result];
 			break;
 		case _C_USHT:     // 'S'
-			description = [NSString stringWithFormat:@"%hu", self.result];
+			description = [NSString stringWithFormat:@"%hu", (unsigned short)self.result];
 			break;
 		case _C_INT:      // 'i'
-			description = [NSString stringWithFormat:@"%i", self.result];
+			description = [NSString stringWithFormat:@"%i", (int)self.result];
 			break;
 		case _C_UINT:     // 'I'
-			description = [NSString stringWithFormat:@"%u", self.result];
+			description = [NSString stringWithFormat:@"%u", (unsigned int)self.result];
 			break;
 		case _C_LNG:      // 'l'
-			description = [NSString stringWithFormat:@"%ld", self.result];
+			description = [NSString stringWithFormat:@"%ld", (long)self.result];
 			break;
 		case _C_ULNG:     // 'L'
-			description = [NSString stringWithFormat:@"%lu", self.result];
+			description = [NSString stringWithFormat:@"%lu", (unsigned long)self.result];
 			break;
 		case _C_LNG_LNG:  // 'q'
-			description = [NSString stringWithFormat:@"%qi", self.result]; // or '%lld'
+			description = [NSString stringWithFormat:@"%qi", (long long)self.result]; // or '%lld'
 			break;
 		case _C_ULNG_LNG: // 'Q'
-			description = [NSString stringWithFormat:@"%qu", self.result]; // or '%llu"
+			description = [NSString stringWithFormat:@"%qu", (unsigned long long)self.result]; // or '%llu"
 			break;
 		case _C_FLT:      // 'f'
-			description = [NSString stringWithFormat:@"%f", self.result]; // or '%g', '%ld"
+        {
+            // test this, but this will suppress the error for now
+            NSString *format = @"%f";
+			description = [NSString stringWithFormat:format, self.result]; // or '%g', '%ld"
+        }
 			break;
 		case _C_DBL:      // 'd'
-			description = [NSString stringWithFormat:@"%f", self.result];
+        {
+            NSString *format = @"%f";
+			description = [NSString stringWithFormat:format, self.result];
+        }
 			break;
 		case _C_BFLD:     // 'b'
 			description = [self descriptionForBitFold:(int)self.result];
 			break;
 		case _C_BOOL:     // 'B'
-			description = [NSString stringWithFormat:@"%@", (BOOL)self.result ? @"YES" : @"NO"];
+			description = (self.result ? @"YES" : @"NO");
 			break;
 		case _C_VOID:     // 'v'
-			description = [NSString stringWithFormat:@"(null)"];
+			description = @"(null)";
 			break;
 		case _C_UNDEF:    // '?'
 		case _C_PTR:      // '^'
@@ -145,7 +152,7 @@
 		case _C_CONST:    // 'r'
 			
 		default:
-			description = [NSString stringWithFormat:@"Description for type '%c' not yet supported", [NSString stringWithUTF8String:self.type]];
+			description = [NSString stringWithFormat:@"Description for type '%c' not yet supported", (int)[NSString stringWithUTF8String:self.type]];
 			break;
 	}
 	

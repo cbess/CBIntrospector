@@ -374,7 +374,7 @@
     NSMutableDictionary *jsonInfo = [NSMutableDictionary dictionaryWithCapacity:7];
     
     [jsonInfo setObject:[[CBIntrospect sharedIntrospector] nameForObject:self] forKey:kUIViewClassNameKey];
-    [jsonInfo setObject:[NSString stringWithFormat:@"%x", self] forKey:kUIViewMemoryAddressKey];
+    [jsonInfo setObject:[NSString stringWithFormat:@"%x", (unsigned int)self] forKey:kUIViewMemoryAddressKey];
     [jsonInfo setObject:self.viewDescription forKey:kUIViewDescriptionKey];
     
     [jsonInfo setObject:NSStringFromCGRect(self.bounds) forKey:kUIViewBoundsKey];
@@ -396,7 +396,7 @@
 {
     // check class and mem address    
     NSString *memAddress = [jsonInfo valueForKey:kUIViewMemoryAddressKey];
-    if (![[NSString stringWithFormat:@"%x", self] isEqualToString:memAddress])
+    if (![[NSString stringWithFormat:@"%x", (unsigned int)self] isEqualToString:memAddress])
     {
         DebugLog(@"Bad memory address for current view from JSON: 0x%@", memAddress);
         return NO;
@@ -447,7 +447,7 @@
 - (NSString *)viewDescription
 {
     Class objectClass = [self class];
-	NSString *className = [NSString stringWithFormat:@"%@:0x%x", objectClass, self];
+	NSString *className = [NSString stringWithFormat:@"%@:0x%x", objectClass, (unsigned int) self];
 	
 	unsigned int count;
 	objc_property_t *properties = class_copyPropertyList(objectClass, &count);
@@ -494,7 +494,7 @@
         NSMutableArray *subviewsArray = [NSMutableArray arrayWithCapacity:view.subviews.count];
         for (UIView *subview in view.subviews) 
         {
-            [subviewsArray addObject:[NSString stringWithFormat:@"<%@: 0x%x>", NSStringFromClass([subview class]), subview]];
+            [subviewsArray addObject:[NSString stringWithFormat:@"<%@: 0x%x>", NSStringFromClass([subview class]), (unsigned int)subview]];
         }
         
         // ex: subviews: 3 views [<UIView: 0x23f434f>, <UIButton: 0x43f4ffe>]
