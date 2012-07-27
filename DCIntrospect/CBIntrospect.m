@@ -118,16 +118,18 @@
     }
     
     NSDictionary *messageInfo = [jsonString objectFromJSONString];
+    NSString *statement = [messageInfo objectForKey:kUIViewMessageKey];
     
     // if EXC_BAD_ACCESS, try reloading the tree
-    NSInvocation *invocation = [[DLStatementParser sharedParser] invocationForStatement:[messageInfo objectForKey:kUIViewMessageKey] error:&error];
+    NSInvocation *invocation = [[DLStatementParser sharedParser] invocationForStatement:statement error:&error];
     [invocation invoke];
     
     // get the results (the response from the message)
-    NSString *memAddress = [messageInfo objectForKey:kUIViewMemoryAddressKey];
     DLInvocationResult *invocationResult = [[DLInvocationResult alloc] initWithInvokedInvocation:invocation];
-    UIView *view = [self viewWithMemoryAddress:memAddress];
-    NSString *message = [NSString stringWithFormat:@"%@: <%@: 0x%@> = %@", self.class, view.class, memAddress, invocationResult.resultDescription];
+//    NSString *memAddress = [messageInfo objectForKey:kUIViewMemoryAddressKey];
+//    UIView *view = [self viewWithMemoryAddress:memAddress];
+//    NSString *message = [NSString stringWithFormat:@"%@: <%@: 0x%@> = %@", self.class, view.class, memAddress, invocationResult.resultDescription];
+    NSString *message = [NSString stringWithFormat:@"%@: %@ = %@", self.class, statement, invocationResult.resultDescription];
     NSLog(@"%@", message);
     
     // write the response back to the client
