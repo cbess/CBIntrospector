@@ -88,6 +88,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E6CBC4D15C34B4A009C7D51 /* Statement Parser */ = {
+			isa = PBXGroup;
+			children = (
+				1E73F22615C34754004EE6E2 /* DLInvocationResult.h */,
+				1E73F22715C34754004EE6E2 /* DLInvocationResult.m */,
+				1E73F22815C34754004EE6E2 /* DLStatementParser.h */,
+				1E73F22915C34754004EE6E2 /* DLStatementParser.m */,
+			);
+			name = "Statement Parser";
+			sourceTree = "<group>";
+		};
 		1E73F1E415C3467E004EE6E2 = {
 			isa = PBXGroup;
 			children = (
@@ -159,10 +170,7 @@
 				1E73F22315C34754004EE6E2 /* DCStatusBarOverlay.m */,
 				1E73F22415C34754004EE6E2 /* DCUtility.h */,
 				1E73F22515C34754004EE6E2 /* DCUtility.m */,
-				1E73F22615C34754004EE6E2 /* DLInvocationResult.h */,
-				1E73F22715C34754004EE6E2 /* DLInvocationResult.m */,
-				1E73F22815C34754004EE6E2 /* DLStatementParser.h */,
-				1E73F22915C34754004EE6E2 /* DLStatementParser.m */,
+				1E6CBC4D15C34B4A009C7D51 /* Statement Parser */,
 				1E73F23B15C3476A004EE6E2 /* Extensions */,
 			);
 			name = CBIntrospect;
@@ -385,6 +393,7 @@
 				1E73F20F15C3467E004EE6E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
