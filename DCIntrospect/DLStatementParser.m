@@ -598,7 +598,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				else if ([compareString isEqualToString:NIL_STRING])
 				{
                     NSString *str = [[NSString alloc] initWithFormat:@"%c", _C_VOID];
-                    (void)CB_AutoRelease(str)
+                    CB_NO_ARC([str autorelease])
 					parameterType = [str UTF8String];
 				}
 				else

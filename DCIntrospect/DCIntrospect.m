@@ -1145,8 +1145,10 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 
 - (void)logPropertiesForView:(UIView *)object
 {
+#ifdef DEBUG
     NSString *outputString = [object viewDescription];
 	DCNamedLog(@"%@", outputString);
+#endif
 }
 
 - (void)logAccessabilityPropertiesForObject:(id)object

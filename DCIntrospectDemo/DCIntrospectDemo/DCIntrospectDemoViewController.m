@@ -70,13 +70,14 @@
 	if (cell == nil)
 	{
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        CB_NO_ARC([cell autorelease])
 	}
 
 	cell.textLabel.text = [NSString stringWithFormat:@"Row %i", indexPath.row];
 	cell.detailTextLabel.text = @"Detailed Text";
 	cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-	return CB_AutoRelease(cell)
+	return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
