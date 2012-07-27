@@ -229,6 +229,15 @@
     }
 }
 
+- (void)start
+{
+    [super start];
+    
+    // clear the json
+    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] currentViewJSONFilePath] error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] viewTreeJSONFilePath] error:nil];
+}
+
 #pragma mark - Traverse Subviews
 
 - (BOOL)canDumpView:(UIView *)view

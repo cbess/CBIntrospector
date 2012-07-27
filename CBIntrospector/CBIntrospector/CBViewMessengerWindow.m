@@ -43,6 +43,8 @@
     // load the window
     if (receiverView)
         self.receiverViewButton.title = nssprintf(@"<%@: 0x%@>", receiverView.className, receiverView.memoryAddress);
+    else
+        self.receiverViewButton.title = @"UIView";
     
     [self.sendButton setEnabled:receiverView != nil];
 }

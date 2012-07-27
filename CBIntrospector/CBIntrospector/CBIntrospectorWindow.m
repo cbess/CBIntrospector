@@ -535,6 +535,7 @@ static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-vi
 
 - (void)viewManagerClearedView:(CBUIViewManager *)manager
 {
+    self.messengerWindow.receiverView = nil;
     [self.headerButton setTitle:@"UIView Introspector"];
     self.leftPositionTextField.stringValue = self.topPositionTextField.stringValue = // below
     self.widthTextField.stringValue = self.heightTextField.stringValue = @"";
