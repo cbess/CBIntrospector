@@ -37,8 +37,8 @@
     if (receiverView == _receiverView)
         return;
     
-    NSRelease(_receiverView)
-    _receiverView = NSRetain(receiverView)
+    CB_Release(_receiverView);
+    _receiverView = CB_Retain(receiverView);
     
     // load the window
     if (receiverView)

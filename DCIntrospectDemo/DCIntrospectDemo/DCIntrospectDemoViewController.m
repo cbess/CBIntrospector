@@ -8,6 +8,7 @@
 
 #import "DCIntrospectDemoViewController.h"
 #import "CBIntrospect.h"
+#import "CBMacros.h"
 
 @implementation DCIntrospectDemoViewController
 @synthesize activityIndicator;
@@ -17,9 +18,11 @@
 {
 	[[CBIntrospect sharedIntrospector] removeNamesForViewsInView:self.view];
 
+#if ! CB_HAS_ARC
     [activityIndicator release];
 	[label release];
     [super dealloc];
+#endif
 }
 
 - (void)didReceiveMemoryWarning
@@ -66,14 +69,14 @@
 	UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 	}
 
 	cell.textLabel.text = [NSString stringWithFormat:@"Row %i", indexPath.row];
 	cell.detailTextLabel.text = @"Detailed Text";
 	cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-	return cell;
+	return CB_AutoRelease(cell)
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

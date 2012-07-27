@@ -93,7 +93,7 @@
             }
         }
         
-        [jsonString release];
+        CB_Release(jsonString);
     }
     
     // read and execute the 'uiview message' sent from the introspector tool
@@ -134,8 +134,8 @@
     
     // write the response back to the client
 
-    [jsonString release];
-    [invocationResult release];
+    CB_Release(jsonString);
+    CB_Release(invocationResult);
     
     // remove the file after it has been used/read
     return [[NSFileManager defaultManager] removeItemAtPath:messageFilePath error:nil];
@@ -150,7 +150,7 @@
     unsigned addr = 0;
     [[NSScanner scannerWithString:memAddress] scanHexInt:&addr];
     
-    UIView *view = (id)addr;
+    UIView *view = (__bridge UIView *)((void*)addr);
     return view;
 }
 
@@ -273,7 +273,7 @@
     NSString *jsonString = [treeDictionary JSONString];
     NSString *path = [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBTreeDumpFileName];
     [[DCUtility sharedInstance] writeString:jsonString toPath:path];
-    [treeDictionary release];
+    CB_Release(treeDictionary);
 }
 
 - (void)dumpSubviewsOfRootView:(UIView *)rootView toDictionary:(NSMutableDictionary *)treeInfo
@@ -296,7 +296,7 @@
         if ([self canDumpSubviewsOfView:view])
             [self dumpSubviewsOfRootView:view toDictionary:viewInfo];
         
-        [viewInfo release];
+        CB_Release(viewInfo);
     }
     
     [treeInfo setObject:viewArray forKey:kUIViewSubviewsKey];

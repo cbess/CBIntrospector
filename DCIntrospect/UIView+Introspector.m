@@ -7,6 +7,7 @@
 //
 
 #import "UIView+Introspector.h"
+#import "CBMacros.h"
 #import "DCUtility.h"
 #import "JSONKit.h"
 #import "CBIntrospectConstants.h"
@@ -397,12 +398,12 @@
     NSString *memAddress = [jsonInfo valueForKey:kUIViewMemoryAddressKey];
     if (![[NSString stringWithFormat:@"%x", (unsigned int)self] isEqualToString:memAddress])
     {
-        DebugLog(@"Bad memory address for current view from JSON: 0x%@", memAddress);
+        CBDebugLog(@"Bad memory address for current view from JSON: 0x%@", memAddress);
         return NO;
     }
     else if (![[jsonInfo valueForKey:kUIViewClassNameKey] isEqualToString:NSStringFromClass([self class])])
     {
-        DebugLog(@"Bad class name for memory address: 0x%@", memAddress);
+        CBDebugLog(@"Bad class name for memory address: 0x%@", memAddress);
         return NO;
     }
     

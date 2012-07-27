@@ -27,8 +27,8 @@
 
 - (void)dealloc
 {
-    NSRelease(_versionRegex)
-    NSRelease(_pathItems)
+    CB_Release(_versionRegex);
+    CB_Release(_pathItems);
     [super dealloc];
 }
 
@@ -72,7 +72,7 @@
     [self.outlineView reloadData];
     
     [self.progressIndicator stopAnimation:nil];
-    DebugLog(@"%lu top level path items", pathItems.count);
+    CBDebugLog(@"%lu top level path items", pathItems.count);
 }
 
 #pragma mark - Events
@@ -84,7 +84,7 @@
         return;
     
     [self.introspectorWindow switchProjectToDirectoryPath:item.path];
-    DebugLog(@"project opened");
+    CBDebugLog(@"project opened");
 }
 
 - (IBAction)reloadButtonClicked:(id)sender 

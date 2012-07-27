@@ -57,10 +57,12 @@
 
 - (void)dealloc
 {
+#if ! CB_HAS_ARC
 	[window release];
 	[viewController release];
 
 	[super dealloc];
+#endif
 }
 
 @end

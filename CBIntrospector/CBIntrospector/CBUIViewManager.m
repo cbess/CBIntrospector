@@ -52,7 +52,7 @@
         // no tree view
         && ![[NSFileManager defaultManager] fileExistsAtPath:[self.syncDirectoryPath stringByAppendingPathComponent:kCBTreeDumpFileName]])
     {
-        DebugLog(@"Cleared current view");
+        CBDebugLog(@"Cleared current view");
         self.currentView = nil;
         [self.delegate viewManagerClearedView:self];
         return;

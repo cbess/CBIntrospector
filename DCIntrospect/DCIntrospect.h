@@ -10,7 +10,7 @@
 
 #import <objc/runtime.h>
 #include "TargetConditionals.h"
-
+#import "CBMacros.h"
 #import "DCIntrospectSettings.h"
 #import "DCFrameView.h"
 #import "DCStatusBarOverlay.h"
@@ -28,7 +28,7 @@
 
 @property (nonatomic) BOOL keyboardBindingsOn;									// default: YES
 @property (nonatomic) BOOL showStatusBarOverlay;								// default: YES
-@property (nonatomic, retain) UIGestureRecognizer *invokeGestureRecognizer;		// default: nil
+@property (nonatomic, cbstrong) UIGestureRecognizer *invokeGestureRecognizer;		// default: nil
 @property (nonatomic) BOOL enableShakeToActivate; // default: YES
 
 @property (nonatomic) BOOL on;
@@ -36,16 +36,16 @@
 @property (nonatomic) BOOL viewOutlines;
 @property (nonatomic) BOOL highlightNonOpaqueViews;
 @property (nonatomic) BOOL flashOnRedraw;
-@property (nonatomic, retain) DCFrameView *frameView;
-@property (nonatomic, retain) UITextView *inputTextView;
-@property (nonatomic, retain) DCStatusBarOverlay *statusBarOverlay;
+@property (nonatomic, cbstrong) DCFrameView *frameView;
+@property (nonatomic, cbstrong) UITextView *inputTextView;
+@property (nonatomic, cbstrong) DCStatusBarOverlay *statusBarOverlay;
 
-@property (nonatomic, retain) NSMutableDictionary *objectNames;
+@property (nonatomic, cbstrong) NSMutableDictionary *objectNames;
 
 @property (nonatomic, assign) UIView *currentView;
 @property (nonatomic) CGRect originalFrame;
 @property (nonatomic) CGFloat originalAlpha;
-@property (nonatomic, retain) NSMutableArray *currentViewHistory;
+@property (nonatomic, cbstrong) NSMutableArray *currentViewHistory;
 
 @property (nonatomic) BOOL showingHelp;
 

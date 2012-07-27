@@ -13,7 +13,7 @@
 		625780B2138A0EBD004DA77B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 625780B1138A0EBC004DA77B /* QuartzCore.framework */; };
 		920C426D154DDA38001BC855 /* UIView+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 920C426C154DDA38001BC855 /* UIView+Introspector.m */; };
 		92D478A7154F991E00AD49BE /* DCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D478A6154F991E00AD49BE /* DCUtility.m */; };
-		92D950621551F80300C87FD7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D478A9154F9C6E00AD49BE /* JSONKit.m */; };
+		92D950621551F80300C87FD7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D478A9154F9C6E00AD49BE /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		92D950691551FDF400C87FD7 /* CBIntrospect.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D950681551FDF400C87FD7 /* CBIntrospect.m */; };
 		92F947A0154D05F400C4E4F8 /* UIWindow+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F9479F154D05F400C4E4F8 /* UIWindow+Introspector.m */; };
 		AB0D01D5136A778000962171 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0D01D4136A778000962171 /* UIKit.framework */; };
@@ -352,6 +352,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -369,6 +370,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DCIntrospectDemo/DCIntrospectDemo-Prefix.pch";

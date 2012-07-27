@@ -105,7 +105,7 @@
     NSMutableDictionary *jsonInfo = [NSMutableDictionary dictionaryWithCapacity:7];
     if (self.className == nil)
     {
-        DebugLog(@"Unable to build JSON view dictionary: %@", self);
+        CBDebugLog(@"Unable to build JSON view dictionary: %@", self);
         return nil;
     }
     
@@ -127,7 +127,7 @@
     NSDictionary *jsonInfo = [self dictionaryRepresentation];
     if (!jsonInfo)
     {
-        DebugLog(@"Unable save view JSON: %@", self);
+        CBDebugLog(@"Unable save view JSON: %@", self);
         return NO;
     }
     

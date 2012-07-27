@@ -16,10 +16,12 @@
 - (void)dealloc
 {
 	self.delegate = nil;
+    #if ! CB_HAS_ARC
 	[touchPointLabel release];
 	[touchPointView release];
 
 	[super dealloc];
+#endif
 }
 
 #pragma Setup
@@ -33,7 +35,7 @@
 		self.backgroundColor = [UIColor clearColor];
 		self.opaque = NO;
 
-		self.touchPointLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
+		self.touchPointLabel = CB_AutoRelease([[UILabel alloc] initWithFrame:CGRectZero])
 		self.touchPointLabel.text = @"X 320 Y 480";
 		self.touchPointLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		self.touchPointLabel.textAlignment = UITextAlignmentCenter;
@@ -46,7 +48,7 @@
 
 		self.rectsToOutline = [NSMutableArray array];
 
-		self.touchPointView = [[[DCCrossHairView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 17.0f, 17.0f) color:[UIColor blueColor]] autorelease];
+		self.touchPointView = CB_AutoRelease([[DCCrossHairView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 17.0f, 17.0f) color:[UIColor blueColor]])
 		self.touchPointView.alpha = 0.0f;
 		[self addSubview:self.touchPointView];
 	}

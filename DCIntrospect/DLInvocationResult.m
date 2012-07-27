@@ -13,6 +13,7 @@
 
 #import "DLInvocationResult.h"
 #import <objc/runtime.h>
+#import "CBMacros.h"
 
 @interface DLInvocationResult ()
 @property (nonatomic, strong) NSInvocation *invocation;
@@ -27,7 +28,7 @@
 
 + (id)resultWithInvokedInvocation:(NSInvocation *)invocation;
 {
-	return [[[[self class] alloc] initWithInvokedInvocation:invocation] autorelease];
+	return CB_AutoRelease([[[self class] alloc] initWithInvokedInvocation:invocation])
 }
 
 - (NSString *)description
@@ -41,7 +42,7 @@
 	self = [super init];
 	if (self)
 	{
-		_invocation = [invocation retain];
+		_invocation = CB_Retain(invocation)
 		_methodSignature = [invocation methodSignature];
 		if (_methodSignature.methodReturnType[0] != _C_VOID)
 			[invocation getReturnValue:&_result];
@@ -51,7 +52,9 @@
 
 - (void)dealloc
 {
+#if ! CB_HAS_ARC
 	[super dealloc];
+#endif
 }
 
 #pragma mark - Private

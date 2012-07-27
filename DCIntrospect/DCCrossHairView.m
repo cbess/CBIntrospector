@@ -5,14 +5,17 @@
 //
 
 #import "DCCrossHairView.h"
+#import "CBMacros.h"
 
 @implementation DCCrossHairView
 @synthesize color;
 
 - (void)dealloc
 {
+#if ! CB_HAS_ARC
 	[color release];
 	[super dealloc];
+#endif
 }
 
 - (id)initWithFrame:(CGRect)frame color:(UIColor *)aColor

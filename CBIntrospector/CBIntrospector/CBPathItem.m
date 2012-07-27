@@ -25,7 +25,7 @@
     if (error)
     {
         
-        DebugLog(@"error iterating path: %@", error);
+        CBDebugLog(@"error iterating path: %@", error);
         return pathItems;
     }
         
@@ -33,7 +33,7 @@
     @autoreleasepool {
         for (NSString *path in paths)
         {
-            CBPathItem *item = NSAutoRelease([CBPathItem new]);
+            CBPathItem *item = CB_AutoRelease([CBPathItem new]);
             NSString *fullPath = [dirPath stringByAppendingPathComponent:path];
             item.path = fullPath;
             item.name = path;

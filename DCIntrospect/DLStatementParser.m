@@ -13,6 +13,7 @@
 
 #import "DLStatementParser.h"
 #import <objc/runtime.h>
+#import "CBMacros.h"
 
 // Single character strings
 static NSString *const HEX_ADDRESS_PREFIX = @"0x";
@@ -62,7 +63,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 {
 	if (_squareBracketInverseCharacterSet == nil)
 	{
-		_squareBracketInverseCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"[]"] invertedSet] retain];
+		_squareBracketInverseCharacterSet = CB_Retain([[NSCharacterSet characterSetWithCharactersInString:@"[]"] invertedSet]);
 	}
 	return _squareBracketInverseCharacterSet;
 }
@@ -70,7 +71,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 {
 	if (_curlyBraceInverseCharacterSet == nil)
 	{
-		_curlyBraceInverseCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"{}"] invertedSet] retain];
+		_curlyBraceInverseCharacterSet = CB_Retain([[NSCharacterSet characterSetWithCharactersInString:@"{}"] invertedSet]);
 	}
 	return _curlyBraceInverseCharacterSet;
 }
@@ -78,7 +79,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 {
 	if (_classNameCharacterSet == nil)
 	{
-		_classNameCharacterSet = [[NSCharacterSet alphanumericCharacterSet] retain];
+		_classNameCharacterSet = CB_Retain([NSCharacterSet alphanumericCharacterSet]);
 	}
 	return _classNameCharacterSet;
 }
@@ -86,7 +87,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 {
 	if (_hexadecimalCharacterSet == nil)
 	{
-		_hexadecimalCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"] retain];
+		_hexadecimalCharacterSet = CB_Retain([NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"]);
 	}
 	return _hexadecimalCharacterSet;
 }
@@ -102,7 +103,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 {
 	if (_parameterObjectCharacterSet == nil)
 	{
-		NSMutableCharacterSet *parameterObjectCharacterSet = [[NSMutableCharacterSet alphanumericCharacterSet] retain];
+		NSMutableCharacterSet *parameterObjectCharacterSet = CB_Retain([NSMutableCharacterSet alphanumericCharacterSet]);
 		[parameterObjectCharacterSet addCharactersInString:@"."];
 		_parameterObjectCharacterSet = parameterObjectCharacterSet;
 	}
@@ -112,7 +113,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 {
 	if (_stringCharacterSet == nil)
 	{
-		NSMutableCharacterSet *stringCharacterSet = [[NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"] retain];
+		NSMutableCharacterSet *stringCharacterSet = CB_Retain([NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"]);
 		_stringCharacterSet = stringCharacterSet;
 	}
 	return _stringCharacterSet;
@@ -243,8 +244,8 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	unsigned addr = 0;
 	NSScanner *scanner = [[NSScanner alloc] initWithString:memoryAddress];
 	[scanner scanHexInt:&addr];
-	[scanner release];
-	theObject = (id)addr;
+	CB_Release(scanner)
+	theObject = (__bridge id)((void*)addr);
 	
 	return theObject;
 }
@@ -257,7 +258,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	NSError *returnError = nil;
 	
 	// Scan statement
-	NSScanner *scanner = [[[NSScanner alloc] initWithString:statement] autorelease];
+	NSScanner *scanner = CB_AutoRelease([[NSScanner alloc] initWithString:statement]);
 	while (scanner.scanLocation < statement.length)
 	{
 		// Setup
@@ -285,7 +286,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 											  code:DLStatementParserErrorStartingOpenBracketNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
 																			   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-			DebugLog(@"Error! %@", errorString);
+			CBDebugLog(@"Error! %@", errorString);
 			break;
 		}
 		
@@ -347,7 +348,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 												  code:DLStatementParserErrorClassNameInvalid
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
 																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-				DebugLog(@"Error! %@", errorString);
+				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
 		}
@@ -359,12 +360,12 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 											  code:DLStatementParserErrorClassNameNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
 																			   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-			DebugLog(@"Error! %@", errorString);
+			CBDebugLog(@"Error! %@", errorString);
 			break;
 		}
 		
 		// Method name setup
-		NSMutableString *selectorName = [[[NSMutableString alloc] initWithCapacity:statement.length - scanner.scanLocation] autorelease];
+		NSMutableString *selectorName = CB_AutoRelease([[NSMutableString alloc] initWithCapacity:statement.length - scanner.scanLocation]);
 		int numberOfMethodParameters = 0; // Used for parsing parameter objects
 		
 		NSUInteger methodNameScanLocation = scanner.scanLocation;
@@ -437,7 +438,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 														  code:DLStatementParserErrorParameterNotFound
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
 																						   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-						DebugLog(@"Error! %@", errorString);
+						CBDebugLog(@"Error! %@", errorString);
 						break;
 					}
 				}
@@ -450,7 +451,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 												  code:DLStatementParserErrorMethodNameNotFound
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
 																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-				DebugLog(@"Error! %@", errorString);
+				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
 			
@@ -481,7 +482,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 												  code:	DLStatementParserErrorClassDoesNotRespondToSelector
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
 																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-				DebugLog(@"Error! %@", errorString);
+				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
 			
@@ -501,7 +502,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 												  code:	DLStatementParserErrorInstanceDoesNotRespondToSelector
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
 																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-				DebugLog(@"Error! %@", errorString);
+				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
 			
@@ -513,7 +514,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		// Error, no class or object
 		else
 		{
-			DebugLog(@"Error! Unable to create invocation!");
+			CBDebugLog(@"Error! Unable to create invocation!");
 			break;
 		}
 		
@@ -569,8 +570,8 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 					}
 				}
 				
-				NSString *argument = [[[NSString alloc] initWithString:stringContents] autorelease];
-				[stringContents release];
+				NSString *argument = CB_AutoRelease([[NSString alloc] initWithString:stringContents]);
+                CB_Release(stringContents)
 				
 				[invocation setArgument:&argument atIndex:index];
 			}
@@ -591,15 +592,18 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 						 [compareString isEqualToString:TRUE_STRING])
 				{
 					parameterType = [[NSString stringWithFormat:@"%c", _C_BOOL] UTF8String];
-					parameterValue = [[[[NSNumber alloc] initWithBool:YES] autorelease] pointerValue];
+                    NSNumber *num = CB_AutoRelease([[NSNumber alloc] initWithBool:YES])
+					parameterValue = [num pointerValue];
 				}
 				else if ([compareString isEqualToString:NIL_STRING])
 				{
-					parameterType = [[[[NSString alloc] initWithFormat:@"%c", _C_VOID] autorelease] UTF8String];
+                    NSString *str = [[NSString alloc] initWithFormat:@"%c", _C_VOID];
+                    (void)CB_AutoRelease(str)
+					parameterType = [str UTF8String];
 				}
 				else
 				{
-					NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+					NSNumberFormatter *numberFormatter = CB_AutoRelease([[NSNumberFormatter alloc] init]);
 					NSNumber *stringNumber = [numberFormatter numberFromString:tempString];
 					
 					if (stringNumber)
@@ -616,7 +620,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 													  code:DLStatementParserErrorParameterTypeUnknown
 												  userInfo:[NSDictionary dictionaryWithObject:errorString
 																					   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-					DebugLog(@"Error! %@", errorString);
+					CBDebugLog(@"Error! %@", errorString);
 					break;
 				}
 				
@@ -676,7 +680,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 														  code:DLStatementParserErrorParameterIsInvalidStruct
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
 																						   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-						DebugLog(@"Error! %@", errorString);
+						CBDebugLog(@"Error! %@", errorString);
 						break;
 					}
 				}
@@ -719,7 +723,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 														  code:DLStatementParserErrorParameterReturnValueDifferentFromSelectorArgumentValue
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
 																						   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-						DebugLog(@"Error! %@", errorString);
+						CBDebugLog(@"Error! %@", errorString);
 						break;
 					}
 				}
@@ -737,7 +741,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 												  code:DLStatementParserErrorMethodNameNotFound
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
 																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-				DebugLog(@"Error! %@", errorString);
+				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
 		}
@@ -756,7 +760,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 											  code:DLStatementParserErrorClosingCloseBracketNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
 																			   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-			DebugLog(@"Error! %@", errorString);
+			CBDebugLog(@"Error! %@", errorString);
 			break;
 		}
 		
@@ -797,7 +801,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 										  code:DLStatementParserErrorUnknown
 									  userInfo:[NSDictionary dictionaryWithObject:errorString
 																		   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
-		DebugLog(@"Error! %@", errorString);
+		CBDebugLog(@"Error! %@", errorString);
 		
 		*error = returnError;
 	}

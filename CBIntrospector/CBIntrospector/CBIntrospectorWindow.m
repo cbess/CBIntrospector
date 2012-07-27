@@ -300,7 +300,7 @@ static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-vi
 - (void)reselectCurrentlySelectedNode
 {
     NSDictionary *viewInfo = [self.treeView itemAtRow:self.treeView.selectedRow];
-    DebugLog(@"selected: %@", [viewInfo valueForKey:kUIViewClassNameKey]);
+    CBDebugLog(@"selected: %@", [viewInfo valueForKey:kUIViewClassNameKey]);
     [self loadControlsWithJSON:viewInfo];
 }
 
