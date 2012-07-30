@@ -258,7 +258,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
                                                       [self.inputTextView resignFirstResponder];
                                                       [self takeFirstResponder];
                                                   }];
-    
+    	
 	// listen for device orientation changes to adjust the status bar
 	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews) name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -267,6 +267,10 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		self.currentViewHistory = CB_AutoRelease([[NSMutableArray alloc] init]);
 	
 	DCLog(@"%@ (%@) is setup. %@ to start.", [self class], [self versionName], [kDCIntrospectKeysInvoke isEqualToString:@" "] ? @"Push the space bar" : [NSString stringWithFormat:@"Type '%@'",  kDCIntrospectKeysInvoke]);
+    if (self.enableShakeToActivate)
+    {
+        DCLog(@"Or start %@ using shake gesture - ⌃⌘+Z", self.class);
+    }
 }
 
 - (void)takeFirstResponder
