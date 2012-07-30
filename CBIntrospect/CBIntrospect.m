@@ -15,7 +15,7 @@
 #import "DLStatementParser.h"
 #import "DLInvocationResult.h"
 
-@interface CBIntrospect ()
+@interface CBIntrospect () <UIAlertViewDelegate>
 {
     NSArray *_ignoreDumpSubviews;
 }
@@ -26,6 +26,15 @@
 @synthesize syncFileSystemState = _syncFileSystemState;
 
 #pragma mark - Properties
+
+- (void)setStatusBarOverlay:(DCStatusBarOverlay *)statusBarOverlay
+{
+	statusBarOverlay.userInteractionEnabled = YES;
+	UITapGestureRecognizer *tapGesture = CB_AutoRelease([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showCodeAlertView)]);
+	statusBarOverlay.gestureRecognizers = [NSArray arrayWithObject:tapGesture];
+	
+	[super setStatusBarOverlay:statusBarOverlay];
+}
 
 - (void)setSyncFileSystemState:(CBIntrospectSyncFileSystemState)syncFileSystemState
 {
@@ -121,7 +130,7 @@
     NSString *statement = [messageInfo objectForKey:kUIViewMessageKey];
     
     // if EXC_BAD_ACCESS, try reloading the tree
-    NSInvocation *invocation = [[DLStatementParser sharedParser] invocationForStatement:statement error:&error];
+    NSInvocation *invocation = [DLStatementParser invocationForStatement:statement error:&error];
     [invocation invoke];
     
     // get the results (the response from the message)
@@ -301,4 +310,77 @@
     
     [treeInfo setObject:viewArray forKey:kUIViewSubviewsKey];
 }
+
+#pragma mark - Code execution
+
+static NSString * const kDLIntrospectPreviousStatementKey = @"DLIntrospectPreviousStatementKey";
+static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStatementHistoryKey";
+- (void)showCodeAlertView;
+{
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Execute Code:" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Perform", nil];
+	alertView = CB_AutoRelease(alertView);
+	alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+	alertView.tag = (int)self.currentView;
+	
+	UITextField *textField = [alertView textFieldAtIndex:0];
+	textField.text = [[NSUserDefaults standardUserDefaults] objectForKey:kDLIntrospectPreviousStatementKey];
+	
+	[alertView show];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+	if (buttonIndex == alertView.cancelButtonIndex)
+		return;
+	
+	UITextField *textField = [alertView textFieldAtIndex:0];
+	NSString *text = textField.text;
+	if (text.length == 0)
+		return;
+	
+	[[NSUserDefaults standardUserDefaults] setObject:text forKey:kDLIntrospectPreviousStatementKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	NSString *viewHexAddress = [NSString stringWithFormat:@"0x%x", alertView.tag];
+	text = [text stringByReplacingOccurrencesOfString:@"self" withString:viewHexAddress];
+	
+	NSError *error = nil;
+	NSInvocation *invocation = [DLStatementParser invocationForStatement:text error:&error];
+	
+	if (error)
+	{
+		CBDebugLog(@"%@", error);
+		UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:[error description] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		errorAlert = CB_AutoRelease(errorAlert);
+		[errorAlert show];
+	}
+	else
+	{
+		[invocation invoke];
+		
+		DLInvocationResult *result = [DLInvocationResult resultWithInvokedInvocation:invocation];
+		NSString *resultDescription = [result resultDescription];
+		CBDebugLog(@"%@", resultDescription);
+		
+		if ([resultDescription isEqualToString:@"(null)"] == NO)
+		{
+			UIAlertView *descriptionAlert = [[UIAlertView alloc] initWithTitle:@"Result" message:resultDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			descriptionAlert = CB_AutoRelease(descriptionAlert);
+			[descriptionAlert show];
+		}
+		
+		NSMutableArray *history = [[[NSUserDefaults standardUserDefaults] objectForKey:kDLIntrospectStatementHistoryKey] mutableCopy];
+		history = CB_AutoRelease(history);
+		if (!history)
+			history = [NSMutableArray arrayWithCapacity:1];
+		NSDictionary *dict = @{ text : @"statement", resultDescription : @"result" };
+		[history addObject:dict];
+		[[NSUserDefaults standardUserDefaults] setObject:history forKey:kDLIntrospectStatementHistoryKey];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+	}
+}
+
+
 @end
