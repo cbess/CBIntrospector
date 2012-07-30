@@ -249,7 +249,16 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
                                                 usingBlock:^(NSNotification *notification) {
                                                   [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(takeFirstResponder) object:nil];
                                                 }];
-
+    
+    // fix for losing first responder on backgrounding app
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self.inputTextView resignFirstResponder];
+                                                      [self takeFirstResponder];
+                                                  }];
+    
 	// listen for device orientation changes to adjust the status bar
 	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews) name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -263,7 +272,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 - (void)takeFirstResponder
 {
 	if (![self.inputTextView becomeFirstResponder])
-		DCNamedLog(@"Couldn't reclaim keyboard input.  Is the keyboard used elsewhere?");
+		DCNamedLog(@"Couldn't reclaim keyboard input. Is the keyboard used elsewhere?");
 }
 
 - (void)resetInputTextView
@@ -382,10 +391,6 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 
 	if (![self.currentViewHistory containsObject:self.currentView])
 		[self.currentViewHistory addObject:self.currentView];
-    
-    // resign then activate/focus to ensure keyboard events are consumed
-    [self.inputTextView resignFirstResponder]; // or call in application inactive notification
-    [self.inputTextView becomeFirstResponder];
 }
 
 - (void)statusBarTapped
