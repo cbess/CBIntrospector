@@ -15,13 +15,15 @@
 
 @interface DLInvocationResult : NSObject
 
+@property (nonatomic, strong, readonly) NSInvocation *invocation;
+
 + (id)resultWithInvokedInvocation:(NSInvocation *)invocation;
 
 - (id)initWithInvokedInvocation:(NSInvocation *)invocation;
 
-- (void *)result;
-- (const char *)type;
+- (const char *)resultType;
+- (NSString *)resultDescription; // Will return (null) if no description
 
-- (NSString *)resultDescription;
+- (void *)result;
 
 @end

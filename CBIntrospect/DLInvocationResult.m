@@ -16,15 +16,11 @@
 #import "CBMacros.h"
 
 @interface DLInvocationResult ()
-@property (nonatomic, strong) NSInvocation *invocation;
-@property (nonatomic, strong) NSMethodSignature *methodSignature;
-@property (nonatomic) void *result;
+@property (nonatomic, strong, readwrite) NSInvocation *invocation;
 @end
 
 @implementation DLInvocationResult
 @synthesize invocation = _invocation;
-@synthesize methodSignature = _methodSignature;
-@synthesize result = _result;
 
 + (id)resultWithInvokedInvocation:(NSInvocation *)invocation;
 {
@@ -33,7 +29,7 @@
 
 - (NSString *)description
 {
-	return [[super description] stringByAppendingFormat:@"%@", [self resultDescription]];
+	return [[super description] stringByAppendingFormat:@" %@", [self resultDescription]];
 }
 
 #pragma mark - Object lifecycle
@@ -43,9 +39,6 @@
 	if (self)
 	{
 		_invocation = CB_Retain(invocation)
-		_methodSignature = [invocation methodSignature];
-		if (_methodSignature.methodReturnType[0] != _C_VOID)
-			[invocation getReturnValue:&_result];
 	}
 	return self;
 }
@@ -53,113 +46,249 @@
 - (void)dealloc
 {
 #if ! CB_HAS_ARC
+	[_invocation release];
 	[super dealloc];
 #endif
 }
 
 #pragma mark - Private
-- (NSString *)descriptionForBitFold:(int)bitFold
+- (NSString *)descriptionForUnsupportedType:(const char *)type
 {
-	// TODO: Implement returning a binary visualization of the int
-	return [NSString stringWithFormat:@"Bitfold: %i", (int)self.result];
+	return [NSString stringWithFormat:@"Description for type '%s' not yet supported", type];
 }
 
 #pragma mark - Public
-- (const char *)type
+- (const char *)resultType;
 {
-	return self.methodSignature.methodReturnType;
+	return self.invocation.methodSignature.methodReturnType;
 }
 
 - (NSString *)resultDescription
 {
 	NSString *description = nil;
 	
-	// TODO: Finish implementing this
-	switch (self.methodSignature.methodReturnType[0])
+	const char *type = [self resultType];
+	CBDebugLog(@"resultType: %s", type);
+	switch (type[0])
 	{
 		case _C_ID:       // '@'
-			if ([(id)self.result conformsToProtocol:@protocol(NSObject)])
-				description = [(NSObject *)self.result description];
+		{
+			id result;
+			[self.invocation getReturnValue:&result];
+
+			if ([result conformsToProtocol:@protocol(NSObject)])
+			{
+				NSObject *resultObject = (NSObject *)result;
+				description = [resultObject description];
+			}
 			else
-				description = [NSString stringWithFormat:@"Object at memory address %p doesn't conform to NSObject protocol", (id)self.result];
+			{
+				description = [NSString stringWithFormat:@"Object at memory address %p doesn't conform to NSObject protocol", result];
+			}
+		}
 			break;
 		case _C_CLASS:    // '#'
-			description = NSStringFromClass(self.result);
+		{
+			Class result;
+			[self.invocation getReturnValue:&result];
+			description = NSStringFromClass(result);
+		}
 			break;
 		case _C_SEL:      // ':'
-			description = NSStringFromSelector(self.result);
+		{
+			SEL result;
+			[self.invocation getReturnValue:&result];
+			description = NSStringFromSelector(result);
+		}
 			break;
 		case _C_CHR:      // 'c'
-			description = [NSString stringWithFormat:@"%c", (int)self.result];
+		{
+			char result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%hhd", result];
+		}
 			break;
 		case _C_UCHR:     // 'C'
-			description = [NSString stringWithFormat:@"%C", (unsigned short)self.result];
+		{
+			unsigned char result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%hhu", result];
+		}
 			break;
 		case _C_SHT:      // 's'
-			description = [NSString stringWithFormat:@"%hi", (short)self.result];
+		{
+			short result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%hd", result];
+		}
 			break;
 		case _C_USHT:     // 'S'
-			description = [NSString stringWithFormat:@"%hu", (unsigned short)self.result];
+		{
+			unsigned short result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%hu", result];
+		}
 			break;
 		case _C_INT:      // 'i'
-			description = [NSString stringWithFormat:@"%i", (int)self.result];
+		{
+			int result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%d", result];
+		}
 			break;
 		case _C_UINT:     // 'I'
-			description = [NSString stringWithFormat:@"%u", (unsigned int)self.result];
+		{
+			unsigned int result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%u", result];
+		}
 			break;
 		case _C_LNG:      // 'l'
-			description = [NSString stringWithFormat:@"%ld", (long)self.result];
+		{
+			long result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%ld", result];
+		}
 			break;
 		case _C_ULNG:     // 'L'
-			description = [NSString stringWithFormat:@"%lu", (unsigned long)self.result];
+		{
+			unsigned long result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%lu", result];
+		}
 			break;
 		case _C_LNG_LNG:  // 'q'
-			description = [NSString stringWithFormat:@"%qi", (long long)self.result]; // or '%lld'
+		{
+			long long result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%lld", result];
+		}
 			break;
 		case _C_ULNG_LNG: // 'Q'
-			description = [NSString stringWithFormat:@"%qu", (unsigned long long)self.result]; // or '%llu"
+		{
+			unsigned long long result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%llu", result];
+		}
 			break;
 		case _C_FLT:      // 'f'
         {
-            // test this, but this will suppress the error for now
-            NSString *format = @"%f";
-			description = [NSString stringWithFormat:format, self.result]; // or '%g', '%ld"
+			float result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%f", result];
         }
 			break;
 		case _C_DBL:      // 'd'
         {
-            NSString *format = @"%f";
-			description = [NSString stringWithFormat:format, self.result];
+			double result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"%f", result];
         }
 			break;
 		case _C_BFLD:     // 'b'
-			description = [self descriptionForBitFold:(int)self.result];
+		{
+//			void *result;
+//			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithFormat:@"bitfield result is currently unsupported"];
+		}
 			break;
 		case _C_BOOL:     // 'B'
-			description = (self.result ? @"YES" : @"NO");
+		{
+			BOOL result;
+			[self.invocation getReturnValue:&result];
+			description = (result ? @"YES" : @"NO");
+		}
 			break;
 		case _C_VOID:     // 'v'
 			description = @"(null)";
 			break;
 		case _C_UNDEF:    // '?'
+			description = @"(undefined)";
+			break;
 		case _C_PTR:      // '^'
+		{
+			NSString *typeString = [NSString stringWithUTF8String:type];
+			if ([typeString isEqualToString:@"^{CGColor=}"])
+			{
+				CGColorRef colorRef;
+				[self.invocation getReturnValue:&colorRef];
+				description = [NSString stringWithFormat:@"%@", colorRef];
+			}
+			else
+				description = [self descriptionForUnsupportedType:(const char *)type];
+		}
+			break;
 		case _C_CHARPTR:  // '*'
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_ATOM:     // '%'
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_ARY_B:    // '['
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_ARY_E:    // ']'
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_UNION_B:  // '('
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_UNION_E:  // ')'
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_STRUCT_B: // '{'
+		{
+			NSString *typeString = [NSString stringWithUTF8String:type];
+			if ([typeString isEqualToString:@"{CGPoint=ff}"])
+			{
+				CGPoint result;
+				[self.invocation getReturnValue:&result];
+				description = NSStringFromCGPoint(result);
+			}
+			else if ([typeString isEqualToString:@"{CGSize=ff}"])
+			{
+				CGSize result;
+				[self.invocation getReturnValue:&result];
+				description = NSStringFromCGSize(result);
+			}
+			else if ([typeString isEqualToString:@"{CGRect={CGPoint=ff}{CGSize=ff}}"])
+			{
+				CGRect result;
+				[self.invocation getReturnValue:&result];
+				description = NSStringFromCGRect(result);
+			}
+			else
+				description = [self descriptionForUnsupportedType:(const char *)type];
+		}
+			break;
 		case _C_STRUCT_E: // '}'
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_VECTOR:   // '!'
+			description = [self descriptionForUnsupportedType:(const char *)type];
+			break;
 		case _C_CONST:    // 'r'
+		{
+			const char *result;
+			[self.invocation getReturnValue:&result];
+			description = [NSString stringWithUTF8String:result];
+		}
+			break;
 			
 		default:
-			description = [NSString stringWithFormat:@"Description for type '%c' not yet supported", (int)[NSString stringWithUTF8String:self.type]];
+			description = [NSString stringWithFormat:@"Warning! Unexpected return type: %s", type];
 			break;
 	}
 	
 	return description;
 }
+
+- (void *)result;
+{
+	void *result = nil;
+	[self.invocation getReturnValue:&result];
+	return result;
+}
+
 
 @end
