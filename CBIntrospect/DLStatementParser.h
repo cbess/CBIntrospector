@@ -29,12 +29,11 @@ typedef enum {
 	DLStatementParserErrorParameterIsInvalidStruct = 52,
 	DLStatementParserErrorParameterReturnValueDifferentFromSelectorArgumentValue = 53
 } DLStatementParserError;
-extern NSString * const PSStatementParserErrorUserInfoDescriptionKey;
+extern NSString * const DLStatementParserErrorUserInfoDescriptionKey;
 
 
 @interface DLStatementParser : NSObject
 
-+ (DLStatementParser *)sharedParser;
-- (NSInvocation *)invocationForStatement:(NSString *)statement error:(NSError **)error;
++ (NSInvocation *)invocationForStatement:(NSString *)statement error:(NSError **)error;
 
 @end

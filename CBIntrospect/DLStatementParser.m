@@ -15,51 +15,12 @@
 #import <objc/runtime.h>
 #import "CBMacros.h"
 
-// Single character strings
-static NSString *const HEX_ADDRESS_PREFIX = @"0x";
-static NSString *const OPEN_BRACKET_STRING = @"[";
-static NSString *const CLOSE_BRACKET_STRING = @"]";
-static NSString *const OPEN_CURLY_BRACE_STRING = @"{";
-static NSString *const CLOSE_CURLY_BRACE_STRING = @"}";
-static NSString *const COLON_STRING = @":";
-static NSString *const SEMI_COLON_STRING = @";";
-static NSString *const QUOTATION_STRING = @"\"";
-static NSString *const BACKSLASH_STRING = @"\\";
-static NSString *const AT_SYMBOL_STRING = @"@";
-// BOOL strings
-static NSString *const NO_STRING = @"NO";
-static NSString *const FALSE_STRING = @"FALSE";
-static NSString *const YES_STRING = @"YES";
-static NSString *const TRUE_STRING = @"TRUE";
-// nil string
-static NSString *const NIL_STRING = @"NIL";
-
 // Error strings
-NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementParserErrorUserInfoDescriptionKey";
+NSString * const DLStatementParserErrorUserInfoDescriptionKey = @"DLStatementParserUserInfoKey";
 
-@interface DLStatementParser ()
-@property (nonatomic, strong) NSCharacterSet *squareBracketInverseCharacterSet;
-@property (nonatomic, strong) NSCharacterSet *curlyBraceInverseCharacterSet;
-@property (nonatomic, strong) NSCharacterSet *classNameCharacterSet;
-@property (nonatomic, strong) NSCharacterSet *hexadecimalCharacterSet;
-@property (nonatomic, strong) NSCharacterSet *methodNameCharacterSet;
-@property (nonatomic, strong) NSCharacterSet *parameterObjectCharacterSet;
-@property (nonatomic, strong) NSCharacterSet *stringCharacterSet;
-@property (nonatomic, strong) NSCharacterSet *whitespaceCharacterSet;
-@end
-
-@implementation DLStatementParser
-@synthesize squareBracketInverseCharacterSet	= _squareBracketInverseCharacterSet;
-@synthesize curlyBraceInverseCharacterSet		= _curlyBraceInverseCharacterSet;
-@synthesize classNameCharacterSet				= _classNameCharacterSet;
-@synthesize hexadecimalCharacterSet				= _hexadecimalCharacterSet;
-@synthesize methodNameCharacterSet				= _methodNameCharacterSet;
-@synthesize parameterObjectCharacterSet			= _parameterObjectCharacterSet;
-@synthesize stringCharacterSet					= _stringCharacterSet;
-@synthesize whitespaceCharacterSet				= _whitespaceCharacterSet;
-
-#pragma mark - Lazy loading
-- (NSCharacterSet *)squareBracketInverseCharacterSet
+#pragma mark Character Sets
+static NSCharacterSet *_squareBracketInverseCharacterSet = nil;
+static NSCharacterSet *squareBracketInverseCharacterSet()
 {
 	if (_squareBracketInverseCharacterSet == nil)
 	{
@@ -67,7 +28,8 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	}
 	return _squareBracketInverseCharacterSet;
 }
-- (NSCharacterSet *)curlyBraceInverseCharacterSet
+static NSCharacterSet *_curlyBraceInverseCharacterSet = nil;
+static NSCharacterSet *curlyBraceInverseCharacterSet()
 {
 	if (_curlyBraceInverseCharacterSet == nil)
 	{
@@ -75,7 +37,8 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	}
 	return _curlyBraceInverseCharacterSet;
 }
-- (NSCharacterSet *)classNameCharacterSet
+static NSCharacterSet *_classNameCharacterSet = nil;
+static NSCharacterSet *classNameCharacterSet()
 {
 	if (_classNameCharacterSet == nil)
 	{
@@ -83,7 +46,8 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	}
 	return _classNameCharacterSet;
 }
-- (NSCharacterSet *)hexadecimalCharacterSet
+static NSCharacterSet *_hexadecimalCharacterSet = nil;
+static NSCharacterSet *hexadecimalCharacterSet()
 {
 	if (_hexadecimalCharacterSet == nil)
 	{
@@ -91,57 +55,51 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	}
 	return _hexadecimalCharacterSet;
 }
-- (NSCharacterSet *)methodNameCharacterSet
+static NSCharacterSet *_methodNameCharacterSet = nil;
+static NSCharacterSet *methodNameCharacterSet()
 {
 	if (_methodNameCharacterSet == nil)
 	{
-		_methodNameCharacterSet = [self.classNameCharacterSet copy];
+		_methodNameCharacterSet = [classNameCharacterSet() copy];
 	}
 	return _methodNameCharacterSet;
 }
-- (NSCharacterSet *)parameterObjectCharacterSet
+static NSCharacterSet *_parameterObjectCharacterSet = nil;
+static NSCharacterSet *parameterObjectCharacterSet()
 {
 	if (_parameterObjectCharacterSet == nil)
 	{
 		NSMutableCharacterSet *parameterObjectCharacterSet = CB_Retain([NSMutableCharacterSet alphanumericCharacterSet]);
-		[parameterObjectCharacterSet addCharactersInString:@"."];
+		[parameterObjectCharacterSet addCharactersInString:@".-"];
 		_parameterObjectCharacterSet = parameterObjectCharacterSet;
 	}
 	return _parameterObjectCharacterSet;
 }
-- (NSCharacterSet *)stringCharacterSet
+static NSCharacterSet *_stringCharacterSet = nil;
+static NSCharacterSet *stringCharacterSet()
 {
 	if (_stringCharacterSet == nil)
 	{
-		NSMutableCharacterSet *stringCharacterSet = CB_Retain([NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"]);
-		_stringCharacterSet = stringCharacterSet;
+		_stringCharacterSet = CB_Retain([NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"]);;
 	}
 	return _stringCharacterSet;
 }
-- (NSCharacterSet *)whitespaceCharacterSet
+static NSCharacterSet *_whitespaceCharacterSet = nil;
+static NSCharacterSet *whitespaceCharacterSet()
 {
 	if (_whitespaceCharacterSet == nil)
 	{
-		_whitespaceCharacterSet = [NSCharacterSet whitespaceCharacterSet];
+		_whitespaceCharacterSet = CB_Retain([NSCharacterSet whitespaceCharacterSet]);
 	}
 	return _whitespaceCharacterSet;
 }
 
-#pragma mark - Object lifecycle
 
-+ (DLStatementParser *)sharedParser
-{
-    static DLStatementParser *instance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [[DLStatementParser alloc] init];
-    });
-    
-    return instance;
-}
+#pragma mark -
+@implementation DLStatementParser
 
 #pragma mark - Private
-- (NSRange)rangeOfStatementInString:(NSString *)string
++ (NSRange)rangeOfStatementInString:(NSString *)string
 {
 	int numberOfBracketsOpen = 0;
 	NSRange range = NSMakeRange(NSUIntegerMax, 0);
@@ -149,14 +107,14 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	NSScanner *scanner = [NSScanner scannerWithString:string];
 	while (scanner.scanLocation < string.length)
 	{
-		if ([scanner scanString:OPEN_BRACKET_STRING intoString:NULL])
+		if ([scanner scanString:@"[" intoString:NULL])
 		{
 			if (range.location == NSUIntegerMax)
 				range.location = scanner.scanLocation;
 			
 			numberOfBracketsOpen++;
 		}
-		else if ([scanner scanString:CLOSE_BRACKET_STRING intoString:NULL])
+		else if ([scanner scanString:@"]" intoString:NULL])
 		{
 			numberOfBracketsOpen--;
 			
@@ -168,7 +126,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		}
 		else
 		{
-			[scanner scanCharactersFromSet:self.squareBracketInverseCharacterSet intoString:NULL];
+			[scanner scanCharactersFromSet:squareBracketInverseCharacterSet() intoString:NULL];
 		}
 	}
 	
@@ -182,12 +140,12 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	return range;
 }
 
-- (NSRange)rangeOfStructInString:(NSString *)string
++ (NSRange)rangeOfStructInString:(NSString *)string
 {
 	return [self rangeOfStructInString:string numberOfCurlyBracePairs:NULL];
 }
 
-- (NSRange)rangeOfStructInString:(NSString *)string numberOfCurlyBracePairs:(NSInteger *)numberOfCurlyBracePairs
++ (NSRange)rangeOfStructInString:(NSString *)string numberOfCurlyBracePairs:(NSInteger *)numberOfCurlyBracePairs
 {
 	NSInteger curlyBracePairs = 0;
 	
@@ -197,14 +155,14 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	NSScanner *scanner = [NSScanner scannerWithString:string];
 	while (scanner.scanLocation < string.length)
 	{
-		if ([scanner scanString:OPEN_CURLY_BRACE_STRING intoString:NULL])
+		if ([scanner scanString:@"{" intoString:NULL])
 		{
 			if (range.location == NSUIntegerMax)
 				range.location = scanner.scanLocation;
 			
 			numberOfOpenCurlyBracePairs++;
 		}
-		else if ([scanner scanString:CLOSE_CURLY_BRACE_STRING intoString:NULL])
+		else if ([scanner scanString:@"}" intoString:NULL])
 		{
 			if (numberOfOpenCurlyBracePairs)
 				curlyBracePairs++;
@@ -219,7 +177,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		}
 		else
 		{
-			[scanner scanCharactersFromSet:self.curlyBraceInverseCharacterSet intoString:NULL];
+			[scanner scanCharactersFromSet:curlyBraceInverseCharacterSet() intoString:NULL];
 		} 
 	}
 	
@@ -237,7 +195,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 	return range;
 }
 
-- (id)objectForMemoryAddress:(NSString *)memoryAddress
++ (id)objectForMemoryAddress:(NSString *)memoryAddress
 {
 	id theObject = nil;
 	
@@ -251,7 +209,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 }
 
 #pragma mark - Public
-- (NSInvocation *)invocationForStatement:(NSString *)statement error:(NSError **)error
++ (NSInvocation *)invocationForStatement:(NSString *)statement error:(NSError **)error
 {
 	// Invocation to create and return
 	NSInvocation *invocation = nil;
@@ -271,11 +229,11 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		
 		
 		// Beginning of Method, open square bracket '['
-		if ([scanner scanUpToString:OPEN_BRACKET_STRING intoString:NULL])
+		if ([scanner scanUpToString:@"[" intoString:NULL])
 		{
 			scanner.scanLocation++;
 		}
-		else if ([scanner scanString:OPEN_BRACKET_STRING intoString:NULL])
+		else if ([scanner scanString:@"[" intoString:NULL])
 		{
 			// do nothing...
 		}
@@ -285,26 +243,26 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 			returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 											  code:DLStatementParserErrorStartingOpenBracketNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
-																			   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																			   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 			CBDebugLog(@"Error! %@", errorString);
 			break;
 		}
 		
 		
 		
-		[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
+		[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 		tempString = nil;
 		
 		// Memory address
-		if ([scanner scanString:HEX_ADDRESS_PREFIX intoString:NULL])
+		if ([scanner scanString:@"0x" intoString:NULL])
 		{
 			NSString *memAddress = nil;
-			[scanner scanCharactersFromSet:self.hexadecimalCharacterSet intoString:&memAddress];
+			[scanner scanCharactersFromSet:hexadecimalCharacterSet() intoString:&memAddress];
 			
 			theObject = [self objectForMemoryAddress:memAddress];
 		}
 		// Nested method, open square bracket '['
-		else if ([scanner scanString:OPEN_BRACKET_STRING intoString:&tempString])
+		else if ([scanner scanString:@"[" intoString:&tempString])
 		{
 			// Range of sub statement
 			scanner.scanLocation--;
@@ -332,7 +290,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 			}
 		}
 		// Class name
-		else if ([scanner scanCharactersFromSet:self.classNameCharacterSet intoString:&tempString])
+		else if ([scanner scanCharactersFromSet:classNameCharacterSet() intoString:&tempString])
 		{
 			// Class
 			theClass = NSClassFromString(tempString);
@@ -347,7 +305,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 												  code:DLStatementParserErrorClassNameInvalid
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
-																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																				   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
@@ -359,7 +317,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 			returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 											  code:DLStatementParserErrorClassNameNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
-																			   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																			   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 			CBDebugLog(@"Error! %@", errorString);
 			break;
 		}
@@ -374,57 +332,57 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		// Parse method name
 		while (isParsingMethodName && scanner.scanLocation < statement.length)
 		{
-			[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
+			[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 			tempString = nil;
 			
 			// Method name
-			if ([scanner scanCharactersFromSet:self.methodNameCharacterSet intoString:&tempString])
+			if ([scanner scanCharactersFromSet:methodNameCharacterSet() intoString:&tempString])
 			{
 				[selectorName appendString:tempString];
 				
-				[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
+				[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 				tempString = nil;
 				
 				// Parameter separator ':'
-				if ([scanner scanString:COLON_STRING intoString:&tempString])
+				if ([scanner scanString:@":" intoString:&tempString])
 				{
 					numberOfMethodParameters++;
 					
 					[selectorName appendString:tempString];
 					
-					[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
+					[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 					tempString = nil;
 					
 					// Parameter object name
-					if ([scanner scanString:AT_SYMBOL_STRING intoString:NULL])
+					if ([scanner scanString:@"@" intoString:NULL])
 					{
 						BOOL numberOfNonEscapedQuotations = 0;
 						while (numberOfNonEscapedQuotations < 2)
 						{
-							[scanner scanUpToString:QUOTATION_STRING intoString:NULL];
-							[scanner scanString:QUOTATION_STRING intoString:NULL];
+							[scanner scanUpToString:@"\"" intoString:NULL];
+							[scanner scanString:@"\"" intoString:NULL];
 							
 							NSString *quotationPreviousCharacter = [statement substringWithRange:NSMakeRange(scanner.scanLocation - 2, 1)];
-							// TODO: Ensure this backslash '\' isn't backslash escaped already
-							if ([quotationPreviousCharacter isEqualToString:BACKSLASH_STRING] == NO)
+							// TODO: Implement checking whether this backslash '\' is already escaped
+							if ([quotationPreviousCharacter isEqualToString:@"\\"] == NO)
 							{
 								numberOfNonEscapedQuotations++;
 							}
 						}
 					}
-					else if ([scanner scanCharactersFromSet:self.parameterObjectCharacterSet intoString:NULL])
+					else if ([scanner scanCharactersFromSet:parameterObjectCharacterSet() intoString:NULL])
 					{
 						// Do nothing...
 					}
 					// Parameter is struct
-					else if ([scanner scanString:OPEN_CURLY_BRACE_STRING intoString:&tempString])
+					else if ([scanner scanString:@"{" intoString:&tempString])
 					{
 						// Scan past command
 						scanner.scanLocation--;
 						scanner.scanLocation += [self rangeOfStructInString:[statement substringFromIndex:(scanner.scanLocation)]].length;
 					}
 					// Parameter is command
-					else if ([scanner scanString:OPEN_BRACKET_STRING intoString:&tempString])
+					else if ([scanner scanString:@"[" intoString:&tempString])
 					{
 						// Scan past command
 						scanner.scanLocation--;
@@ -437,7 +395,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 						returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 														  code:DLStatementParserErrorParameterNotFound
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
-																						   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																						   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 						CBDebugLog(@"Error! %@", errorString);
 						break;
 					}
@@ -450,13 +408,13 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 												  code:DLStatementParserErrorMethodNameNotFound
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
-																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																				   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
 			
 			// End of method, closing square bracket ']'
-			if ([scanner scanString:CLOSE_BRACKET_STRING intoString:NULL])
+			if ([scanner scanString:@"]" intoString:NULL])
 			{
 				scanner.scanLocation--;
 				isParsingMethodName = NO;
@@ -481,7 +439,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 												  code:	DLStatementParserErrorClassDoesNotRespondToSelector
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
-																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																				   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
@@ -501,7 +459,7 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 												  code:	DLStatementParserErrorInstanceDoesNotRespondToSelector
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
-																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																				   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
@@ -530,21 +488,21 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		for (int index = 2; (index - 2) < numberOfMethodParameters; index++)
 		{
 			// Method name, ignore
-			[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
-			[scanner scanCharactersFromSet:self.methodNameCharacterSet intoString:NULL];
+			[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
+			[scanner scanCharactersFromSet:methodNameCharacterSet() intoString:NULL];
 			
 			// Parameter separator ':', ignore
-			[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
-			[scanner scanString:COLON_STRING intoString:NULL];
+			[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
+			[scanner scanString:@":" intoString:NULL];
 			
-			[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
+			[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 			tempString = nil;
 			
 			// Parameter
 			// String
-			if ([scanner scanString:AT_SYMBOL_STRING intoString:NULL])
+			if ([scanner scanString:@"@" intoString:NULL])
 			{
-				[scanner scanString:QUOTATION_STRING intoString:NULL];
+				[scanner scanString:@"\"" intoString:NULL];
 				
 				// TODO: Implement supporting backslash '\' encoded characters
 				NSMutableString *stringContents = [[NSMutableString alloc] initWithCapacity:(statement.length - scanner.scanLocation)];
@@ -552,20 +510,20 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				while (isScanningParameterString && scanner.scanLocation < statement.length)
 				{
 					tempString = nil;
-					[scanner scanUpToString:QUOTATION_STRING intoString:&tempString];
+					[scanner scanUpToString:@"\"" intoString:&tempString];
 					[stringContents appendString:tempString];
 					
 					NSString *quotationPreviousCharacter = [statement substringWithRange:NSMakeRange(scanner.scanLocation - 2, 1)];
-					// TODO: Ensure this backslash '\' isn't backslash escaped already
-					if ([quotationPreviousCharacter isEqualToString:BACKSLASH_STRING])
+					// TODO: Implement checking whether this backslash '\' is already escaped
+					if ([quotationPreviousCharacter isEqualToString:@"\\"])
 					{
 						tempString = nil;
-						[scanner scanString:QUOTATION_STRING intoString:&tempString];
+						[scanner scanString:@"\"" intoString:&tempString];
 						[stringContents appendString:tempString];
 					}
 					else
 					{
-						[scanner scanString:QUOTATION_STRING intoString:NULL];
+						[scanner scanString:@"\"" intoString:NULL];
 						isScanningParameterString = NO;
 					}
 				}
@@ -576,30 +534,29 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				[invocation setArgument:&argument atIndex:index];
 			}
 			// Primitive? type
-			else if ([scanner scanCharactersFromSet:self.parameterObjectCharacterSet intoString:&tempString])
+			else if ([scanner scanCharactersFromSet:parameterObjectCharacterSet() intoString:&tempString])
 			{
 				// Note: referenced from <objc/runtime.h>, starting at line 362
 				const char *parameterType = nil;
-				void *parameterValue = nil;
 				
 				NSString *compareString = [tempString uppercaseString];
-				if ([compareString isEqualToString:NO_STRING] ||
-					[compareString isEqualToString:FALSE_STRING])
+				if ([compareString isEqualToString:@"NO"])
 				{
 					parameterType = [[NSString stringWithFormat:@"%c", _C_BOOL] UTF8String];
+					BOOL parameterValue = YES;
+					[invocation setArgument:&parameterValue atIndex:index];
 				}
-				else if ([compareString isEqualToString:YES_STRING] ||
-						 [compareString isEqualToString:TRUE_STRING])
+				else if ([compareString isEqualToString:@"YES"])
 				{
 					parameterType = [[NSString stringWithFormat:@"%c", _C_BOOL] UTF8String];
-                    NSNumber *num = CB_AutoRelease([[NSNumber alloc] initWithBool:YES])
-					parameterValue = [num pointerValue];
+					BOOL parameterValue = YES;
+					[invocation setArgument:&parameterValue atIndex:index];
 				}
-				else if ([compareString isEqualToString:NIL_STRING])
+				else if ([compareString isEqualToString:@"NIL"])
 				{
-                    NSString *str = [[NSString alloc] initWithFormat:@"%c", _C_VOID];
-                    CB_NO_ARC([str autorelease])
-					parameterType = [str UTF8String];
+					parameterType = [[NSString stringWithFormat:@"%c", _C_VOID] UTF8String];
+					void *parameterValue = nil;
+					[invocation setArgument:&parameterValue atIndex:index];
 				}
 				else
 				{
@@ -608,8 +565,36 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 					
 					if (stringNumber)
 					{
-						parameterType = [stringNumber objCType];
-						[stringNumber getValue:&parameterValue];
+						BOOL isNegative = NO;
+						BOOL hasDecimal = NO;
+						
+						if ([[tempString substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"-"])
+							isNegative = YES;
+						
+						if ([tempString rangeOfString:@"."].location != NSNotFound)
+							hasDecimal = YES;
+						
+						if (hasDecimal)
+						{
+							parameterType = [[NSString stringWithFormat:@"%c", _C_FLT] UTF8String];
+							float parameterValue = [stringNumber floatValue];
+							[invocation setArgument:&parameterValue atIndex:index];
+						}
+						else
+						{
+							if (isNegative)
+							{
+								parameterType = [[NSString stringWithFormat:@"%c", _C_LNG_LNG] UTF8String];
+								long long parameterValue = [stringNumber longLongValue];
+								[invocation setArgument:&parameterValue atIndex:index];
+							}
+							else
+							{
+								parameterType = [[NSString stringWithFormat:@"%c", _C_ULNG_LNG] UTF8String];
+								unsigned long long parameterValue = [stringNumber unsignedLongLongValue];
+								[invocation setArgument:&parameterValue atIndex:index];
+							}
+						}
 					}
 				}
 				
@@ -619,15 +604,13 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 					returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 													  code:DLStatementParserErrorParameterTypeUnknown
 												  userInfo:[NSDictionary dictionaryWithObject:errorString
-																					   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																					   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 					CBDebugLog(@"Error! %@", errorString);
 					break;
 				}
-				
-				[invocation setArgument:&parameterValue atIndex:index];
 			}
 			// Struct
-			else if ([scanner scanString:OPEN_CURLY_BRACE_STRING intoString:&tempString])
+			else if ([scanner scanString:@"{" intoString:&tempString])
 			{
 				NSInteger numberOfCurlyBracePairs = 0;
 				
@@ -641,22 +624,6 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 				
 				// Sub statement string
 				NSString *subStatement = [statement substringWithRange:subStatementRange];
-				
-//				NSInteger numberOfOpenCurlyBrackes = 0;
-//				NSString *temp = [subStatement copy];
-//				while (temp.length)
-//				{
-//					NSRange range = [temp rangeOfString:OPEN_CURLY_BRACE_STRING];
-//					if (range.length)
-//					{
-//						numberOfOpenCurlyBrackes++;
-//						temp = [temp substringFromIndex:range.location];
-//					}
-//					else
-//					{
-//						break;
-//					}
-//				}
 				
 				switch (numberOfCurlyBracePairs)
 				{
@@ -679,14 +646,14 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 						returnError = [NSError errorWithDomain:@"com.thedanielleber.DLStamementParser" 
 														  code:DLStatementParserErrorParameterIsInvalidStruct
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
-																						   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																						   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 						CBDebugLog(@"Error! %@", errorString);
 						break;
 					}
 				}
 			}
 			// Command
-			else if ([scanner scanString:OPEN_BRACKET_STRING intoString:&tempString])
+			else if ([scanner scanString:@"[" intoString:&tempString])
 			{
 				// Range of sub statement
 				scanner.scanLocation--;
@@ -717,12 +684,11 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 					}
 					else
 					{
-						// TODO: look into converting return type into argument type
 						NSString *errorString = [NSString stringWithFormat:@"Selector parameter %d command at statement index %d return type '%c' different from selector argument type '%c'. Command: %@", index, scanner.scanLocation, (int)[NSString stringWithUTF8String:parameterReturnType], (int)[NSString stringWithUTF8String:theInvocationArgumentType], subStatement];
 						returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 														  code:DLStatementParserErrorParameterReturnValueDifferentFromSelectorArgumentValue
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
-																						   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																						   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 						CBDebugLog(@"Error! %@", errorString);
 						break;
 					}
@@ -736,11 +702,11 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 			// Error, no valid parameter
 			else
 			{
-				NSString *errorString = [NSString stringWithFormat:@"Expected method name at index %d, but found: %@", scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
+				NSString *errorString = [NSString stringWithFormat:@"Expected parameter at index %d, but found: %@", scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
-												  code:DLStatementParserErrorMethodNameNotFound
+												  code:DLStatementParserErrorParameterNotFound
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
-																				   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																				   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 				CBDebugLog(@"Error! %@", errorString);
 				break;
 			}
@@ -753,13 +719,13 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		
 		
 		// End of command, close square bracket ']'
-		if ([scanner scanString:CLOSE_BRACKET_STRING intoString:NULL] == NO)
+		if ([scanner scanString:@"]" intoString:NULL] == NO)
 		{
 			NSString *errorString = [NSString stringWithFormat:@"Expected ']' at index %d, but found: %@", scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
 			returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 											  code:DLStatementParserErrorClosingCloseBracketNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
-																			   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																			   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 			CBDebugLog(@"Error! %@", errorString);
 			break;
 		}
@@ -769,17 +735,17 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		
 		
 		
-		[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
+		[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 		
 		// TODO: implement parsing multiple commands
-		if ([scanner scanString:SEMI_COLON_STRING intoString:NULL])
+		if ([scanner scanString:@";" intoString:NULL])
 		{
 		}
 		
 		
 		
 		// Finish scanning through remainder of statement
-		[scanner scanCharactersFromSet:self.whitespaceCharacterSet intoString:NULL];
+		[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 	}
 
 	// Error
@@ -800,11 +766,12 @@ NSString * const PSStatementParserErrorUserInfoDescriptionKey = @"PSStatementPar
 		returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 										  code:DLStatementParserErrorUnknown
 									  userInfo:[NSDictionary dictionaryWithObject:errorString
-																		   forKey:PSStatementParserErrorUserInfoDescriptionKey]];
+																		   forKey:DLStatementParserErrorUserInfoDescriptionKey]];
 		CBDebugLog(@"Error! %@", errorString);
 		
 		*error = returnError;
 	}
+	
 	// Return status of parsing statement
 	return invocation;
 }
