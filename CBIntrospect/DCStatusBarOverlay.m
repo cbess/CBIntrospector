@@ -5,6 +5,7 @@
 //
 
 #import "DCStatusBarOverlay.h"
+#import "CBMacros.h"
 
 @implementation DCStatusBarOverlay
 @synthesize leftLabel, rightLabel;

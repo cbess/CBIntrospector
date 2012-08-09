@@ -5,6 +5,7 @@
 //
 
 #import "DCFrameView.h"
+#import "CBMacros.h"
 
 @implementation DCFrameView
 @synthesize delegate;
