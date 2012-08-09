@@ -19,54 +19,59 @@
 NSString * const DLStatementParserErrorUserInfoDescriptionKey = @"DLStatementParserUserInfoKey";
 
 #pragma mark Character Sets
-static NSCharacterSet *_squareBracketInverseCharacterSet = nil;
 static NSCharacterSet *squareBracketInverseCharacterSet()
 {
+    static NSCharacterSet *_squareBracketInverseCharacterSet = nil;
 	if (_squareBracketInverseCharacterSet == nil)
 	{
 		_squareBracketInverseCharacterSet = CB_Retain([[NSCharacterSet characterSetWithCharactersInString:@"[]"] invertedSet]);
 	}
 	return _squareBracketInverseCharacterSet;
 }
-static NSCharacterSet *_curlyBraceInverseCharacterSet = nil;
+
 static NSCharacterSet *curlyBraceInverseCharacterSet()
 {
+    static NSCharacterSet *_curlyBraceInverseCharacterSet = nil;
 	if (_curlyBraceInverseCharacterSet == nil)
 	{
 		_curlyBraceInverseCharacterSet = CB_Retain([[NSCharacterSet characterSetWithCharactersInString:@"{}"] invertedSet]);
 	}
 	return _curlyBraceInverseCharacterSet;
 }
-static NSCharacterSet *_classNameCharacterSet = nil;
+
 static NSCharacterSet *classNameCharacterSet()
 {
+    static NSCharacterSet *_classNameCharacterSet = nil;
 	if (_classNameCharacterSet == nil)
 	{
 		_classNameCharacterSet = CB_Retain([NSCharacterSet alphanumericCharacterSet]);
 	}
 	return _classNameCharacterSet;
 }
-static NSCharacterSet *_hexadecimalCharacterSet = nil;
+
 static NSCharacterSet *hexadecimalCharacterSet()
 {
+    static NSCharacterSet *_hexadecimalCharacterSet = nil;
 	if (_hexadecimalCharacterSet == nil)
 	{
 		_hexadecimalCharacterSet = CB_Retain([NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdef"]);
 	}
 	return _hexadecimalCharacterSet;
 }
-static NSCharacterSet *_methodNameCharacterSet = nil;
+
 static NSCharacterSet *methodNameCharacterSet()
 {
+    static NSCharacterSet *_methodNameCharacterSet = nil;
 	if (_methodNameCharacterSet == nil)
 	{
 		_methodNameCharacterSet = [classNameCharacterSet() copy];
 	}
 	return _methodNameCharacterSet;
 }
-static NSCharacterSet *_parameterObjectCharacterSet = nil;
+
 static NSCharacterSet *parameterObjectCharacterSet()
 {
+    static NSCharacterSet *_parameterObjectCharacterSet = nil;
 	if (_parameterObjectCharacterSet == nil)
 	{
 		NSMutableCharacterSet *parameterObjectCharacterSet = CB_Retain([NSMutableCharacterSet alphanumericCharacterSet]);
@@ -75,18 +80,20 @@ static NSCharacterSet *parameterObjectCharacterSet()
 	}
 	return _parameterObjectCharacterSet;
 }
-static NSCharacterSet *_stringCharacterSet = nil;
+
 static NSCharacterSet *stringCharacterSet()
 {
+    static NSCharacterSet *_stringCharacterSet = nil;
 	if (_stringCharacterSet == nil)
 	{
 		_stringCharacterSet = CB_Retain([NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"]);;
 	}
 	return _stringCharacterSet;
 }
-static NSCharacterSet *_whitespaceCharacterSet = nil;
+
 static NSCharacterSet *whitespaceCharacterSet()
 {
+    static NSCharacterSet *_whitespaceCharacterSet = nil;
 	if (_whitespaceCharacterSet == nil)
 	{
 		_whitespaceCharacterSet = CB_Retain([NSCharacterSet whitespaceCharacterSet]);
@@ -247,8 +254,6 @@ static NSCharacterSet *whitespaceCharacterSet()
 			CBDebugLog(@"Error! %@", errorString);
 			break;
 		}
-		
-		
 		
 		[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 		tempString = nil;
@@ -475,8 +480,6 @@ static NSCharacterSet *whitespaceCharacterSet()
 			CBDebugLog(@"Error! Unable to create invocation!");
 			break;
 		}
-		
-		
 		
 		// Method parameters
 		if (numberOfMethodParameters)
@@ -716,8 +719,6 @@ static NSCharacterSet *whitespaceCharacterSet()
 		if (numberOfMethodParameters == NSUIntegerMax || returnError)
 			break;
 		
-		
-		
 		// End of command, close square bracket ']'
 		if ([scanner scanString:@"]" intoString:NULL] == NO)
 		{
@@ -733,16 +734,12 @@ static NSCharacterSet *whitespaceCharacterSet()
 		if (returnError)
 			break;
 		
-		
-		
 		[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
 		
 		// TODO: implement parsing multiple commands
 		if ([scanner scanString:@";" intoString:NULL])
 		{
 		}
-		
-		
 		
 		// Finish scanning through remainder of statement
 		[scanner scanCharactersFromSet:whitespaceCharacterSet() intoString:NULL];
