@@ -22,7 +22,7 @@
 		1E73F23415C34754004EE6E2 /* DCStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22315C34754004EE6E2 /* DCStatusBarOverlay.m */; };
 		1E73F23515C34754004EE6E2 /* DCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22515C34754004EE6E2 /* DCUtility.m */; };
 		1E73F23615C34754004EE6E2 /* DLInvocationResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22715C34754004EE6E2 /* DLInvocationResult.m */; };
-		1E73F23715C34754004EE6E2 /* DLStatementParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22915C34754004EE6E2 /* DLStatementParser.m */; };
+		1E73F23715C34754004EE6E2 /* DLStatementParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22915C34754004EE6E2 /* DLStatementParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E73F23815C34754004EE6E2 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22B15C34754004EE6E2 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E73F23915C34754004EE6E2 /* UIView+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22D15C34754004EE6E2 /* UIView+Introspector.m */; };
 		1E73F23A15C34754004EE6E2 /* UIWindow+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22F15C34754004EE6E2 /* UIWindow+Introspector.m */; };

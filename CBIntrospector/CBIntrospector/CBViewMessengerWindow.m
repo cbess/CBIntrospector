@@ -11,6 +11,7 @@
 #import "CBUIView.h"
 #import "JSONKit.h"
 
+
 @interface CBViewMessengerWindow ()
 @property (assign) IBOutlet NSButton *receiverViewButton;
 @property (assign) IBOutlet NSTextField *messageTextField;
@@ -30,6 +31,7 @@
 - (void)awakeFromNib
 {
     [self.sendButton setEnabled:NO];
+    self.responseTextView.font = [NSFont fontWithName:@"Monaco" size:12];
 }
 
 - (void)setReceiverView:(CBUIView *)receiverView

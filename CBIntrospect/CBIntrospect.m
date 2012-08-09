@@ -15,10 +15,14 @@
 #import "DLStatementParser.h"
 #import "DLInvocationResult.h"
 
-@interface CBIntrospect () <UIAlertViewDelegate>
+static NSString * const kDLIntrospectPreviousStatementKey = @"DLIntrospectPreviousStatementKey";
+static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStatementHistoryKey";
+
+@interface CBIntrospect () <UIAlertViewDelegate, UITextFieldDelegate>
 {
     NSArray *_ignoreDumpSubviews;
 }
+@property (nonatomic, strong) UIAlertView *alertView;
 - (void)sync;
 @end
 
@@ -313,19 +317,19 @@
 
 #pragma mark - Code execution
 
-static NSString * const kDLIntrospectPreviousStatementKey = @"DLIntrospectPreviousStatementKey";
-static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStatementHistoryKey";
 - (void)showCodeAlertView;
 {
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Execute Code:" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Perform", nil];
 	alertView = CB_AutoRelease(alertView);
 	alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-	alertView.tag = (int)self.currentView;
 	
 	UITextField *textField = [alertView textFieldAtIndex:0];
 	textField.text = [[NSUserDefaults standardUserDefaults] objectForKey:kDLIntrospectPreviousStatementKey];
+    textField.font = [UIFont fontWithName:@"Courier-Bold" size:14];
+    textField.delegate = self;
 	
 	[alertView show];
+    self.alertView = alertView;
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -343,7 +347,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 	[[NSUserDefaults standardUserDefaults] setObject:text forKey:kDLIntrospectPreviousStatementKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	NSString *viewHexAddress = [NSString stringWithFormat:@"0x%x", alertView.tag];
+	NSString *viewHexAddress = [NSString stringWithFormat:@"0x%@", self.currentView.memoryAddress];
 	text = [text stringByReplacingOccurrencesOfString:@"self" withString:viewHexAddress];
 	
 	NSError *error = nil;
@@ -351,7 +355,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 	
 	if (error)
 	{
-		CBDebugLog(@"%@", error);
+		NSLog(@"%@: %@", self.class, error);
 		UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:[error description] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		errorAlert = CB_AutoRelease(errorAlert);
 		[errorAlert show];
@@ -362,7 +366,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 		
 		DLInvocationResult *result = [DLInvocationResult resultWithInvokedInvocation:invocation];
 		NSString *resultDescription = [result resultDescription];
-		CBDebugLog(@"%@", resultDescription);
+		NSLog(@"%@: %@", self.class, resultDescription);
 		
 		if ([resultDescription isEqualToString:@"(null)"] == NO)
 		{
@@ -371,6 +375,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 			[descriptionAlert show];
 		}
 		
+        // store the statement info in the history
 		NSMutableArray *history = [[[NSUserDefaults standardUserDefaults] objectForKey:kDLIntrospectStatementHistoryKey] mutableCopy];
 		history = CB_AutoRelease(history);
 		if (!history)
@@ -380,7 +385,16 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 		[[NSUserDefaults standardUserDefaults] setObject:history forKey:kDLIntrospectStatementHistoryKey];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
+    self.alertView = nil;
 }
 
+#pragma mark - Text View Delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    [self.alertView dismissWithClickedButtonIndex:1 animated:YES];
+    return YES;
+}
 
 @end

@@ -66,9 +66,8 @@
 - (NSString *)resultDescription
 {
 	NSString *description = nil;
-	
 	const char *type = [self resultType];
-	CBDebugLog(@"resultType: %s", type);
+    
 	switch (type[0])
 	{
 		case _C_ID:       // '@'

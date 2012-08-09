@@ -15,6 +15,10 @@
 #import <objc/runtime.h>
 #import "CBMacros.h"
 
+#if __has_feature(objc_arc)
+#error DLStatementParser does not support Objective-C Automatic Reference Counting (ARC)
+#endif
+
 // Error strings
 NSString * const DLStatementParserErrorUserInfoDescriptionKey = @"DLStatementParserUserInfoKey";
 
