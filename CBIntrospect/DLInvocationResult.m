@@ -67,6 +67,8 @@
 {
 	NSString *description = nil;
 	const char *type = [self resultType];
+    if (!type)
+        return @"No type specified.";
     
 	switch (type[0])
 	{

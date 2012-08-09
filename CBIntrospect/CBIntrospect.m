@@ -142,7 +142,16 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 //    NSString *memAddress = [messageInfo objectForKey:kUIViewMemoryAddressKey];
 //    UIView *view = [self viewWithMemoryAddress:memAddress];
 //    NSString *message = [NSString stringWithFormat:@"%@: <%@: 0x%@> = %@", self.class, view.class, memAddress, invocationResult.resultDescription];
-    NSString *message = [NSString stringWithFormat:@"%@: %@ = %@", self.class, statement, invocationResult.resultDescription];
+    NSString *message = nil;
+    if (error)
+    {
+        message = error.localizedDescription;
+    }
+    else
+    {
+        message = [NSString stringWithFormat:@"%@: %@ = %@", self.class, statement, invocationResult.resultDescription];
+    }
+    
     NSLog(@"%@", message);
     
     // write the response back to the client
