@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>appicon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.cbess.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.cbess.ViewIntrospector</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
