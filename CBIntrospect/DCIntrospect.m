@@ -184,8 +184,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		sharedInstance.keyboardBindingsOn = YES;
 		sharedInstance.showStatusBarOverlay = ![UIApplication sharedApplication].statusBarHidden;
 		[self workaroundUITextInputTraitsPropertiesBug];
-//        [UIApplication replaceCanonicalSendEvent];
-        [UIWindow replaceCanonicalSendEvent];
+        // [UIWindow replaceCanonicalSendEvent]; // may be needed for iOS <= 5.x
 	}
 #endif
 	return sharedInstance;
