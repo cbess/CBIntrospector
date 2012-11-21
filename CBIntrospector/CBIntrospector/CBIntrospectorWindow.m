@@ -20,6 +20,10 @@ static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-vi
 
 @interface CBIntrospectorWindow () <NSDraggingDestination, CBUIViewManagerDelegate, NSOutlineViewDataSource, 
     NSOutlineViewDelegate, NSTextFieldDelegate, NSWindowDelegate, NSSplitViewDelegate>
+{
+    // honored in [loadCurrentViewControls]
+    BOOL _doUpdateSelectedViewFile;
+}
 @property (assign) IBOutlet NSMenuItem *showAllSubviewsMenuItem;
 @property (assign) IBOutlet NSMenuItem *messageActiveViewMenuItem;
 @property (assign) IBOutlet NSTextView *textView;
@@ -309,15 +313,17 @@ static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-vi
     self.viewManager.currentView = [[CBUIView alloc] initWithJSON:jsonInfo];
     self.viewManager.currentView.syncFilePath = [self.syncDirectoryPath stringByAppendingPathComponent:kCBCurrentViewFileName];
     
-    [self.viewManager.currentView saveJSON];
-    [self.viewManager sync];
-    
     [self loadCurrentViewControls];
 }
 
 - (void)loadCurrentViewControls
 {
     CBUIView *view = self.viewManager.currentView;
+    
+    if (_doUpdateSelectedViewFile)
+    {
+        [self.viewManager updateSelectedViewToView:view];
+    }
     
     if (self.doMessageActiveView)
         self.messengerWindow.receiverView = view;
@@ -373,6 +379,9 @@ static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-vi
             
             NSDictionary *jsonInfo = [jsonString objectFromJSONString];
             [self loadControlsWithJSON:jsonInfo];
+            
+            if (jsonInfo.count)
+                [self.viewManager sync];
         }
         
         [self reloadTree];
@@ -548,6 +557,8 @@ static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-vi
     self.treeContents = nil;
     [self.treeView reloadData];
     self.title = self.defaultTitle;
+    
+    [[NSFileManager defaultManager] removeItemAtPath:[self.syncDirectoryPath stringByAppendingPathComponent:kCBSelectedViewFileName] error:nil];
 }
 
 #pragma mark - NSOutlineDataSource
@@ -603,19 +614,21 @@ static NSString * const kCBUserSettingMessageActiveViewKey = @"message-active-vi
         name = [name substringFromIndex:2]; // remove the class prefix
     
     // get the image
-    NSString *imageName = @"NSView.icns";
-    
     [buttonCell setTitle:name];
-    [buttonCell setImage:[NSImage imageNamed:imageName]];
+    [buttonCell setImage:[NSImage imageNamed:@"NSView.icns"]];
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification
 {
     [self reselectCurrentlySelectedNode];
+    _doUpdateSelectedViewFile = NO;
 }
 
+// only called when the user clicks or selects a node, not when selected programmactically
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
 {
+    // tell the device to change its selected view
+    _doUpdateSelectedViewFile = YES;
     return YES;
 }
 

@@ -24,4 +24,5 @@
 - (id)initWithJSON:(NSDictionary *)jsonInfo;
 - (BOOL)updateWithJSON:(NSDictionary *)jsonInfo;
 - (BOOL)saveJSON;
+- (BOOL)saveJSONToFile:(NSString *)path;
 @end

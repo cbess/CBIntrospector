@@ -9,9 +9,16 @@
 #ifndef CBIntrospector_CBConstants_h
 #define CBIntrospector_CBConstants_h
 
+/**
+ * FYI: File synching is done rather than networking protocols to avoid network lib 
+ * conflicts and its a simplier design.
+ */
+
 static NSString *const kCBCurrentViewFileName = @"current.view.json";
 static NSString * const kCBTreeDumpFileName = @"viewtree.dump.json";
 static NSString * const kCBViewMessageFileName = @"view.message.json";
+// contains the memaddress of the selected view from the desktop client
+static NSString * const kCBSelectedViewFileName = @"selected.view.json";
 
 // stored json keys
 static NSString * const kUIViewSubviewsKey = @"subviews";

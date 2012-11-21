@@ -99,4 +99,9 @@
     _lastModTime = sb.st_mtimespec;
 }
 
+- (void)updateSelectedViewToView:(CBUIView *)selectedView
+{
+    [self.currentView saveJSONToFile:[self.syncDirectoryPath stringByAppendingPathComponent:kCBSelectedViewFileName]];
+}
+
 @end

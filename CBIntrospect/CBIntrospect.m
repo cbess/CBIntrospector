@@ -69,7 +69,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
     
     // create the loop (polling the file system)
     if (self.syncFileSystemState == CBIntrospectSyncFileSystemStarted)
-        [self performSelector:@selector(sync) withObject:nil afterDelay:0.3];
+        [self performSelector:@selector(sync) withObject:nil afterDelay:0.2];
 }
 
 - (void)syncNow

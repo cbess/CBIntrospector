@@ -124,6 +124,11 @@
 
 - (BOOL)saveJSON
 {
+    return [self saveJSONToFile:self.syncFilePath];
+}
+
+- (BOOL)saveJSONToFile:(NSString *)path
+{
     NSDictionary *jsonInfo = [self dictionaryRepresentation];
     if (!jsonInfo)
     {
@@ -134,7 +139,7 @@
     // save to disk
     NSError *error = nil;
     NSString *jsonString = [jsonInfo JSONString];
-    [jsonString writeToFile:self.syncFilePath
+    [jsonString writeToFile:path
                  atomically:NO
                    encoding:NSUTF8StringEncoding
                       error:&error];
