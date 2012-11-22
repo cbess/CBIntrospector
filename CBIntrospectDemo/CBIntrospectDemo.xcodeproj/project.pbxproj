@@ -28,6 +28,7 @@
 		1E73F23A15C34754004EE6E2 /* UIWindow+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22F15C34754004EE6E2 /* UIWindow+Introspector.m */; };
 		1E73F23E15C347D9004EE6E2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E73F23D15C347D9004EE6E2 /* QuartzCore.framework */; };
 		1E73F24015C34839004EE6E2 /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E73F23F15C34839004EE6E2 /* circle.png */; };
+		920F9779165D97C500222526 /* CBFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F9778165D97C500222526 /* CBFileWatcher.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,8 @@
 		1E73F22F15C34754004EE6E2 /* UIWindow+Introspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+Introspector.m"; sourceTree = "<group>"; };
 		1E73F23D15C347D9004EE6E2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1E73F23F15C34839004EE6E2 /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
+		920F9777165D97C500222526 /* CBFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBFileWatcher.h; sourceTree = "<group>"; };
+		920F9778165D97C500222526 /* CBFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBFileWatcher.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +162,8 @@
 			children = (
 				1E73F21715C34754004EE6E2 /* CBIntrospect.h */,
 				1E73F21815C34754004EE6E2 /* CBIntrospect.m */,
+				920F9777165D97C500222526 /* CBFileWatcher.h */,
+				920F9778165D97C500222526 /* CBFileWatcher.m */,
 				1E73F21B15C34754004EE6E2 /* DCCrossHairView.h */,
 				1E73F21C15C34754004EE6E2 /* DCCrossHairView.m */,
 				1E73F21D15C34754004EE6E2 /* DCFrameView.h */,
@@ -278,6 +283,7 @@
 				1E73F23815C34754004EE6E2 /* JSONKit.m in Sources */,
 				1E73F23915C34754004EE6E2 /* UIView+Introspector.m in Sources */,
 				1E73F23A15C34754004EE6E2 /* UIWindow+Introspector.m in Sources */,
+				920F9779165D97C500222526 /* CBFileWatcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

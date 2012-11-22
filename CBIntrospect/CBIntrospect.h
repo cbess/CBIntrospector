@@ -17,9 +17,7 @@ typedef enum {
     CBIntrospectSyncFileSystemStopped,
 } CBIntrospectSyncFileSystemState;
 
-@interface CBIntrospect : DCIntrospect {
-    struct timespec _lastModTime;
-}
+@interface CBIntrospect : DCIntrospect
 
 @property (nonatomic, assign) CBIntrospectSyncFileSystemState syncFileSystemState;
 

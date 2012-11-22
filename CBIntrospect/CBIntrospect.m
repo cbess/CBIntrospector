@@ -14,6 +14,7 @@
 #import "CBIntrospectConstants.h"
 #import "DLStatementParser.h"
 #import "DLInvocationResult.h"
+#import "CBFileWatcher.h"
 
 static NSString * const kDLIntrospectPreviousStatementKey = @"DLIntrospectPreviousStatementKey";
 static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStatementHistoryKey";
@@ -23,13 +24,33 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
     NSArray *_ignoreDumpSubviews;
 }
 @property (nonatomic, strong) UIAlertView *alertView;
+@property (nonatomic, strong) CBFileWatcher *fileWatcher;
 - (void)sync;
 @end
 
 @implementation CBIntrospect
 @synthesize syncFileSystemState = _syncFileSystemState;
 
+- (void)dealloc
+{
+    self.fileWatcher = nil;
+    CB_NO_ARC([super dealloc]);
+}
+
 #pragma mark - Properties
+
+- (CBFileWatcher *)fileWatcher
+{
+    if (_fileWatcher == nil)
+    {
+        _fileWatcher = [CBFileWatcher new];
+        
+        // add default watched files
+        [_fileWatcher addFilePath:[[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBCurrentViewFileName]];
+        [_fileWatcher addFilePath:[[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBSelectedViewFileName]];
+    }
+    return _fileWatcher;
+}
 
 - (void)setStatusBarOverlay:(DCStatusBarOverlay *)statusBarOverlay
 {
@@ -74,46 +95,38 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 
 - (void)syncNow
 {
-    BOOL doSync = NO;
-    // only one view json file at a time
-    NSString *syncFilePath = [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBCurrentViewFileName];
-    const char *filepath = [syncFilePath cStringUsingEncoding:NSUTF8StringEncoding];
-    struct stat sb;
-    // check the mod time
-    if (stat(filepath, &sb) == 0)
-    {
-        doSync = (_lastModTime.tv_sec != sb.st_mtimespec.tv_sec);
-    }
+    NSArray *changedFilepaths = [self.fileWatcher changedFilePaths];
     
-    if (doSync)
+    for (NSString *filePath in changedFilepaths)
     {
-        // get the view info
         NSError *error = nil;
-        NSString *jsonString = [[NSString alloc] initWithContentsOfFile:syncFilePath
+        NSString *contents = [[NSString alloc] initWithContentsOfFile:filePath
                                                                encoding:NSUTF8StringEncoding
                                                                   error:&error];
-        NSDictionary *jsonInfo = [jsonString objectFromJSONString];
-        
-        // if the mem address in the current view json is different, then point `self.currentView`
-        // to the target memory address
-        if (![self updateCurrentViewWithMemoryAddress:[jsonInfo valueForKey:kUIViewMemoryAddressKey]])
-        { // the current view did not change, then update the current view
-            // update the current view
-            if ([self.currentView updateWithJSON:jsonInfo])
-            {
-                [self updateFrameView];
-                [self updateStatusBar];
+        NSString *filename = filePath.lastPathComponent;
+        if ([filename isEqualToString:kCBCurrentViewFileName] ||
+            [filename isEqualToString:kCBSelectedViewFileName])
+        {
+            NSDictionary *jsonInfo = [contents objectFromJSONString];
+
+            // if the mem address in the current view json is different, then point `self.currentView`
+            // to the target memory address
+            if (![self updateCurrentViewWithMemoryAddress:[jsonInfo valueForKey:kUIViewMemoryAddressKey]])
+            { // the current view did not change, then update the current view
+                // update the current view
+                if ([self.currentView updateWithJSON:jsonInfo])
+                {
+                    [self updateFrameView];
+                    [self updateStatusBar];
+                }
             }
         }
         
-        CB_Release(jsonString);
+        CB_Release(contents);
     }
     
     // read and execute the 'uiview message' sent from the introspector tool
     [self readSentViewMessage];
-    
-    // store last mod time
-    _lastModTime = sb.st_mtimespec;
 }
 
 - (BOOL)readSentViewMessage
