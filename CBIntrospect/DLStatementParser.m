@@ -214,7 +214,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 	NSScanner *scanner = [[NSScanner alloc] initWithString:memoryAddress];
 	[scanner scanHexInt:&addr];
 	CB_Release(scanner)
-	theObject = (__bridge id)((void*)addr);
+	theObject = (id)((void*)addr);
 	
 	return theObject;
 }
