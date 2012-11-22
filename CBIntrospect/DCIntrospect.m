@@ -268,7 +268,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	DCLog(@"%@ (%@) is setup. %@ to start.", [self class], [self versionName], [kDCIntrospectKeysInvoke isEqualToString:@" "] ? @"Push the space bar" : [NSString stringWithFormat:@"Type '%@'",  kDCIntrospectKeysInvoke]);
     if (self.enableShakeToActivate)
     {
-        DCLog(@"Or start %@ using shake gesture - ⌃⌘+Z", self.class);
+        DCLog(@"Or start %@ using shake gesture - ⌃⌘Z", self.class);
     }
 }
 

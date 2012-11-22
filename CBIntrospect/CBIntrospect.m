@@ -214,7 +214,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 
 - (NSString *)versionName
 {
-    return @"v0.3";
+    return @"v0.3.1";
 }
 
 #pragma mark - Overrides
