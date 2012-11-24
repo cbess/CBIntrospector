@@ -180,7 +180,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	if (!sharedInstance)
 	{
 		sharedInstance = [[[self class] alloc] init];
-        sharedInstance.enableShakeToActivate = YES;
+        sharedInstance.enableShakeToActivate = NO;
 		sharedInstance.keyboardBindingsOn = YES;
 		sharedInstance.showStatusBarOverlay = ![UIApplication sharedApplication].statusBarHidden;
 		[self workaroundUITextInputTraitsPropertiesBug];

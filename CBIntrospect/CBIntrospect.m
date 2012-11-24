@@ -46,8 +46,9 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
         _fileWatcher = [CBFileWatcher new];
         
         // add default watched files
-        [_fileWatcher addFilePath:[[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBCurrentViewFileName]];
-        [_fileWatcher addFilePath:[[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBSelectedViewFileName]];
+        NSArray *files = @[kCBCurrentViewFileName, kCBSelectedViewFileName];
+        for (NSString *fileString in files)
+            [_fileWatcher addFilePath:[[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:fileString]];
     }
     return _fileWatcher;
 }
@@ -341,7 +342,11 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 
 - (void)showCodeAlertView;
 {
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Execute Code:" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Perform", nil];
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Execute Code:"
+                                                        message:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Perform", nil];
 	alertView = CB_AutoRelease(alertView);
 	alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
 	
@@ -369,7 +374,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 	[[NSUserDefaults standardUserDefaults] setObject:text forKey:kDLIntrospectPreviousStatementKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	NSString *viewHexAddress = [NSString stringWithFormat:@"0x%@", self.currentView.memoryAddress];
+	NSString *viewHexAddress = [@"0x" stringByAppendingString:self.currentView.memoryAddress];
 	text = [text stringByReplacingOccurrencesOfString:@"self" withString:viewHexAddress];
 	
 	NSError *error = nil;
@@ -377,8 +382,12 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 	
 	if (error)
 	{
-		NSLog(@"%@: %@", self.class, error);
-		UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:[error description] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		CBDebugLog(@"%@: %@", self.class, error);
+		UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                             message:error.description
+                                                            delegate:nil
+                                                   cancelButtonTitle:@"OK"
+                                                   otherButtonTitles:nil];
 		errorAlert = CB_AutoRelease(errorAlert);
 		[errorAlert show];
 	}
@@ -388,11 +397,15 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 		
 		DLInvocationResult *result = [DLInvocationResult resultWithInvokedInvocation:invocation];
 		NSString *resultDescription = [result resultDescription];
-		NSLog(@"%@: %@", self.class, resultDescription);
+		CBDebugLog(@"%@: %@", self.class, resultDescription);
 		
-		if ([resultDescription isEqualToString:@"(null)"] == NO)
+		if (![resultDescription isEqualToString:@"(null)"])
 		{
-			UIAlertView *descriptionAlert = [[UIAlertView alloc] initWithTitle:@"Result" message:resultDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			UIAlertView *descriptionAlert = [[UIAlertView alloc] initWithTitle:@"Result"
+                                                                       message:resultDescription
+                                                                      delegate:nil
+                                                             cancelButtonTitle:@"OK"
+                                                             otherButtonTitles:nil];
 			descriptionAlert = CB_AutoRelease(descriptionAlert);
 			[descriptionAlert show];
 		}
