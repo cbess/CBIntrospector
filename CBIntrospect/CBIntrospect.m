@@ -249,9 +249,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 {
     [super invokeIntrospector];
    
-    // remove the current view file
-    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] currentViewJSONFilePath] error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] viewMessageJSONFilePath] error:nil];
+    [self cleanupFiles]; 
     
     if (self.on)
     {
@@ -270,8 +268,14 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
     [super start];
     
     // clear the json
+    [self cleanupFiles];
+}
+
+- (void)cleanupFiles
+{
     [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] currentViewJSONFilePath] error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] viewTreeJSONFilePath] error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] viewMessageJSONFilePath] error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] filePathForSelectedViewJSON] error:nil];
 }
 
 #pragma mark - Traverse Subviews

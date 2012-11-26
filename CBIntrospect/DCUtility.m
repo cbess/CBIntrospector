@@ -59,6 +59,11 @@
     return [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBViewMessageFileName];
 }
 
+- (NSString *)filePathForSelectedViewJSON
+{
+    return [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:kCBSelectedViewFileName];
+}
+
 - (NSString *)describeColor:(UIColor *)color
 {
 	if (!color)
