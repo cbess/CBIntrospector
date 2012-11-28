@@ -2,6 +2,8 @@ CBIntrospector
 ============
 ![app icon](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/CBIntrospector/appicon.png)
 
+[Download View Introspector](https://github.com/cbess/CBIntrospector/downloads)
+
 Introspector is a small set of tools for iOS and the iOS Simulator that aid in debugging user interfaces built with UIKit.  It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily.  It's designed for use in the iOS simulator, but can also be used on a device.
 
 ![Introspect Demo Image](http://domesticcat.com.au/projects/introspect/introspectdemo.png)
@@ -15,7 +17,7 @@ It uses keyboard shortcuts to handle starting, ending and other commands.  It ca
 Features:
 --------------
 * Simple to setup and use
-* Compatible with the iOS Simulator companion desktop app - [View Introspector](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-latest.dmg)
+* Compatible with the iOS Simulator companion desktop app - [View Introspector](https://github.com/cbess/CBIntrospector/downloads)
 * Send messages (call any method) to the selected view from the desktop app or from device (tap the status bar)
 * Controlled via app-wide keyboard commands
 * Highlighting of view frames
