@@ -215,7 +215,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 
 - (NSString *)versionName
 {
-    return @"v0.3.1";
+    return @"v0.3.2";
 }
 
 #pragma mark - Overrides
@@ -266,7 +266,9 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 - (void)start
 {
     [super start];
-    
+
+    // remove the view tree json from the last run
+    [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] viewTreeJSONFilePath] error:nil];
     // clear the json
     [self cleanupFiles];
 }
