@@ -21,8 +21,16 @@ typedef enum {
 
 @property (nonatomic, assign) CBIntrospectSyncFileSystemState syncFileSystemState;
 
++ (CBIntrospect *)sharedIntrospector;
+
 /**
  * Syncs the changes from the file system back to the corresponding iOS view.
  */
 - (void)syncNow;
+
+/**
+ * Sets the view's name in the object tree from the specified view controller.
+ * @discussion Use within [viewDidLoad].
+ */
+- (void)setNameForViewController:(UIViewController *)viewController;
 @end

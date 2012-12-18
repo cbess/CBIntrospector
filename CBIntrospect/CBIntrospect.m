@@ -31,6 +31,11 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 @implementation CBIntrospect
 @synthesize syncFileSystemState = _syncFileSystemState;
 
++ (CBIntrospect *)sharedIntrospector
+{
+    return (CBIntrospect*) [super sharedIntrospector];
+}
+
 - (void)dealloc
 {
     self.fileWatcher = nil;
@@ -216,6 +221,11 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 - (NSString *)versionName
 {
     return @"v0.3.2";
+}
+
+- (void)setNameForViewController:(UIViewController *)viewController
+{
+    [self setName:[NSStringFromClass(viewController.class) stringByAppendingString:@".view"] forObject:viewController.view accessedWithSelf:NO];
 }
 
 #pragma mark - Overrides
