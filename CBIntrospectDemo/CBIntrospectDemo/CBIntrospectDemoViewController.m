@@ -1,16 +1,16 @@
 //
-//  DCIntrospectDemoViewController.m
-//  DCIntrospectDemo
+//  CBIntrospectDemoViewController.m
+//  CBIntrospectDemo
 //
 //  Created by Domestic Cat on 29/04/11.
 //  Copyright 2011 Domestic Cat Software. All rights reserved.
 //
 
-#import "DCIntrospectDemoViewController.h"
+#import "CBIntrospectDemoViewController.h"
 #import "CBIntrospect.h"
 #import "CBMacros.h"
 
-@implementation DCIntrospectDemoViewController
+@implementation CBIntrospectDemoViewController
 @synthesize activityIndicator;
 @synthesize label;
 

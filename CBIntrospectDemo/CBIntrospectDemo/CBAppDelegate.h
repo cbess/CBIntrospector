@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class DCIntrospectDemoViewController;
+@class CBIntrospectDemoViewController;
 
 @interface CBAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet DCIntrospectDemoViewController *viewController;
+@property (nonatomic, retain) IBOutlet CBIntrospectDemoViewController *viewController;
 
 @end

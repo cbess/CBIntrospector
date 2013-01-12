@@ -7,7 +7,7 @@
 //
 
 #import "CBAppDelegate.h"
-#import "DCIntrospectDemoViewController.h"
+#import "CBIntrospectDemoViewController.h"
 #import "CBIntrospect.h"
 
 @implementation CBAppDelegate

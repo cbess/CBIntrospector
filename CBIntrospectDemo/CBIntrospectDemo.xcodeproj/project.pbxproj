@@ -13,7 +13,7 @@
 		1E73F1FE15C3467E004EE6E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E73F1FC15C3467E004EE6E2 /* InfoPlist.strings */; };
 		1E73F20015C3467E004EE6E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F1FF15C3467E004EE6E2 /* main.m */; };
 		1E73F20415C3467E004EE6E2 /* CBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F20315C3467E004EE6E2 /* CBAppDelegate.m */; };
-		1E73F21215C34709004EE6E2 /* DCIntrospectDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F21115C34709004EE6E2 /* DCIntrospectDemoViewController.m */; };
+		1E73F21215C34709004EE6E2 /* CBIntrospectDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F21115C34709004EE6E2 /* CBIntrospectDemoViewController.m */; };
 		1E73F21515C34721004EE6E2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E73F21315C34721004EE6E2 /* MainWindow.xib */; };
 		1E73F23015C34754004EE6E2 /* CBIntrospect.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F21815C34754004EE6E2 /* CBIntrospect.m */; };
 		1E73F23115C34754004EE6E2 /* DCCrossHairView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F21C15C34754004EE6E2 /* DCCrossHairView.m */; };
@@ -42,8 +42,8 @@
 		1E73F20115C3467E004EE6E2 /* CBIntrospectDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CBIntrospectDemo-Prefix.pch"; sourceTree = "<group>"; };
 		1E73F20215C3467E004EE6E2 /* CBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBAppDelegate.h; sourceTree = "<group>"; };
 		1E73F20315C3467E004EE6E2 /* CBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBAppDelegate.m; sourceTree = "<group>"; };
-		1E73F21015C34709004EE6E2 /* DCIntrospectDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCIntrospectDemoViewController.h; sourceTree = "<group>"; };
-		1E73F21115C34709004EE6E2 /* DCIntrospectDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCIntrospectDemoViewController.m; sourceTree = "<group>"; };
+		1E73F21015C34709004EE6E2 /* CBIntrospectDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBIntrospectDemoViewController.h; sourceTree = "<group>"; };
+		1E73F21115C34709004EE6E2 /* CBIntrospectDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBIntrospectDemoViewController.m; sourceTree = "<group>"; };
 		1E73F21415C34721004EE6E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		1E73F21715C34754004EE6E2 /* CBIntrospect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBIntrospect.h; sourceTree = "<group>"; };
 		1E73F21815C34754004EE6E2 /* CBIntrospect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBIntrospect.m; sourceTree = "<group>"; };
@@ -136,8 +136,8 @@
 				1E73F21615C34754004EE6E2 /* CBIntrospect */,
 				1E73F20215C3467E004EE6E2 /* CBAppDelegate.h */,
 				1E73F20315C3467E004EE6E2 /* CBAppDelegate.m */,
-				1E73F21015C34709004EE6E2 /* DCIntrospectDemoViewController.h */,
-				1E73F21115C34709004EE6E2 /* DCIntrospectDemoViewController.m */,
+				1E73F21015C34709004EE6E2 /* CBIntrospectDemoViewController.h */,
+				1E73F21115C34709004EE6E2 /* CBIntrospectDemoViewController.m */,
 				1E73F23C15C34780004EE6E2 /* Other Sources */,
 				1E73F1FA15C3467E004EE6E2 /* Supporting Files */,
 			);
@@ -271,7 +271,7 @@
 			files = (
 				1E73F20015C3467E004EE6E2 /* main.m in Sources */,
 				1E73F20415C3467E004EE6E2 /* CBAppDelegate.m in Sources */,
-				1E73F21215C34709004EE6E2 /* DCIntrospectDemoViewController.m in Sources */,
+				1E73F21215C34709004EE6E2 /* CBIntrospectDemoViewController.m in Sources */,
 				1E73F23015C34754004EE6E2 /* CBIntrospect.m in Sources */,
 				1E73F23115C34754004EE6E2 /* DCCrossHairView.m in Sources */,
 				1E73F23215C34754004EE6E2 /* DCFrameView.m in Sources */,
