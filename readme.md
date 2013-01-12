@@ -1,24 +1,24 @@
 CBIntrospector
 ============
-![app icon](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/CBIntrospector/appicon.png)
+![app icon](https://github.com/cbess/ViewIntrospector/raw/master/CBIntrospector/appicon.png)
 
 [Download View Introspector](https://github.com/cbess/CBIntrospector/downloads)
 
-Introspector is a small set of tools for iOS and the iOS Simulator that aid in debugging user interfaces built with UIKit.  It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily.  It's designed for use in the iOS simulator, but can also be used on a device.
+Introspector is a small set of tools for iOS and the iOS Simulator that aid in debugging user interfaces built with UIKit. It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily. It's designed for use in the iOS simulator, but can also be used on a device.
 
 ![Introspect Demo Image](http://domesticcat.com.au/projects/introspect/introspectdemo.png)
 
-![View Introspector Screenshot](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-screenshot.jpg)
+![View Introspector Screenshot](https://github.com/cbess/ViewIntrospector/raw/master/cbintrospector-screenshot.jpg)
 
 [Download View Introspector](https://github.com/cbess/CBIntrospector/downloads)
 
-It uses keyboard shortcuts to handle starting, ending and other commands.  It can also be invoked via an app-wide `UIGestureRecognizer` if it is to be used on the device.
+It uses keyboard shortcuts to handle starting, ending and other commands. It can also be invoked via an app-wide `UIGestureRecognizer` if it is to be used on the device.
 
 Features:
 --------------
 * Simple to setup and use
 * Compatible with the iOS Simulator companion desktop app - [View Introspector](https://github.com/cbess/CBIntrospector/downloads)
-* Send messages (call any method) to the selected view from the desktop app or from device (tap the status bar)
+* Send messages (call any method) to the selected view from the desktop app or from device (tap the status bar) during runtime
 * Controlled via app-wide keyboard commands
 * Highlighting of view frames
 * Displays a views origin & size, including distances to edges of main window
@@ -49,18 +49,18 @@ The `#if` to target the simulator is not required but is a good idea to further 
 
 Once setup, simply push the space bar to invoke the introspect or then start clicking on views to get info.  You can also tap and drag around the interface.
 
-A a small demo app is included to test it out.
+Provide custom name of view:
 
-View Introspector Usage
---------------------
+    - (void)viewDidLoad
+    {
+        [super viewDidLoad];
 
-* Download desktop app [View Introspector](https://github.com/cbess/CBIntrospector/downloads)
-* Start your app
-* Start `View Introspector` desktop app
-* Click `Reload` to load the projects
-* Select the project to open from `View Introspector` project window (Menu->Window->Show Projects)
-* Interact with `View Introspector` UIView tree to select or adjust the UIView in the iOS Simulator
-* (More documentation coming soon)
+        // provide custom names for use by the View Introspector desktop app and console output
+    	[[CBIntrospect sharedIntrospector] setName:@"myActivityIndicator" forObject:self.activityIndicator accessedWithSelf:YES];
+        [[CBIntrospect sharedIntrospector] setNameForViewController:self];
+    }
+
+A small demo app is included to test it out.
 
 Selected keyboard shortcuts
 -----------------------------------------
@@ -110,7 +110,7 @@ Customizing Key Bindings
 --------------------------------------
 
 Edit the file `DCIntrospectSettings.h` to change key bindings.  You might want to change the key bindings if your using a laptop/wireless keyboard for development.
-Keep in mind you can use the `View Introspector` desktop app to interact with the UIView objects as well, and even call methods on the selected view using the `View Messenger` [(see screenshot)](https://github.com/cbess/CBIntrospector/raw/master/CBIntrospector/cbintrospector-screenshot.jpg).
+Keep in mind you can use the `View Introspector` desktop app to interact with the UIView objects as well, and even call methods on the selected view using the `View Messenger` [(see screenshot)](https://github.com/cbess/ViewIntrospector/raw/master/cbintrospector-screenshot.jpg).
 
 License
 -----------

@@ -38,7 +38,10 @@
 
 	// set the activity indicator to a non-integer frame for demonstration
 	self.activityIndicator.frame = CGRectOffset(self.activityIndicator.frame, 0.5, 0.0);
+    
+    // provide custom names for use by the View Introspector desktop app and console output
 	[[CBIntrospect sharedIntrospector] setName:@"activityIndicator" forObject:self.activityIndicator accessedWithSelf:YES];
+    [[CBIntrospect sharedIntrospector] setNameForViewController:self];
 }
 
 - (void)viewDidUnload
