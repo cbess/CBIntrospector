@@ -28,7 +28,7 @@
 - (void)dealloc
 {
     self.filePathInfo = nil;
-    CB_NO_ARC([super dealloc])
+    CB_NO_ARC([super dealloc]);
 }
 
 #pragma mark -
