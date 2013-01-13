@@ -197,7 +197,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 
 - (BOOL)updateCurrentViewWithMemoryAddress:(NSString *)memAddress
 {
-    // if mem address different than current view, then get mem address of the target view
+    // if mem address is different than current view, then get mem address of the target view
     if (![memAddress isEqualToString:self.currentView.memoryAddress])
     {
         UIView *view = [self viewWithMemoryAddress:memAddress];

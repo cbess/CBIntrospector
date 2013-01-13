@@ -17,7 +17,7 @@ It uses keyboard shortcuts to handle starting, ending and other commands. It can
 Features:
 --------------
 * Simple to setup and use
-* Compatible with the iOS Simulator companion desktop app - [View Introspector](https://github.com/cbess/CBIntrospector/downloads)
+* Compatible with the iOS Simulator companion desktop app - [View Introspector](https://github.com/cbess/ViewIntrospector)
 * Send messages (call any method) to the selected view from the desktop app or from device (tap the status bar) during runtime
 * Controlled via app-wide keyboard commands
 * Highlighting of view frames
