@@ -1,1 +1,0 @@
-The desktop app is available at [https://github.com/cbess/ViewIntrospector.git](https://github.com/cbess/ViewIntrospector.git).
