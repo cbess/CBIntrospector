@@ -21,6 +21,14 @@ typedef enum {
 
 @property (nonatomic, assign) CBIntrospectSyncFileSystemState syncFileSystemState;
 
+/**
+ * Gets/sets the introspector key name that can be used to provide a name for objects in the introspector.
+ * @discussion This value is set within IB, using the "User Defined Runtime Properties" panel. Used in
+ * the View Introspector and CBIntrospect output. Therefore it must be set before nibs are loaded. 
+ */
++ (void)setIntrospectorKeyName:(NSString *)keyName;
++ (NSString *)introspectorKeyName;
+
 + (CBIntrospect *)sharedIntrospector;
 
 /**

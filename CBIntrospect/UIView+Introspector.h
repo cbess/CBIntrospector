@@ -10,6 +10,8 @@
 
 @interface UIView (Introspector)
 @property (nonatomic, readonly) NSString *memoryAddress;
+// Uses [setName:forObject:] internally.
+@property (copy, nonatomic) NSString *introspectorName; // set in IB, using "User Defined Runtime Attributes"
 
 + (NSString *)describeProperty:(NSString *)propertyName value:(id)value;
 

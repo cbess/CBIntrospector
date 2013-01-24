@@ -22,6 +22,7 @@
 
 @implementation UIView (Introspector)
 @dynamic memoryAddress;
+@dynamic introspectorName;
 
 + (NSString *)describeProperty:(NSString *)propertyName value:(id)value
 {
@@ -317,7 +318,26 @@
 	return value ? [value description] : @"nil";
 }
 
+#ifdef DEBUG
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+    if ([[CBIntrospect introspectorKeyName] isEqualToString:key])
+        self.introspectorName = value;
+    else
+        [super setValue:value forUndefinedKey:key];
+}
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    if ([[CBIntrospect introspectorKeyName] isEqualToString:key])
+        return self.introspectorName;
+    
+    return [super valueForUndefinedKey:key];
+}
+#endif
+
 #pragma mark - Persistence
+
 + (NSString *)filePathWithView:(UIView *)view;
 {
     // uncomment below line to create unique filenames for each selected view
@@ -368,12 +388,13 @@
 }
 
 #pragma mark - Transform
+
 - (NSDictionary *)dictionaryRepresentation
 {
     // build the JSON/dictionary
     NSMutableDictionary *jsonInfo = [NSMutableDictionary dictionaryWithCapacity:7];
     
-    [jsonInfo setObject:[[CBIntrospect sharedIntrospector] nameForObject:self] forKey:kUIViewClassNameKey];
+    [jsonInfo setObject:self.introspectorName forKey:kUIViewClassNameKey];
     [jsonInfo setObject:[NSString stringWithFormat:@"%x", (unsigned int)self] forKey:kUIViewMemoryAddressKey];
     [jsonInfo setObject:self.viewDescription forKey:kUIViewDescriptionKey];
     
@@ -442,6 +463,16 @@
     return [NSString stringWithFormat:@"%x", (int)self];
 }
 
+- (NSString *)introspectorName
+{
+    return [[CBIntrospect sharedIntrospector] nameForObject:self];
+}
+
+- (void)setIntrospectorName:(NSString *)introspectorName
+{
+    [[CBIntrospect sharedIntrospector] setName:introspectorName forObject:self accessedWithSelf:NO];
+}
+
 #pragma mark - View Description
 
 - (NSString *)viewDescription
@@ -470,6 +501,7 @@
 		UIView *view = (UIView *)self;
 		// print out generic uiview properties
 		[outputString appendString:@"  ** UIView properties **\n"];
+//        [outputString appendFormat:@"    introspectorName: %@\n", self.introspectorName];
 		[outputString appendFormat:@"    tag: %i\n", view.tag];
 		[outputString appendFormat:@"    frame: %@ | ", NSStringFromCGRect(view.frame)];
 		[outputString appendFormat:@"bounds: %@ | ", NSStringFromCGRect(view.bounds)];
@@ -478,7 +510,7 @@
 		[outputString appendFormat:@"    autoresizingMask: %@\n", [UIView describeProperty:@"autoresizingMask" value:[NSNumber numberWithInt:view.autoresizingMask]]];
 		[outputString appendFormat:@"    autoresizesSubviews: %@\n", NSStringFromBOOL(view.autoresizesSubviews)];
 		[outputString appendFormat:@"    contentMode: %@ | ", [UIView describeProperty:@"contentMode" value:[NSNumber numberWithInt:view.contentMode]]];
-		[outputString appendFormat:@"contentStretch: %@\n", NSStringFromCGRect(view.contentStretch)];
+//		[outputString appendFormat:@"contentStretch: %@\n", NSStringFromCGRect(view.contentStretch)];
 		[outputString appendFormat:@"    backgroundColor: %@\n", [[DCUtility sharedInstance] describeColor:view.backgroundColor]];
 		[outputString appendFormat:@"    alpha: %.2f | ", view.alpha];
 		[outputString appendFormat:@"opaque: %@ | ", NSStringFromBOOL(view.opaque)];

@@ -18,6 +18,7 @@
 
 static NSString * const kDLIntrospectPreviousStatementKey = @"DLIntrospectPreviousStatementKey";
 static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStatementHistoryKey";
+static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [CBIntrospect setIntrospectorKeyName:]
 
 @interface CBIntrospect () <UIAlertViewDelegate, UITextFieldDelegate>
 {
@@ -34,6 +35,17 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 + (CBIntrospect *)sharedIntrospector
 {
     return (CBIntrospect*) [super sharedIntrospector];
+}
+
++ (NSString *)introspectorKeyName
+{
+    return gIntrospectorKeyName;
+}
+
++ (void)setIntrospectorKeyName:(NSString *)keyName
+{
+    CB_Release(gIntrospectorKeyName)
+    gIntrospectorKeyName = [keyName copy];
 }
 
 - (void)dealloc
@@ -220,7 +232,7 @@ static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStateme
 
 - (NSString *)versionName
 {
-    return @"v0.3.2";
+    return @"v0.3.21";
 }
 
 - (void)setNameForViewController:(UIViewController *)viewController
