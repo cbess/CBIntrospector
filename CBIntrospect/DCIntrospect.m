@@ -664,7 +664,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 		{
 #ifdef DEBUG
 			UIView *view = self.currentView;
-			view.tag = view.tag;	// suppress the xcode warning about an unused variable.
+#pragma unused(view)
 			DCNamedLog(@"access current view using local 'view' variable.");
 			DEBUGGER;
 			return NO;

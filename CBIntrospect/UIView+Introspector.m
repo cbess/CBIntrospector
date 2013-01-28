@@ -16,6 +16,9 @@
 #import <objc/runtime.h>
 #import "CBIntrospect.h"
 
+// expands to a string representation of the object memory address
+#define MEM_STR(obj) [NSString stringWithFormat:@"%lx", (unsigned long)obj]
+
 @interface UIView (Custom)
 + (NSString *)filePathWithView:(UIView *)view;
 @end
@@ -26,6 +29,7 @@
 
 + (NSString *)describeProperty:(NSString *)propertyName value:(id)value
 {
+#ifdef DEBUG
 	if ([propertyName isEqualToString:@"contentMode"])
 	{
 		switch ([value intValue])
@@ -314,34 +318,17 @@
 		UIFont *font = (UIFont *)value;
 		return [NSString stringWithFormat:@"%.0fpx %@", font.pointSize, font.fontName];
 	}
-	
+#endif
+    
 	return value ? [value description] : @"nil";
 }
-
-#ifdef DEBUG
-- (void)setValue:(id)value forUndefinedKey:(NSString *)key
-{
-    if ([[CBIntrospect introspectorKeyName] isEqualToString:key])
-        self.introspectorName = value;
-    else
-        [super setValue:value forUndefinedKey:key];
-}
-
-- (id)valueForUndefinedKey:(NSString *)key
-{
-    if ([[CBIntrospect introspectorKeyName] isEqualToString:key])
-        return self.introspectorName;
-    
-    return [super valueForUndefinedKey:key];
-}
-#endif
 
 #pragma mark - Persistence
 
 + (NSString *)filePathWithView:(UIView *)view;
 {
     // uncomment below line to create unique filenames for each selected view
-//    NSString *filename = [NSString stringWithFormat:@"%@.%x.view.json", NSStringFromClass([view class]), view]; // gen unique filenames
+    //    NSString *filename = [NSString stringWithFormat:@"%@.%x.view.json", NSStringFromClass([view class]), view]; // gen unique filenames
     NSString *filename = kCBCurrentViewFileName;
     return [[[DCUtility sharedInstance] cacheDirectoryPath] stringByAppendingPathComponent:filename];
 }
@@ -387,6 +374,24 @@
     [[NSFileManager defaultManager] removeItemAtPath:[self filePathWithView:view] error:nil];
 }
 
+#pragma mark - UIView Overrides
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+    if ([[CBIntrospect introspectorKeyName] isEqualToString:key])
+        self.introspectorName = value;
+    else
+        [super setValue:value forUndefinedKey:key];
+}
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    if ([[CBIntrospect introspectorKeyName] isEqualToString:key])
+        return self.introspectorName;
+    
+    return [super valueForUndefinedKey:key];
+}
+
 #pragma mark - Transform
 
 - (NSDictionary *)dictionaryRepresentation
@@ -395,7 +400,7 @@
     NSMutableDictionary *jsonInfo = [NSMutableDictionary dictionaryWithCapacity:7];
     
     [jsonInfo setObject:self.introspectorName forKey:kUIViewClassNameKey];
-    [jsonInfo setObject:[NSString stringWithFormat:@"%x", (unsigned int)self] forKey:kUIViewMemoryAddressKey];
+    [jsonInfo setObject:MEM_STR(self) forKey:kUIViewMemoryAddressKey];
     [jsonInfo setObject:self.viewDescription forKey:kUIViewDescriptionKey];
     
     [jsonInfo setObject:NSStringFromCGRect(self.bounds) forKey:kUIViewBoundsKey];
@@ -417,7 +422,7 @@
 {
     // check class and mem address    
     NSString *memAddress = [jsonInfo valueForKey:kUIViewMemoryAddressKey];
-    if (![[NSString stringWithFormat:@"%x", (unsigned int)self] isEqualToString:memAddress])
+    if (![MEM_STR(self) isEqualToString:memAddress])
     {
         CBDebugLog(@"Bad memory address for current view from JSON: 0x%@", memAddress);
         return NO;
@@ -460,7 +465,7 @@
 
 - (NSString *)memoryAddress
 {
-    return [NSString stringWithFormat:@"%x", (int)self];
+    return MEM_STR(self);
 }
 
 - (NSString *)introspectorName
@@ -477,15 +482,18 @@
 
 - (NSString *)viewDescription
 {
+	NSMutableString *outputString = nil;
+    
+#ifdef DEBUG
     Class objectClass = [self class];
-	NSString *className = [NSString stringWithFormat:@"%@:0x%x", objectClass, (unsigned int) self];
+	NSString *className = [NSString stringWithFormat:@"%@:0x%@", objectClass, MEM_STR(self)];
+	outputString = [NSMutableString stringWithFormat:@"\n\n** %@", className];
 	
 	unsigned int count;
 	objc_property_t *properties = class_copyPropertyList(objectClass, &count);
     size_t buf_size = 1024;
     char *buffer = malloc(buf_size);
-	NSMutableString *outputString = [NSMutableString stringWithFormat:@"\n\n** %@", className];
-	
+    
 	// list the class heirachy
 	Class superClass = [objectClass superclass];
 	while (superClass)
@@ -526,7 +534,7 @@
         NSMutableArray *subviewsArray = [NSMutableArray arrayWithCapacity:view.subviews.count];
         for (UIView *subview in view.subviews) 
         {
-            [subviewsArray addObject:[NSString stringWithFormat:@"<%@: 0x%x>", NSStringFromClass([subview class]), (unsigned int)subview]];
+            [subviewsArray addObject:[NSString stringWithFormat:@"<%@: 0x%@>", NSStringFromClass([subview class]), MEM_STR(subview)]];
         }
         
         // ex: subviews: 3 views [<UIView: 0x23f434f>, <UIButton: 0x43f4ffe>]
@@ -593,6 +601,7 @@
     
 	free(properties);
     free(buffer);
+#endif
     
     return outputString;
 }
