@@ -49,7 +49,7 @@ The `#if` to target the simulator is not required but is a good idea to further 
 
 Once setup, simply push the space bar to invoke the introspect or then start clicking on views to get info.  You can also tap and drag around the interface.
 
-Provide custom name of view:
+Provide custom name of the view:
 
     - (void)viewDidLoad
     {
@@ -59,6 +59,16 @@ Provide custom name of view:
     	[[CBIntrospect sharedIntrospector] setName:@"myActivityIndicator" forObject:self.activityIndicator accessedWithSelf:YES];
         [[CBIntrospect sharedIntrospector] setNameForViewController:self];
     }
+
+Use `Interface Builder` to set the custom name of the view:
+
+![IB Screenshot](https://github.com/cbess/CBIntrospector/raw/master/introspector-name.jpg)
+
+    - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+    {
+        // must be set before any nib is called
+        [CBIntrospect setIntrospectorKeyName:@"introspectorName"];
+        ...
 
 A small demo app is included to test it out.
 

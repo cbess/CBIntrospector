@@ -14,6 +14,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // must be set before any nib is called
+    [CBIntrospect setIntrospectorKeyName:@"introspectorName"];
+    
     // create a custom tap gesture recognizer so introspection can be invoked from a device
 	// this one is a three finger double tap
     /*
