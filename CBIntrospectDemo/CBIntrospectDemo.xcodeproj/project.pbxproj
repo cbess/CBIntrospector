@@ -29,6 +29,7 @@
 		1E73F23E15C347D9004EE6E2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E73F23D15C347D9004EE6E2 /* QuartzCore.framework */; };
 		1E73F24015C34839004EE6E2 /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E73F23F15C34839004EE6E2 /* circle.png */; };
 		920F9779165D97C500222526 /* CBFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F9778165D97C500222526 /* CBFileWatcher.m */; };
+		92F8FAFD16DC7A52002660FE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92F8FAFC16DC7A52002660FE /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		1E73F23F15C34839004EE6E2 /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		920F9777165D97C500222526 /* CBFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBFileWatcher.h; sourceTree = "<group>"; };
 		920F9778165D97C500222526 /* CBFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBFileWatcher.m; sourceTree = "<group>"; };
+		92F8FAFC16DC7A52002660FE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 		1E73F1E415C3467E004EE6E2 = {
 			isa = PBXGroup;
 			children = (
+				92F8FAFC16DC7A52002660FE /* Default-568h@2x.png */,
 				1E73F1F915C3467E004EE6E2 /* CBIntrospectDemo */,
 				1E73F1F215C3467E004EE6E2 /* Frameworks */,
 				1E73F1F015C3467E004EE6E2 /* Products */,
@@ -231,7 +234,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = CB;
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Christopher Bess";
 			};
 			buildConfigurationList = 1E73F1E915C3467E004EE6E2 /* Build configuration list for PBXProject "CBIntrospectDemo" */;
@@ -259,6 +262,7 @@
 				1E73F1FE15C3467E004EE6E2 /* InfoPlist.strings in Resources */,
 				1E73F21515C34721004EE6E2 /* MainWindow.xib in Resources */,
 				1E73F24015C34839004EE6E2 /* circle.png in Resources */,
+				92F8FAFD16DC7A52002660FE /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +320,9 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -343,6 +350,9 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
