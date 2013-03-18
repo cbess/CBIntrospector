@@ -21,7 +21,7 @@
 - (NSDictionary *)filePathInfo
 {
     if (_filePathInfo == nil)
-        _filePathInfo = [NSMutableDictionary dictionary];
+        _filePathInfo = [[NSMutableDictionary alloc] init];
     return _filePathInfo;
 }
 
