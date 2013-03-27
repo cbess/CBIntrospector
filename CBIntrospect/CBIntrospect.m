@@ -232,7 +232,7 @@ static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [C
 
 - (NSString *)versionName
 {
-    return @"v0.3.22";
+    return @"v0.3.3";
 }
 
 - (void)setNameForViewController:(UIViewController *)viewController
