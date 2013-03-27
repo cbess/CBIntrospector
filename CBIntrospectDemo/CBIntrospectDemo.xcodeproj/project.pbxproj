@@ -65,8 +65,8 @@
 		1E73F22715C34754004EE6E2 /* DLInvocationResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLInvocationResult.m; sourceTree = "<group>"; };
 		1E73F22815C34754004EE6E2 /* DLStatementParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLStatementParser.h; sourceTree = "<group>"; };
 		1E73F22915C34754004EE6E2 /* DLStatementParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLStatementParser.m; sourceTree = "<group>"; };
-		1E73F22A15C34754004EE6E2 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = ../../CBIntrospect/JSONKit.h; sourceTree = "<group>"; };
-		1E73F22B15C34754004EE6E2 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = ../../CBIntrospect/JSONKit.m; sourceTree = "<group>"; };
+		1E73F22A15C34754004EE6E2 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = ../../CBIntrospect/Vendor/JSONKit.h; sourceTree = "<group>"; };
+		1E73F22B15C34754004EE6E2 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = ../../CBIntrospect/Vendor/JSONKit.m; sourceTree = "<group>"; };
 		1E73F22C15C34754004EE6E2 /* UIView+Introspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Introspector.h"; sourceTree = "<group>"; };
 		1E73F22D15C34754004EE6E2 /* UIView+Introspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Introspector.m"; sourceTree = "<group>"; };
 		1E73F22E15C34754004EE6E2 /* UIWindow+Introspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+Introspector.h"; sourceTree = "<group>"; };
