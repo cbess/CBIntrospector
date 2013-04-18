@@ -528,7 +528,7 @@
 		[outputString appendFormat:@"    userInteractionEnabled: %@ | ", NSStringFromBOOL(view.userInteractionEnabled)];
 		[outputString appendFormat:@"multipleTouchEnabled: %@\n", NSStringFromBOOL(view.multipleTouchEnabled)];
 		[outputString appendFormat:@"    gestureRecognizers: %@\n", (view.gestureRecognizers) ? [view.gestureRecognizers description] : @"nil"];
-        [outputString appendFormat:@"    superview: %@\n", view.superview];
+        [outputString appendFormat:@"    superview: %@\n", view.superview.description];
         
         // get subviews instance info
         NSMutableArray *subviewsArray = [NSMutableArray arrayWithCapacity:view.subviews.count];
