@@ -545,16 +545,19 @@
 	
 	[outputString appendFormat:@"  ** %@ properties **\n", objectClass];
 	
-	if (objectClass == UIButton.class)
-	{
-		[outputString appendString:@"    Logging properties not currently supported for this view.\n"];
-	}
-    else if (objectClass == [UIScrollView class])
+    // custom property descriptions
+    if ([self isKindOfClass:[UIScrollView class]])
     {
         UIScrollView *scrollView = (UIScrollView*) self;
         [outputString appendFormat:@"    contentOffset: %@\n", NSStringFromCGPoint(scrollView.contentOffset)];
         [outputString appendFormat:@"    contentSize: %@\n", NSStringFromCGSize(scrollView.contentSize)];
     }
+	
+    // descriptions for dynamic property discovery
+	if (objectClass == UIButton.class)
+	{
+		[outputString appendString:@"    Logging properties not currently supported for this view.\n"];
+	}
 	else
 	{
 		for (unsigned int i = 0; i < count; ++i)
