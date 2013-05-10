@@ -27,9 +27,11 @@ static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [C
 @property (nonatomic, strong) UIAlertView *alertView;
 @property (nonatomic, strong) CBFileWatcher *fileWatcher;
 - (void)sync;
+
 @end
 
 @implementation CBIntrospect
+
 @synthesize syncFileSystemState = _syncFileSystemState;
 
 + (CBIntrospect *)sharedIntrospector
@@ -157,38 +159,64 @@ static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [C
     NSString *jsonString = [[NSString alloc] initWithContentsOfFile:messageFilePath encoding:NSUTF8StringEncoding error:&error];
     if (error)
     {
-        NSAssert(NO, @"Unable to read the sent view mesage: %@", error);
+        NSAssert(NO, @"Unable to read the sent message: %@", error);
         return NO;
     }
     
     NSDictionary *messageInfo = [jsonString objectFromJSONString];
-    NSString *statement = [messageInfo objectForKey:kUIViewMessageKey];
+    NSString *messageTypeString = messageInfo[kCBMessageTypeKey];
     
-    // if EXC_BAD_ACCESS, try reloading the tree
-    NSInvocation *invocation = [DLStatementParser invocationForStatement:statement error:&error];
-    [invocation invoke];
-    
-    // get the results (the response from the message)
-    DLInvocationResult *invocationResult = [[DLInvocationResult alloc] initWithInvokedInvocation:invocation];
-//    NSString *memAddress = [messageInfo objectForKey:kUIViewMemoryAddressKey];
-//    UIView *view = [self viewWithMemoryAddress:memAddress];
-//    NSString *message = [NSString stringWithFormat:@"%@: <%@: 0x%@> = %@", self.class, view.class, memAddress, invocationResult.resultDescription];
-    NSString *message = nil;
-    if (error)
+    // determine how to handle the message
+    if ([messageTypeString isEqualToString:kCBMessageTypeView])
     {
-        message = error.localizedDescription;
-    }
-    else
-    {
-        message = [NSString stringWithFormat:@"%@: %@ = %@", self.class, statement, invocationResult.resultDescription];
-    }
-    
-    NSLog(@"%@", message);
-    
-    // write the response back to the client
+        NSString *statement = [messageInfo objectForKey:kUIViewMessageKey];
+        
+        // if EXC_BAD_ACCESS, try reloading the tree
+        NSInvocation *invocation = [DLStatementParser invocationForStatement:statement error:&error];
+        [invocation invoke];
+        
+        // get the results (the response from the message)
+        DLInvocationResult *invocationResult = [[DLInvocationResult alloc] initWithInvokedInvocation:invocation];
+    //    NSString *memAddress = [messageInfo objectForKey:kUIViewMemoryAddressKey];
+    //    UIView *view = [self viewWithMemoryAddress:memAddress];
+    //    NSString *message = [NSString stringWithFormat:@"%@: <%@: 0x%@> = %@", self.class, view.class, memAddress, invocationResult.resultDescription];
+        NSString *message = nil;
+        if (error)
+        {
+            message = error.localizedDescription;
+        }
+        else
+        {
+            message = [NSString stringWithFormat:@"%@: %@ = %@", self.class, statement, invocationResult.resultDescription];
+        }
+        
+        NSLog(@"%@", message);
+        
+        // write the response back to the client
 
-    CB_Release(jsonString);
-    CB_Release(invocationResult);
+        CB_Release(jsonString);
+        CB_Release(invocationResult);
+    }
+    else if ([messageTypeString isEqualToString:kCBMessageTypeRemoteNotification])
+    {
+        // simulate remote notifications
+        NSString *string = messageInfo[kUIViewMessageKey];
+        NSError *error = nil;
+		NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[string dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+		if (!dictionary)
+        {
+			NSLog(@"CBRemoteNotification: error = %@", error);
+        }
+        else if (![dictionary isKindOfClass:[NSDictionary class]])
+        {
+			NSLog(@"CBRemoteNotification: message error (not a dictionary)");
+		}
+        else
+        {
+			if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didReceiveRemoteNotification:)])
+                [[UIApplication sharedApplication].delegate application:[UIApplication sharedApplication] didReceiveRemoteNotification:dictionary];
+		}
+    }
     
     // remove the file after it has been used/read
     return [[NSFileManager defaultManager] removeItemAtPath:messageFilePath error:nil];
@@ -232,12 +260,26 @@ static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [C
 
 - (NSString *)versionName
 {
-    return @"v0.3.4";
+    return @"v0.4";
 }
 
 - (void)setNameForViewController:(UIViewController *)viewController
 {
     [self setName:[NSStringFromClass(viewController.class) stringByAppendingString:@".view"] forObject:viewController.view accessedWithSelf:NO];
+}
+
+- (void)listenForRemoteNotifications
+{
+    double delayInSeconds = 3.7;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)])
+        {
+            // tell app delegate
+            NSString *deviceTokenString = [NSString stringWithFormat:@"simulator-remote-notification=%@:9930", [[DCUtility sharedInstance] IPAddressString]];
+            [[UIApplication sharedApplication].delegate application:[UIApplication sharedApplication] didRegisterForRemoteNotificationsWithDeviceToken:[deviceTokenString dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+    });
 }
 
 #pragma mark - Overrides

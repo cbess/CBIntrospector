@@ -36,6 +36,12 @@
 	// always insert this AFTER makeKeyAndVisible so statusBarOrientation is reported correctly.
 	[[CBIntrospect sharedIntrospector] start];
     
+    /**
+        Listen for remote notification messages.
+        Notifications can be sent from View Introspector, using the Messenger window.
+     */
+    [[CBIntrospect sharedIntrospector] listenForRemoteNotifications];
+    
     return YES;
 }
 
@@ -65,5 +71,27 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+#pragma mark - Remote Notifications
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+	NSLog(@"Device token = \"%@\"", [[NSString alloc] initWithData:deviceToken encoding:NSUTF8StringEncoding]);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+	NSLog(@"Remote notification = %@", userInfo);
+	
+	if (application.applicationState == UIApplicationStateActive)
+    {
+		[[[UIAlertView alloc] initWithTitle:@"Remote notification received"
+                                    message:[userInfo description]
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+	}
+}
+
 
 @end

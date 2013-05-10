@@ -9,7 +9,16 @@
 #import "DCUtility.h"
 #import "CBIntrospectConstants.h"
 
+#import <arpa/inet.h>
+#import <netinet/in.h>
+#import <stdio.h>
+#import <sys/types.h>
+#import <sys/socket.h>
+#import <unistd.h>
+#import <ifaddrs.h>
+
 @implementation DCUtility
+
 + (DCUtility *)sharedInstance
 {
     static DCUtility *sharedObj = nil;
@@ -84,6 +93,42 @@
 		returnString = [NSString stringWithFormat:@"%@ (incompatible color space)", color];
 	}
 	return returnString;
+}
+
+- (NSString *)IPAddressString
+{	
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+	
+	NSString *result = nil;
+	
+    // retrieve the current interfaces - returns 0 on success
+    if (!getifaddrs(&interfaces))
+    {
+        // Loop through linked list of interfaces
+        temp_addr = interfaces;
+        while(temp_addr != NULL)
+        {
+            sa_family_t sa_type = temp_addr->ifa_addr->sa_family;
+            if (sa_type == AF_INET || sa_type == AF_INET6)
+            {
+                NSString *addr = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
+                //NSString *name = [NSString stringWithUTF8String:temp_addr->ifa_name];
+				//NSLog(@"Interface \"%@\" addr %@", name, addr);
+				
+				if (!result ||
+					[result isEqualToString:@"0.0.0.0"] ||
+					([result isEqualToString:@"127.0.0.1"] && ![addr isEqualToString:@"0.0.0.0"])
+					) {
+					result = addr;
+				}
+                
+            }
+            temp_addr = temp_addr->ifa_next;
+        }
+        freeifaddrs(interfaces);
+    }
+    return result ? result : @"0.0.0.0";
 }
 
 @end

@@ -41,4 +41,7 @@ typedef enum {
  * @discussion Use within [viewDidLoad].
  */
 - (void)setNameForViewController:(UIViewController *)viewController;
+
+- (void)listenForRemoteNotifications;
+
 @end

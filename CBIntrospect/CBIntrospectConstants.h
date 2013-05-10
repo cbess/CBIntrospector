@@ -19,6 +19,9 @@ static NSString * const kCBTreeDumpFileName = @"viewtree.dump.json";
 static NSString * const kCBViewMessageFileName = @"view.message.json";
 // contains the memaddress of the selected view from the desktop client
 static NSString * const kCBSelectedViewFileName = @"selected.view.json";
+static NSString * const kCBMessageTypeRemoteNotification = @"messagetype.remotenotification";
+static NSString * const kCBMessageTypeView = @"messagetype.view";
+static NSString * const kCBMessageTypeObject = @"messagetype.object";
 
 // stored json keys
 static NSString * const kUIViewSubviewsKey = @"subviews";
@@ -31,5 +34,7 @@ static NSString * const kUIViewCenterKey = @"center";
 static NSString * const kUIViewFrameKey = @"frame";
 static NSString * const kUIViewDescriptionKey = @"viewdescription";
 static NSString * const kUIViewMessageKey = @"viewmessage";
+// only used with view introspector
+static NSString * const kCBMessageTypeKey = @"messagetype";
 
 #endif
