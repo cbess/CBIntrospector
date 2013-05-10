@@ -75,7 +75,7 @@
 		920F9778165D97C500222526 /* CBFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBFileWatcher.m; sourceTree = "<group>"; };
 		928FB47C173CA84800FEC11C /* NSObject+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JSON.h"; sourceTree = "<group>"; };
 		928FB47D173CA84800FEC11C /* NSObject+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JSON.m"; sourceTree = "<group>"; };
-		92F8FAFC16DC7A52002660FE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		92F8FAFC16DC7A52002660FE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +107,6 @@
 		1E73F1E415C3467E004EE6E2 = {
 			isa = PBXGroup;
 			children = (
-				92F8FAFC16DC7A52002660FE /* Default-568h@2x.png */,
 				1E73F1F915C3467E004EE6E2 /* CBIntrospectDemo */,
 				1E73F1F215C3467E004EE6E2 /* Frameworks */,
 				1E73F1F015C3467E004EE6E2 /* Products */,
@@ -150,12 +149,13 @@
 		1E73F1FA15C3467E004EE6E2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1E73F20115C3467E004EE6E2 /* CBIntrospectDemo-Prefix.pch */,
 				1E73F1FB15C3467E004EE6E2 /* CBIntrospectDemo-Info.plist */,
 				1E73F1FC15C3467E004EE6E2 /* InfoPlist.strings */,
 				1E73F21315C34721004EE6E2 /* MainWindow.xib */,
 				1E73F1FF15C3467E004EE6E2 /* main.m */,
+				92F8FAFC16DC7A52002660FE /* Default-568h@2x.png */,
 				1E73F23F15C34839004EE6E2 /* circle.png */,
-				1E73F20115C3467E004EE6E2 /* CBIntrospectDemo-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
