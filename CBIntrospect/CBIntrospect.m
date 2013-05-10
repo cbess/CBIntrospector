@@ -9,8 +9,8 @@
 #import "CBIntrospect.h"
 #import "UIView+Introspector.h"
 #import <sys/stat.h>
-#import "JSONKit.h"
 #import "DCUtility.h"
+#import "NSObject+JSON.h"
 #import "CBIntrospectConstants.h"
 #import "DLStatementParser.h"
 #import "DLInvocationResult.h"

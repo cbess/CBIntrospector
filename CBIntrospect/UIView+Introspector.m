@@ -9,7 +9,7 @@
 #import "UIView+Introspector.h"
 #import "CBMacros.h"
 #import "DCUtility.h"
-#import "JSONKit.h"
+#import "NSObject+JSON.h"
 #import "CBIntrospectConstants.h"
 #include <stdbool.h>
 #include <sys/types.h>
