@@ -131,4 +131,13 @@
     return result ? result : @"0.0.0.0";
 }
 
+- (void)showMessageWithString:(NSString *)string
+{
+    [[[UIAlertView alloc] initWithTitle:nil
+                               message:string
+                              delegate:nil
+                     cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil] show];
+}
+
 @end

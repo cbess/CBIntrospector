@@ -33,4 +33,6 @@ static inline NSString * NSStringFromBOOL(BOOL value)
 
 - (NSString *)IPAddressString;
 
+- (void)showMessageWithString:(NSString *)string;
+
 @end
