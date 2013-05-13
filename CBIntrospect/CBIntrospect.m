@@ -19,6 +19,7 @@
 static NSString * const kDLIntrospectPreviousStatementKey = @"DLIntrospectPreviousStatementKey";
 static NSString * const kDLIntrospectStatementHistoryKey = @"DLIntrospectStatementHistoryKey";
 static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [CBIntrospect setIntrospectorKeyName:]
+static BOOL gListenForRemoteNotifications = NO;
 
 @interface CBIntrospect () <UIAlertViewDelegate, UITextFieldDelegate>
 {
@@ -195,7 +196,7 @@ static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [C
         CB_Release(jsonString);
         CB_Release(invocationResult);
     }
-    else if ([messageTypeString isEqualToString:kCBMessageTypeRemoteNotification])
+    else if ([messageTypeString isEqualToString:kCBMessageTypeRemoteNotification] && gListenForRemoteNotifications)
     {
         // simulate remote notifications
         NSString *string = messageInfo[kUIViewMessageKey];
@@ -269,6 +270,9 @@ static NSString * gIntrospectorKeyName = @"introspectorName"; // change using [C
 
 - (void)listenForRemoteNotifications
 {
+    NSLog(@"Listening for remote notifications from View Introspector...");
+    
+    gListenForRemoteNotifications = YES;
     UIApplication *application = [UIApplication sharedApplication];
     double delayInSeconds = 3.7; // simulate work
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
