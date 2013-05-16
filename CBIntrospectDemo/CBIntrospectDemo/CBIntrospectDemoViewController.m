@@ -44,14 +44,6 @@
     [[CBIntrospect sharedIntrospector] setNameForViewController:self];
 }
 
-- (void)viewDidUnload
-{
-    [self setActivityIndicator:nil];
-	[self setLabel:nil];
-
-	[super viewDidUnload];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 	return YES;
@@ -73,7 +65,7 @@
 	if (cell == nil)
 	{
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        CB_NO_ARC([cell autorelease])
+        CB_NO_ARC([cell autorelease]);
 	}
 
 	cell.textLabel.text = [NSString stringWithFormat:@"Row %i", indexPath.row];

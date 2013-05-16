@@ -231,7 +231,12 @@ static BOOL gListenForRemoteNotifications = NO;
     unsigned addr = 0;
     [[NSScanner scannerWithString:memAddress] scanHexInt:&addr];
     
+#if CB_HAS_ARC
     UIView *view = (__bridge UIView *)((void*)addr);
+#else
+    UIView *view = (UIView *)((void*)addr);
+#endif
+    
     return view;
 }
 
@@ -260,7 +265,7 @@ static BOOL gListenForRemoteNotifications = NO;
 
 - (NSString *)versionName
 {
-    return @"v0.4";
+    return @"v0.4.1";
 }
 
 - (void)setNameForViewController:(UIViewController *)viewController

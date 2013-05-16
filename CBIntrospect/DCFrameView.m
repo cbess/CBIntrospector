@@ -39,7 +39,7 @@
 		self.touchPointLabel = CB_AutoRelease([[UILabel alloc] initWithFrame:CGRectZero])
 		self.touchPointLabel.text = @"X 320 Y 480";
 		self.touchPointLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-		self.touchPointLabel.textAlignment = UITextAlignmentCenter;
+		self.touchPointLabel.textAlignment = NSTextAlignmentCenter;
 		self.touchPointLabel.textColor = [UIColor whiteColor];
 		self.touchPointLabel.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.65f];
 		self.touchPointLabel.layer.cornerRadius = 5.5f;
