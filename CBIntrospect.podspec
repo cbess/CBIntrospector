@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name     = 'CBIntrospect'
-  s.version  = '0.4'
+  s.version  = '0.4.1'
   s.summary  = 'Introspect is a tool for iOS that aids in debugging user interfaces built with UIKit. Communicates with View Introspector, a desktop app.'
   s.homepage = 'https://github.com/cbess/CBIntrospector'
 
   s.license  = 'MIT'
   s.author   = { 'Christopher Bess' => 'cbess@quantumquinn.com' }
-  s.source   = { :git => 'https://github.com/cbess/CBIntrospector.git', :tag => 'v0.4' }
+  s.source   = { :git => 'https://github.com/cbess/CBIntrospector.git', :tag => 'v0.4.1' }
 
   s.platform = :ios
   s.requires_arc = false
