@@ -85,16 +85,6 @@ static NSCharacterSet *parameterObjectCharacterSet()
 	return _parameterObjectCharacterSet;
 }
 
-static NSCharacterSet *stringCharacterSet()
-{
-    static NSCharacterSet *_stringCharacterSet = nil;
-	if (_stringCharacterSet == nil)
-	{
-		_stringCharacterSet = CB_Retain([NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"]);;
-	}
-	return _stringCharacterSet;
-}
-
 static NSCharacterSet *whitespaceCharacterSet()
 {
     static NSCharacterSet *_whitespaceCharacterSet = nil;
