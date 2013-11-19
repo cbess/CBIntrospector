@@ -29,35 +29,31 @@
     if ((self = [super initWithFrame:CGRectZero]))
 	{
 		self.windowLevel = UIWindowLevelStatusBar + 1.0f;
+        UIFont *statusBarFont = [UIFont systemFontOfSize:12];
 		UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 		CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
 		CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-		const CGFloat bar_size = 20;
+		CGFloat barHeight = statusBarFont.lineHeight + 2;
 		if (UIInterfaceOrientationIsLandscape(orientation))
-			self.frame = CGRectMake(0, 0, screenHeight, bar_size);
+			self.frame = CGRectMake(0, 0, screenHeight, barHeight);
 		else
-			self.frame = CGRectMake(0, 0, screenWidth, bar_size);
+			self.frame = CGRectMake(0, 0, screenWidth, barHeight);
 		self.backgroundColor = [UIColor blackColor];
-
-        UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.frame];
-        backgroundImageView.image = [[UIImage imageNamed:@"statusBarBackground.png"] stretchableImageWithLeftCapWidth:2.0f topCapHeight:0.0f];
-        [self addSubview:backgroundImageView];
-        CB_Release(backgroundImageView)
 
 		self.leftLabel = CB_AutoRelease([[UILabel alloc] initWithFrame:CGRectOffset(self.frame, 2.0f, 0.0f)])
 		self.leftLabel.backgroundColor = [UIColor clearColor];
 		self.leftLabel.textAlignment = NSTextAlignmentLeft;
-		self.leftLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+		self.leftLabel.font = statusBarFont;
 		self.leftLabel.textColor = [UIColor colorWithWhite:0.97f alpha:1.0f];
 		self.leftLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[self addSubview:self.leftLabel];
 
 		self.rightLabel = CB_AutoRelease([[UILabel alloc] initWithFrame:CGRectOffset(self.frame, -2.0f, 0.0f)]);
-		self.rightLabel.backgroundColor = [UIColor clearColor];
-		self.rightLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+		self.rightLabel.backgroundColor = self.leftLabel.backgroundColor;
+		self.rightLabel.font = statusBarFont;
 		self.rightLabel.textAlignment = NSTextAlignmentRight;
 		self.rightLabel.textColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
-		self.rightLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.rightLabel.autoresizingMask = self.leftLabel.autoresizingMask;
 		[self addSubview:self.rightLabel];
 
 		UITapGestureRecognizer *gestureRecognizer = CB_AutoRelease([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)])

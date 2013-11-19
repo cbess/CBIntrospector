@@ -25,11 +25,6 @@
 #endif
 }
 
-- (void)didReceiveMemoryWarning
-{
-	[super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
