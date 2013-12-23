@@ -36,7 +36,7 @@
 	// always insert this AFTER makeKeyAndVisible so statusBarOrientation is reported correctly.
 	[[CBIntrospect sharedIntrospector] start];
     
-    /**
+    /*
         Listen for remote notification messages.
         Notifications can be sent from View Introspector, using the Messenger window.
      */
@@ -92,6 +92,5 @@
                           otherButtonTitles:nil] show];
 	}
 }
-
 
 @end
