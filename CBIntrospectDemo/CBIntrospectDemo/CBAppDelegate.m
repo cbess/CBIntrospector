@@ -18,23 +18,23 @@
     [CBIntrospect setIntrospectorKeyName:@"introspectorName"];
     
     // create a custom tap gesture recognizer so introspection can be invoked from a device
-	// this one is a three finger double tap
+	// this one is a single finger double tap
     /*
-     UITapGestureRecognizer *defaultGestureRecognizer = [[[UITapGestureRecognizer alloc] init] autorelease];
-     defaultGestureRecognizer.cancelsTouchesInView = NO;
-     defaultGestureRecognizer.delaysTouchesBegan = NO;
-     defaultGestureRecognizer.delaysTouchesEnded = NO;
-     defaultGestureRecognizer.numberOfTapsRequired = 2;
-     defaultGestureRecognizer.numberOfTouchesRequired = 1;
-     [CBIntrospect sharedIntrospector].invokeGestureRecognizer = defaultGestureRecognizer;
-     */
+    UITapGestureRecognizer *defaultGestureRecognizer = [[UITapGestureRecognizer alloc] init];
+    defaultGestureRecognizer.cancelsTouchesInView = NO;
+    defaultGestureRecognizer.delaysTouchesBegan = NO;
+    defaultGestureRecognizer.delaysTouchesEnded = NO;
+    defaultGestureRecognizer.numberOfTapsRequired = 2;
+    defaultGestureRecognizer.numberOfTouchesRequired = 1;
+    [CBIntrospect sharedIntrospector].invokeGestureRecognizer = defaultGestureRecognizer;
+    */
     
     // Override point for customization after application launch.
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     
 	// always insert this AFTER makeKeyAndVisible so statusBarOrientation is reported correctly.
-	[[CBIntrospect sharedIntrospector] start];
+	[[CBIntrospect sharedIntrospector] startWithDefaultInvokeGesture];
     
     /*
         Listen for remote notification messages.

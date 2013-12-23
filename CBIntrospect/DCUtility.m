@@ -24,7 +24,7 @@
     static DCUtility *sharedObj = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedObj = [DCUtility new];
+        sharedObj = [[self class] new];
     });
     
     return sharedObj;
@@ -107,7 +107,7 @@
     {
         // Loop through linked list of interfaces
         temp_addr = interfaces;
-        while(temp_addr != NULL)
+        while (temp_addr != NULL)
         {
             sa_family_t sa_type = temp_addr->ifa_addr->sa_family;
             if (sa_type == AF_INET || sa_type == AF_INET6)

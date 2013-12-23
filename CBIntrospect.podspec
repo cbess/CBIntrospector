@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'CBIntrospect'
-  s.version  = '0.4.2'
+  s.version  = '0.5.0'
   s.summary  = 'Introspect is a tool for iOS that aids in debugging user interfaces built with UIKit. Communicates with View Introspector, a desktop app.'
   s.homepage = 'https://github.com/cbess/CBIntrospector'
 

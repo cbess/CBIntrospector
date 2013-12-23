@@ -4,9 +4,7 @@ CBIntrospector
 
 [Download View Introspector](http://goo.gl/eWtrr)
 
-Introspector is a small set of tools for **iOS 5+** and the iOS Simulator that aid in debugging user interfaces built with UIKit. It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily. It's designed for use in the iOS simulator, but can also be used on a device.
-
-![Introspect Demo Image](http://domesticcat.com.au/projects/introspect/introspectdemo.png)
+Introspector is a small set of tools for **iOS 6.1+** and the iOS Simulator that aid in debugging user interfaces built with UIKit. It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily. It's designed for use in the iOS simulator, but can also be used on a device.
 
 ![View Introspector Screenshot](https://github.com/cbess/ViewIntrospector/raw/master/cbintrospector-screenshot.jpg)
 

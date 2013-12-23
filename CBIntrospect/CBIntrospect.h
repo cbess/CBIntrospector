@@ -29,7 +29,18 @@ typedef enum {
 + (void)setIntrospectorKeyName:(NSString *)keyName;
 + (NSString *)introspectorKeyName;
 
-+ (CBIntrospect *)sharedIntrospector;
+/**
+ Starts the introspector by watching for the gesture that matches the specified tap criteria.
+ @discussion This will facilitate more reliable iOS support on or off device. You can set `invokeGestureRecognizer`
+ to override or provide a more complex gesture to invoke the instrospector.
+ */
+- (void)startWithInvokeGestureWithNumberOfTaps:(NSUInteger)numberOfTaps touchesRequired:(NSUInteger)touchesRequired;
+
+/**
+ Starts the introspector using a default gesture.
+ @disucssion Default is two taps from a single finger (simulator: double-click)
+ */
+- (void)startWithDefaultInvokeGesture;
 
 /**
  * Syncs the changes from the file system back to the corresponding iOS view.

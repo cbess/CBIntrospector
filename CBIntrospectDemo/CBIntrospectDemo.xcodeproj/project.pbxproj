@@ -24,7 +24,6 @@
 		1E73F23615C34754004EE6E2 /* DLInvocationResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22715C34754004EE6E2 /* DLInvocationResult.m */; };
 		1E73F23715C34754004EE6E2 /* DLStatementParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22915C34754004EE6E2 /* DLStatementParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E73F23915C34754004EE6E2 /* UIView+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22D15C34754004EE6E2 /* UIView+Introspector.m */; };
-		1E73F23A15C34754004EE6E2 /* UIWindow+Introspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E73F22F15C34754004EE6E2 /* UIWindow+Introspector.m */; };
 		1E73F23E15C347D9004EE6E2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E73F23D15C347D9004EE6E2 /* QuartzCore.framework */; };
 		1E73F24015C34839004EE6E2 /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E73F23F15C34839004EE6E2 /* circle.png */; };
 		920F9779165D97C500222526 /* CBFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F9778165D97C500222526 /* CBFileWatcher.m */; };
@@ -67,8 +66,6 @@
 		1E73F22915C34754004EE6E2 /* DLStatementParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLStatementParser.m; sourceTree = "<group>"; };
 		1E73F22C15C34754004EE6E2 /* UIView+Introspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Introspector.h"; sourceTree = "<group>"; };
 		1E73F22D15C34754004EE6E2 /* UIView+Introspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Introspector.m"; sourceTree = "<group>"; };
-		1E73F22E15C34754004EE6E2 /* UIWindow+Introspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+Introspector.h"; sourceTree = "<group>"; };
-		1E73F22F15C34754004EE6E2 /* UIWindow+Introspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+Introspector.m"; sourceTree = "<group>"; };
 		1E73F23D15C347D9004EE6E2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1E73F23F15C34839004EE6E2 /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		920F9777165D97C500222526 /* CBFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBFileWatcher.h; sourceTree = "<group>"; };
@@ -192,8 +189,6 @@
 			children = (
 				1E73F22C15C34754004EE6E2 /* UIView+Introspector.h */,
 				1E73F22D15C34754004EE6E2 /* UIView+Introspector.m */,
-				1E73F22E15C34754004EE6E2 /* UIWindow+Introspector.h */,
-				1E73F22F15C34754004EE6E2 /* UIWindow+Introspector.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -285,7 +280,6 @@
 				1E73F23615C34754004EE6E2 /* DLInvocationResult.m in Sources */,
 				1E73F23715C34754004EE6E2 /* DLStatementParser.m in Sources */,
 				1E73F23915C34754004EE6E2 /* UIView+Introspector.m in Sources */,
-				1E73F23A15C34754004EE6E2 /* UIWindow+Introspector.m in Sources */,
 				920F9779165D97C500222526 /* CBFileWatcher.m in Sources */,
 				928FB47E173CA84800FEC11C /* NSObject+JSON.m in Sources */,
 			);

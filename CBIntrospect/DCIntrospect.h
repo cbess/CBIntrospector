@@ -29,7 +29,6 @@
 @property (nonatomic) BOOL keyboardBindingsOn;									// default: YES
 @property (nonatomic) BOOL showStatusBarOverlay;								// default: YES
 @property (nonatomic, cbstrong) UIGestureRecognizer *invokeGestureRecognizer;		// default: nil
-@property (nonatomic) BOOL enableShakeToActivate; // default: YES
 
 @property (nonatomic) BOOL on;
 @property (nonatomic) BOOL handleArrowKeys;
@@ -53,7 +52,7 @@
 // Setup //
 ///////////
 
-+ (DCIntrospect *)sharedIntrospector;		// this returns nil when NOT in DEGBUG mode
++ (instancetype)sharedIntrospector;		// this returns nil when NOT in DEGBUG mode
 - (void)start;								// NOTE: call setup AFTER [window makeKeyAndVisible] so statusBarOrientation is reported correctly.
 
 ////////////////////
@@ -150,6 +149,7 @@
 
 #pragma mark - Misc
 
+- (NSString *)startInstructionsText;
 - (NSString *)versionName;
 
 #pragma mark - Select View Delegate

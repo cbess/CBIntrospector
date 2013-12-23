@@ -14,7 +14,6 @@
 #include <sys/sysctl.h>
 //#import "UIApplication+Introspector.h" // disabled for now, consumes all keyboard events
 #import "UIView+Introspector.h"
-#import "UIWindow+Introspector.h"
 #import "CBIntrospect.h"
 
 #ifdef DEBUG
@@ -88,103 +87,18 @@ static bool AmIBeingDebugged(void)
 @synthesize currentView, originalFrame, originalAlpha;
 @synthesize currentViewHistory;
 @synthesize showingHelp;
-@synthesize enableShakeToActivate;
 
 #pragma mark Setup
 
-+ (void)load
-{
-#ifdef DEBUG
-    @autoreleasepool {
-        NSString *simulatorRoot = [[[NSProcessInfo processInfo] environment] objectForKey:@"IPHONE_SIMULATOR_ROOT"];
-        if (simulatorRoot)
-        {
-            void *AppSupport = dlopen([[simulatorRoot stringByAppendingPathComponent:@"/System/Library/PrivateFrameworks/AppSupport.framework/AppSupport"] fileSystemRepresentation], RTLD_LAZY);
-            CFStringRef (*CPCopySharedResourcesPreferencesDomainForDomain)(CFStringRef domain) = (CFStringRef (*)())dlsym(AppSupport, "CPCopySharedResourcesPreferencesDomainForDomain");
-            if (CPCopySharedResourcesPreferencesDomainForDomain)
-            {
-                CFStringRef accessibilityDomain = CPCopySharedResourcesPreferencesDomainForDomain(CFSTR("com.apple.Accessibility"));
-                if (accessibilityDomain)
-                {
-                    // This must be done *before* UIApplicationMain, hence +load
-                    CFPreferencesSetValue(CFSTR("ApplicationAccessibilityEnabled"), kCFBooleanTrue, accessibilityDomain, kCFPreferencesAnyUser, kCFPreferencesAnyHost);
-                    CFRelease(accessibilityDomain);
-                }
-            }
-        }
-    }
-#endif
-}
-
-static void *originalValueForKeyIMPKey = &originalValueForKeyIMPKey;
-
-id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key);
-id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
-{
-	static NSMutableSet *textInputTraitsProperties = nil;
-	if (!textInputTraitsProperties)
-	{
-		textInputTraitsProperties = [[NSMutableSet alloc] init];
-		unsigned int count = 0;
-		objc_property_t *properties = protocol_copyPropertyList(@protocol(UITextInputTraits), &count);
-		for (unsigned int i = 0; i < count; i++)
-		{
-			objc_property_t property = properties[i];
-			NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
-			[textInputTraitsProperties addObject:propertyName];
-		}
-		free(properties);
-	}
-	
-	IMP valueForKey = (IMP)[objc_getAssociatedObject([self class], originalValueForKeyIMPKey) pointerValue];
-	if ([textInputTraitsProperties containsObject:key])
-	{
-		id textInputTraits = valueForKey(self, _cmd, @"textInputTraits");
-		return valueForKey(textInputTraits, _cmd, key);
-	}
-	else
-	{
-		return valueForKey(self, _cmd, key);
-	}
-}
-
-// See http://stackoverflow.com/questions/6617472/why-does-valueforkey-on-a-uitextfield-throws-an-exception-for-uitextinputtraits
-+ (void)workaroundUITextInputTraitsPropertiesBug
-{
-	Method valueForKey = class_getInstanceMethod([NSObject class], @selector(valueForKey:));
-	const char *valueForKeyTypeEncoding = method_getTypeEncoding(valueForKey);
-	
-	unsigned int count = 0;
-	Class *classes = objc_copyClassList(&count);
-	for (unsigned int i = 0; i < count; i++)
-	{
-		Class class = classes[i];
-		if (class_getInstanceMethod(class, NSSelectorFromString(@"textInputTraits")))
-		{
-			IMP originalValueForKey = class_replaceMethod(class, @selector(valueForKey:), (IMP)UITextInputTraits_valueForKey, valueForKeyTypeEncoding);
-			if (!originalValueForKey)
-				originalValueForKey = (IMP)[objc_getAssociatedObject([class superclass], originalValueForKeyIMPKey) pointerValue];
-			if (!originalValueForKey)
-				originalValueForKey = class_getMethodImplementation([class superclass], @selector(valueForKey:));
-			
-			objc_setAssociatedObject(class, originalValueForKeyIMPKey, [NSValue valueWithPointer:(void *)originalValueForKey], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-		}
-	}
-	free(classes);
-}
-
-+ (DCIntrospect *)sharedIntrospector
++ (instancetype)sharedIntrospector
 {
     static DCIntrospect *sharedInstance = nil;
 #ifdef DEBUG
 	if (!sharedInstance)
 	{
 		sharedInstance = [[[self class] alloc] init];
-        sharedInstance.enableShakeToActivate = NO;
 		sharedInstance.keyboardBindingsOn = YES;
 		sharedInstance.showStatusBarOverlay = ![UIApplication sharedApplication].statusBarHidden;
-		[self workaroundUITextInputTraitsPropertiesBug];
-        // [UIWindow replaceCanonicalSendEvent]; // may be needed for iOS <= 5.x
 	}
 #endif
 	return sharedInstance;
@@ -265,11 +179,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	if (!self.currentViewHistory)
 		self.currentViewHistory = CB_AutoRelease([[NSMutableArray alloc] init]);
 	
-	DCLog(@"%@ (%@) is setup. %@ to start.", [self class], [self versionName], [kDCIntrospectKeysInvoke isEqualToString:@" "] ? @"Push the space bar" : [NSString stringWithFormat:@"Type '%@'",  kDCIntrospectKeysInvoke]);
-    if (self.enableShakeToActivate)
-    {
-        DCLog(@"Or start %@ using shake gesture - ⌃⌘Z", self.class);
-    }
+	DCLog(@"%@ (%@) is setup. %@", [self class], [self versionName], [self startInstructionsText]);
 }
 
 - (void)takeFirstResponder
@@ -287,14 +197,14 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 }
 
 #pragma mark Custom Setters
-- (void)setInvokeGestureRecognizer:(UIGestureRecognizer *)newGestureRecognizer
+- (void)setInvokeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
 	UIWindow *mainWindow = [self mainWindow];
 	[mainWindow removeGestureRecognizer:invokeGestureRecognizer];
 	
     CB_Release(invokeGestureRecognizer)
 	invokeGestureRecognizer = nil;
-	invokeGestureRecognizer = CB_Retain(newGestureRecognizer)
+	invokeGestureRecognizer = CB_Retain(gestureRecognizer)
 	[invokeGestureRecognizer addTarget:self action:@selector(invokeIntrospector)];
 	[mainWindow addGestureRecognizer:invokeGestureRecognizer];
 }
@@ -1248,6 +1158,12 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 }
 
 #pragma mark - Misc
+
+- (NSString *)startInstructionsText
+{
+    return [NSString stringWithFormat:@"%@ to start.",
+            [kDCIntrospectKeysInvoke isEqualToString:@" "] ? @"Push the space bar" : [NSString stringWithFormat:@"Type '%@'",  kDCIntrospectKeysInvoke]];
+}
 
 - (NSString *)versionName
 {

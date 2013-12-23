@@ -27,6 +27,8 @@ static BOOL gListenForRemoteNotifications = NO;
 }
 @property (nonatomic, strong) UIAlertView *alertView;
 @property (nonatomic, strong) CBFileWatcher *fileWatcher;
+@property (nonatomic, assign) BOOL useGestureToInvoke;
+
 - (void)sync;
 
 @end
@@ -34,11 +36,6 @@ static BOOL gListenForRemoteNotifications = NO;
 @implementation CBIntrospect
 
 @synthesize syncFileSystemState = _syncFileSystemState;
-
-+ (CBIntrospect *)sharedIntrospector
-{
-    return (CBIntrospect*) [super sharedIntrospector];
-}
 
 + (NSString *)introspectorKeyName
 {
@@ -346,11 +343,39 @@ static BOOL gListenForRemoteNotifications = NO;
     [self cleanupFiles];
 }
 
+- (void)startWithInvokeGestureWithNumberOfTaps:(NSUInteger)numberOfTaps touchesRequired:(NSUInteger)touchesRequired
+{
+    self.useGestureToInvoke = YES;
+    
+    UITapGestureRecognizer *defaultGestureRecognizer = [[UITapGestureRecognizer alloc] init];
+    defaultGestureRecognizer.cancelsTouchesInView = NO;
+    defaultGestureRecognizer.delaysTouchesBegan = NO;
+    defaultGestureRecognizer.delaysTouchesEnded = NO;
+    defaultGestureRecognizer.numberOfTapsRequired = numberOfTaps;
+    defaultGestureRecognizer.numberOfTouchesRequired = touchesRequired;
+    self.invokeGestureRecognizer = defaultGestureRecognizer;
+    
+    [self start];
+}
+
+- (void)startWithDefaultInvokeGesture
+{
+    [self startWithInvokeGestureWithNumberOfTaps:2 touchesRequired:1];
+}
+
 - (void)cleanupFiles
 {
     [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] currentViewJSONFilePath] error:nil];
     [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] viewMessageJSONFilePath] error:nil];
     [[NSFileManager defaultManager] removeItemAtPath:[[DCUtility sharedInstance] filePathForSelectedViewJSON] error:nil];
+}
+
+- (NSString *)startInstructionsText
+{
+    if (!self.useGestureToInvoke)
+        return [super startInstructionsText];
+
+    return [NSString stringWithFormat:@"Perform invoke gesture to start."];
 }
 
 #pragma mark - Traverse Subviews
@@ -431,7 +456,7 @@ static BOOL gListenForRemoteNotifications = NO;
 	
 	UITextField *textField = [alertView textFieldAtIndex:0];
 	textField.text = [[NSUserDefaults standardUserDefaults] objectForKey:kDLIntrospectPreviousStatementKey];
-    textField.font = [UIFont fontWithName:@"Courier-Bold" size:14];
+    textField.font = [UIFont fontWithName:@"Courier" size:12];
     textField.delegate = self;
 	
 	[alertView show];
