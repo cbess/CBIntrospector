@@ -510,7 +510,7 @@
 		// print out generic uiview properties
 		[outputString appendString:@"  ** UIView properties **\n"];
 //        [outputString appendFormat:@"    introspectorName: %@\n", self.introspectorName];
-		[outputString appendFormat:@"    tag: %i\n", view.tag];
+		[outputString appendFormat:@"    tag: %li\n", (long)view.tag];
 		[outputString appendFormat:@"    frame: %@ | ", NSStringFromCGRect(view.frame)];
 		[outputString appendFormat:@"bounds: %@ | ", NSStringFromCGRect(view.bounds)];
 		[outputString appendFormat:@"center: %@\n", NSStringFromCGPoint(view.center)];
@@ -538,7 +538,7 @@
         }
         
         // ex: subviews: 3 views [<UIView: 0x23f434f>, <UIButton: 0x43f4ffe>]
-        [outputString appendFormat:@"    subviews: %d view%@ [%@]\n", view.subviews.count, (view.subviews.count == 1 ? @"" : @"s"), [subviewsArray componentsJoinedByString:@", "]];
+        [outputString appendFormat:@"    subviews: %lu view%@ [%@]\n", (unsigned long)view.subviews.count, (view.subviews.count == 1 ? @"" : @"s"), [subviewsArray componentsJoinedByString:@", "]];
 		[outputString appendString:@"\n"];
 	}
 	
