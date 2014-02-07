@@ -230,7 +230,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarTapped) name:kDCIntrospectNotificationStatusBarTapped object:nil];
 	
 	// reclaim the keyboard after dismissal if it is taken
-	[[NSNotificationCenter defaultCenter] addObserverForName:UIKeyboardWillHideNotification
+	[[NSNotificationCenter defaultCenter] addObserverForName:UIKeyboardDidHideNotification
 													  object:nil
 													   queue:nil
 												  usingBlock:^(NSNotification *notification) {
@@ -577,7 +577,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			if (self.currentViewHistory.count == 0)
 				return NO;
 			
-			int indexOfCurrentView = [self.currentViewHistory indexOfObject:self.currentView];
+			NSUInteger indexOfCurrentView = [self.currentViewHistory indexOfObject:self.currentView];
 			if (indexOfCurrentView == 0)
 			{
 				DCNamedLog(@"At bottom of view history.");
@@ -825,7 +825,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			nameForObject = [nameForObject substringFromIndex:@"self.".length];
 		
 		if (self.currentView.tag != 0)
-			self.statusBarOverlay.leftLabel.text = [NSString stringWithFormat:@"%@ (tag: %i)", nameForObject, self.currentView.tag];
+			self.statusBarOverlay.leftLabel.text = [NSString stringWithFormat:@"%@ (tag: %li)", nameForObject, (long)self.currentView.tag];
 		else
 			self.statusBarOverlay.leftLabel.text = [NSString stringWithFormat:@"%@", nameForObject];
 		
