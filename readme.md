@@ -4,7 +4,7 @@ CBIntrospector
 
 [Download View Introspector](http://goo.gl/eWtrr)
 
-Introspector is a small set of tools for **iOS 5+** and the iOS Simulator that aid in debugging user interfaces built with UIKit. It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily. It's designed for use in the iOS simulator, but can also be used on a device.
+Introspector is a small set of tools for **iOS 6+** and the iOS Simulator that aid in debugging user interfaces built with UIKit. It's especially useful for UI layouts that are dynamically created or can change during runtime, or for tuning performance by finding non-opaque views or views that are re-drawing unnecessarily. It's designed for use in the iOS simulator, but can also be used on a device.
 
 ![Introspect Demo Image](http://domesticcat.com.au/projects/introspect/introspectdemo.png)
 
@@ -81,7 +81,7 @@ Selected keyboard shortcuts
 * Print accessibility properties and actions of selected view to console: `a`
 * Toggle all view outlines: `o`
 * Toggle highlighting non-opaque views: `O`
-* Nudge view left, right, up & down: `4 6 8 2` (use the numeric pad) or `← → ↑ ↓`
+* Nudge view left, right, up & down: `a d w s` (use the numeric pad) or `← → ↑ ↓`
 * Print out the selected views' new frame to console after nudge/resize: `0`
 * Print selected views recursive description to console: `v`
 
