@@ -198,21 +198,14 @@ static NSCharacterSet *whitespaceCharacterSet()
 
 + (id)objectForMemoryAddress:(NSString *)memoryAddress
 {
-	id theObject = nil;
-
-	uintptr_t addr = 0;
-	NSScanner *scanner = [[NSScanner alloc] initWithString:memoryAddress];
-
-#if defined(__LP64__) && __LP64__
     unsigned long long lAddr = 0;
-    [scanner scanHexLongLong: &lAddr];
-    addr = lAddr;
-#else
-    [scanner scanHexInt:&addr];
-#endif
 
+	NSScanner *scanner = [[NSScanner alloc] initWithString:memoryAddress];
+    [scanner scanHexLongLong: &lAddr];
 	CB_Release(scanner)
-	theObject = (id)((void*)addr);
+
+    uintptr_t addr  = lAddr;
+	id theObject    = (id)((void*)addr);
 	
 	return theObject;
 }
