@@ -198,13 +198,14 @@ static NSCharacterSet *whitespaceCharacterSet()
 
 + (id)objectForMemoryAddress:(NSString *)memoryAddress
 {
-	id theObject = nil;
-	
-	unsigned addr = 0;
+    unsigned long long lAddr = 0;
+
 	NSScanner *scanner = [[NSScanner alloc] initWithString:memoryAddress];
-	[scanner scanHexInt:&addr];
+    [scanner scanHexLongLong: &lAddr];
 	CB_Release(scanner)
-	theObject = (id)((void*)addr);
+
+    uintptr_t addr  = lAddr;
+	id theObject    = (id)((void*)addr);
 	
 	return theObject;
 }
@@ -240,7 +241,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 		}
 		else
 		{
-			NSString *errorString = [NSString stringWithFormat:@"Expected '[' at index: %d, but found: %@", scanner.scanLocation, [statement substringWithRange:NSMakeRange(scanner.scanLocation, 1)]];
+			NSString *errorString = [NSString stringWithFormat:@"Expected '[' at index: %lu, but found: %@", (unsigned long)scanner.scanLocation, [statement substringWithRange:NSMakeRange(scanner.scanLocation, 1)]];
 			returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 											  code:DLStatementParserErrorStartingOpenBracketNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -300,7 +301,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 			// Error, name is not a valid class
 			else
 			{
-				NSString *errorString = [NSString stringWithFormat:@"Invalid class name at index %d: %@", scanner.scanLocation, tempString];
+				NSString *errorString = [NSString stringWithFormat:@"Invalid class name at index %lu: %@", (unsigned long)scanner.scanLocation, tempString];
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 												  code:DLStatementParserErrorClassNameInvalid
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -312,7 +313,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 		// Error, missing open square bracket
 		else
 		{
-			NSString *errorString = [NSString stringWithFormat:@"Expected class name at index %d, but found: %@", scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
+			NSString *errorString = [NSString stringWithFormat:@"Expected class name at index %lu, but found: %@", (unsigned long)scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
 			returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 											  code:DLStatementParserErrorClassNameNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -355,7 +356,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 					// Parameter object name
 					if ([scanner scanString:@"@" intoString:NULL])
 					{
-						BOOL numberOfNonEscapedQuotations = 0;
+						NSUInteger numberOfNonEscapedQuotations = 0;
 						while (numberOfNonEscapedQuotations < 2)
 						{
 							[scanner scanUpToString:@"\"" intoString:NULL];
@@ -390,7 +391,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 					// Error, no valid parameter
 					else
 					{
-						NSString *errorString = [NSString stringWithFormat:@"Selector parameter #%d missing at statement index %d", numberOfMethodParameters, scanner.scanLocation];
+						NSString *errorString = [NSString stringWithFormat:@"Selector parameter #%d missing at statement index %lu", numberOfMethodParameters, (unsigned long)scanner.scanLocation];
 						returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 														  code:DLStatementParserErrorParameterNotFound
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -403,7 +404,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 			// Error, no method name
 			else
 			{
-				NSString *errorString = [NSString stringWithFormat:@"Expected method name at index %d, but found: %@", scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
+				NSString *errorString = [NSString stringWithFormat:@"Expected method name at index %lu, but found: %@", (unsigned long)scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 												  code:DLStatementParserErrorMethodNameNotFound
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -681,7 +682,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 					}
 					else
 					{
-						NSString *errorString = [NSString stringWithFormat:@"Selector parameter %d command at statement index %d return type '%c' different from selector argument type '%c'. Command: %@", index, scanner.scanLocation, (int)[NSString stringWithUTF8String:parameterReturnType], (int)[NSString stringWithUTF8String:theInvocationArgumentType], subStatement];
+						NSString *errorString = [NSString stringWithFormat:@"Selector parameter %d command at statement index %lu return type '%c' different from selector argument type '%c'. Command: %@", index, (unsigned long)scanner.scanLocation, (int)[NSString stringWithUTF8String:parameterReturnType], (int)[NSString stringWithUTF8String:theInvocationArgumentType], subStatement];
 						returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 														  code:DLStatementParserErrorParameterReturnValueDifferentFromSelectorArgumentValue
 													  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -699,7 +700,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 			// Error, no valid parameter
 			else
 			{
-				NSString *errorString = [NSString stringWithFormat:@"Expected parameter at index %d, but found: %@", scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
+				NSString *errorString = [NSString stringWithFormat:@"Expected parameter at index %lu, but found: %@", (unsigned long)scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
 				returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 												  code:DLStatementParserErrorParameterNotFound
 											  userInfo:[NSDictionary dictionaryWithObject:errorString
@@ -716,7 +717,7 @@ static NSCharacterSet *whitespaceCharacterSet()
 		// End of command, close square bracket ']'
 		if ([scanner scanString:@"]" intoString:NULL] == NO)
 		{
-			NSString *errorString = [NSString stringWithFormat:@"Expected ']' at index %d, but found: %@", scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
+			NSString *errorString = [NSString stringWithFormat:@"Expected ']' at index %lu, but found: %@", (unsigned long)scanner.scanLocation, [statement substringFromIndex:scanner.scanLocation]];
 			returnError = [NSError errorWithDomain:@"com.DLStamementParser" 
 											  code:DLStatementParserErrorClosingCloseBracketNotFound
 										  userInfo:[NSDictionary dictionaryWithObject:errorString

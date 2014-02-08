@@ -228,9 +228,12 @@ static BOOL gListenForRemoteNotifications = NO;
 - (UIView *)viewWithMemoryAddress:(NSString *)memAddress
 {
     // convert the memaddres to a pointer
-    unsigned addr = 0;
-    [[NSScanner scannerWithString:memAddress] scanHexInt:&addr];
-    
+
+    unsigned long long lAddr = 0;
+    [[NSScanner scannerWithString:memAddress] scanHexLongLong: &lAddr];
+
+    uintptr_t addr = lAddr;
+
 #if CB_HAS_ARC
     UIView *view = (__bridge UIView *)((void*)addr);
 #else
